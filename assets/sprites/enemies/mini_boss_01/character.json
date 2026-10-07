@@ -1,0 +1,1140 @@
+{
+  "version": 1,
+  "format": "enemy-character/1",
+  "id": "mini_boss_01",
+  "name": "Juggernaut",
+  "archetype": "MINI_BOSS",
+  "type": "MINI_BOSS",
+  "role": "MAJOR_ENCOUNTER",
+  "category": "GROUND",
+  "size": "LARGE",
+  "seed": 1,
+  "logicalSize": { "width": 176, "height": 176 },
+  "drawScale": 0.5,
+  "dimensions": { "width": 176, "height": 176, "unit": "PIXEL", "worldWidth": 88, "worldHeight": 88 },
+  "facing": "RIGHT",
+  "directions": { "RIGHT": "SOURCE", "LEFT": "FLIP_X" },
+  "coordinates": {
+    "origin": "TOP_LEFT",
+    "yAxis": "DOWN",
+    "unit": "PIXEL",
+    "mirrorX": "width - 1 - x",
+    "libgdxY": "height - 1 - y"
+  },
+  "pivot": { "x": 86, "y": 175 },
+  "anchors": {
+    "origin": { "x": 0, "y": 0 },
+    "pivot": { "x": 86, "y": 175 },
+    "footAnchor": { "x": 86, "y": 175 },
+    "bodyAnchor": { "x": 94, "y": 99 },
+    "attackAnchor": { "x": 123, "y": 152 },
+    "hurtAnchor": { "x": 96, "y": 90 },
+    "weaponAnchor": { "x": 123, "y": 152 },
+    "weakPointAnchor": { "x": 73, "y": 84 }
+  },
+  "palette": {
+    "ARMOR_0": "#0a0d08",
+    "ARMOR_1": "#2b3721",
+    "ARMOR_2": "#53603f",
+    "ARMOR_3": "#747f58",
+    "ARMOR_4": "#92977e",
+    "FLESH_0": "#5f3f38",
+    "FLESH_1": "#866353",
+    "FLESH_2": "#a68e7b",
+    "FLESH_3": "#baae9f",
+    "FLESH_4": "#d0ccc6",
+    "WOUND_0": "#391018",
+    "WOUND_1": "#6b2022",
+    "WOUND_2": "#9e4435",
+    "WOUND_3": "#be6c4d",
+    "WOUND_4": "#c89b80",
+    "METAL_0": "#2e343c",
+    "METAL_1": "#4d565f",
+    "METAL_2": "#727b82",
+    "METAL_3": "#92979a",
+    "METAL_4": "#b5b5b5",
+    "DARK_0": "#0b0a09",
+    "DARK_1": "#0b0a09",
+    "DARK_2": "#2f2c2a",
+    "DARK_3": "#4a4847",
+    "DARK_4": "#676767",
+    "HAZARD_0": "#5f2d12",
+    "HAZARD_1": "#965c1e",
+    "HAZARD_2": "#cc9b2f",
+    "HAZARD_3": "#d6c05d",
+    "HAZARD_4": "#ddd393",
+    "BONE_0": "#b0734e",
+    "BONE_1": "#c3a37d",
+    "BONE_2": "#d7ccb0",
+    "BONE_3": "#e9e6d6",
+    "BONE_4": "#f9f9f6",
+    "GLOW_0": "#902400",
+    "GLOW_1": "#dd4d00",
+    "GLOW_2": "#ff8a2a",
+    "GLOW_3": "#f4be7c",
+    "GLOW_4": "#f3e5cf",
+    "outline": "#12180f"
+  },
+  "parts": [
+    { "name": "far", "layer": "FAR", "kind": "LAYER" },
+    { "name": "body", "layer": "BODY", "kind": "LAYER" },
+    { "name": "leg_near", "layer": "LEG_NEAR", "kind": "LAYER" },
+    { "name": "head", "layer": "HEAD", "kind": "LAYER" },
+    { "name": "near", "layer": "NEAR", "kind": "LAYER" }
+  ],
+  "variation": {
+    "palette": "JUGGERNAUT",
+    "helmet": "VISOR",
+    "weapon": "HAMMER",
+    "spikes": 4,
+    "cuff": false,
+    "timing": { "idleFps": 6, "moveFps": 8, "attackFps": 9, "windupHold": 2.15, "strikeSnap": 0.55 }
+  },
+  "gameplay": {
+    "role": "MAJOR_ENCOUNTER",
+    "size": "LARGE",
+    "threatTier": "MAJOR",
+    "locomotion": "GROUND",
+    "speedClass": "SLOW",
+    "durabilityClass": "HIGH",
+    "damageClass": "HIGH",
+    "attackStyle": "OVERHEAD_SMASH + CLAW_SWEEP",
+    "space": "ARENA",
+    "moveSpeed": { "px": 28, "world": 14, "tilesPerSecond": 0.88 },
+    "hurtbox": {
+      "x": 59,
+      "y": 59,
+      "width": 81,
+      "height": 117,
+      "world": { "width": 40.5, "height": 58.5 }
+    },
+    "clearance": { "heightPx": 160, "heightTiles": 5 },
+    "attacks": {
+      "ATTACK_1": {
+        "label": "SMASH",
+        "startupMs": 483,
+        "activeMs": 172,
+        "recoveryMs": 378,
+        "reach": { "px": 87, "world": 43.5 }
+      },
+      "ATTACK_2": {
+        "label": "CLAW SWEEP",
+        "startupMs": 377,
+        "activeMs": 141,
+        "recoveryMs": 300,
+        "reach": { "px": 99, "world": 49.5 }
+      }
+    }
+  },
+  "spriteSheet": {
+    "image": "sprite-sheet.png",
+    "width": 1408,
+    "height": 1056,
+    "frameWidth": 176,
+    "frameHeight": 176,
+    "padding": 0,
+    "layout": "ROW_PER_ANIMATION",
+    "rows": [ "IDLE", "MOVE", "ATTACK_1", "ATTACK_2", "HIT", "DEATH" ]
+  },
+  "spriteSheetLeft": { "image": "sprite-sheet-left.png", "sameLayoutAs": "sprite-sheet.png" },
+  "states": [ "IDLE", "MOVE", "ATTACK_1", "ATTACK_2", "HIT", "DEATH" ],
+  "animations": {
+    "idle": {
+      "state": "IDLE",
+      "row": 0,
+      "strip": "idle.png",
+      "fps": 6,
+      "loop": true,
+      "playMode": "LOOP",
+      "frameCount": 6,
+      "totalDuration": 1002,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "phase 0/6",
+          "duration": 167,
+          "x": 0,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "phase 1/6",
+          "duration": 167,
+          "x": 176,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 95, "y": 99 },
+            "attackAnchor": { "x": 121, "y": 153 },
+            "hurtAnchor": { "x": 97, "y": 91 },
+            "weaponAnchor": { "x": 121, "y": 153 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 2,
+          "label": "phase 2/6",
+          "duration": 167,
+          "x": 352,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 60, "width": 81, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 95, "y": 100 },
+            "attackAnchor": { "x": 122, "y": 153 },
+            "hurtAnchor": { "x": 97, "y": 91 },
+            "weaponAnchor": { "x": 122, "y": 153 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 3,
+          "label": "phase 3/6",
+          "duration": 167,
+          "x": 528,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 60, "width": 81, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 100 },
+            "attackAnchor": { "x": 124, "y": 152 },
+            "hurtAnchor": { "x": 97, "y": 91 },
+            "weaponAnchor": { "x": 124, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 4,
+          "label": "phase 4/6",
+          "duration": 167,
+          "x": 704,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 58, "y": 60, "width": 81, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 100 },
+            "attackAnchor": { "x": 125, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 125, "y": 152 },
+            "weakPointAnchor": { "x": 72, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 5,
+          "label": "phase 5/6",
+          "duration": 167,
+          "x": 880,
+          "y": 0,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 58, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 125, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 125, "y": 152 },
+            "weakPointAnchor": { "x": 72, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        }
+      ],
+      "events": []
+    },
+    "move": {
+      "state": "MOVE",
+      "label": "WALK",
+      "row": 1,
+      "strip": "move.png",
+      "fps": 8,
+      "loop": true,
+      "playMode": "LOOP",
+      "frameCount": 8,
+      "totalDuration": 1000,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "phase 0/8",
+          "duration": 125,
+          "x": 0,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 56, "y": 62, "width": 89, "height": 114 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 103 },
+            "attackAnchor": { "x": 134, "y": 156 },
+            "hurtAnchor": { "x": 99, "y": 94 },
+            "weaponAnchor": { "x": 134, "y": 156 },
+            "weakPointAnchor": { "x": 76, "y": 86 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "phase 1/8",
+          "duration": 125,
+          "x": 176,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 58, "y": 61, "width": 85, "height": 115 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 101 },
+            "attackAnchor": { "x": 132, "y": 155 },
+            "hurtAnchor": { "x": 99, "y": 93 },
+            "weaponAnchor": { "x": 132, "y": 155 },
+            "weakPointAnchor": { "x": 76, "y": 84 }
+          },
+          "contacts": { "N": true, "F": false }
+        },
+        {
+          "index": 2,
+          "label": "phase 2/8",
+          "duration": 125,
+          "x": 352,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 59, "width": 82, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 99 },
+            "attackAnchor": { "x": 125, "y": 154 },
+            "hurtAnchor": { "x": 98, "y": 91 },
+            "weaponAnchor": { "x": 125, "y": 154 },
+            "weakPointAnchor": { "x": 75, "y": 83 }
+          },
+          "contacts": { "N": true, "F": false }
+        },
+        {
+          "index": 3,
+          "label": "phase 3/8",
+          "duration": 125,
+          "x": 528,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 61, "width": 81, "height": 115 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 95, "y": 101 },
+            "attackAnchor": { "x": 119, "y": 155 },
+            "hurtAnchor": { "x": 98, "y": 92 },
+            "weaponAnchor": { "x": 119, "y": 155 },
+            "weakPointAnchor": { "x": 74, "y": 85 }
+          },
+          "contacts": { "N": true, "F": false }
+        },
+        {
+          "index": 4,
+          "label": "phase 4/8",
+          "duration": 125,
+          "x": 704,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 62, "width": 82, "height": 114 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 95, "y": 102 },
+            "attackAnchor": { "x": 123, "y": 144 },
+            "hurtAnchor": { "x": 97, "y": 93 },
+            "weaponAnchor": { "x": 116, "y": 156 },
+            "weakPointAnchor": { "x": 74, "y": 86 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 5,
+          "label": "phase 5/8",
+          "duration": 125,
+          "x": 880,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 61, "width": 81, "height": 115 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 95, "y": 101 },
+            "attackAnchor": { "x": 119, "y": 155 },
+            "hurtAnchor": { "x": 98, "y": 92 },
+            "weaponAnchor": { "x": 119, "y": 155 },
+            "weakPointAnchor": { "x": 74, "y": 85 }
+          },
+          "contacts": { "N": false, "F": true }
+        },
+        {
+          "index": 6,
+          "label": "phase 6/8",
+          "duration": 125,
+          "x": 1056,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 59, "width": 82, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 99 },
+            "attackAnchor": { "x": 125, "y": 154 },
+            "hurtAnchor": { "x": 98, "y": 91 },
+            "weaponAnchor": { "x": 125, "y": 154 },
+            "weakPointAnchor": { "x": 75, "y": 83 }
+          },
+          "contacts": { "N": false, "F": true }
+        },
+        {
+          "index": 7,
+          "label": "phase 7/8",
+          "duration": 125,
+          "x": 1232,
+          "y": 176,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 61, "width": 83, "height": 115 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 101 },
+            "attackAnchor": { "x": 132, "y": 155 },
+            "hurtAnchor": { "x": 99, "y": 93 },
+            "weaponAnchor": { "x": 132, "y": 155 },
+            "weakPointAnchor": { "x": 76, "y": 84 }
+          },
+          "contacts": { "N": false, "F": true }
+        }
+      ],
+      "events": [
+        { "frame": 0, "type": "FOOTSTEP", "foot": "NEAR" },
+        { "frame": 4, "type": "FOOTSTEP", "foot": "FAR" }
+      ],
+      "move": { "stride": 14, "groundSpeed": 28 }
+    },
+    "attack_1": {
+      "state": "ATTACK_1",
+      "label": "SMASH",
+      "row": 2,
+      "strip": "attack_1.png",
+      "fps": 9,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 8,
+      "totalDuration": 1033,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "neutral",
+          "duration": 111,
+          "x": 0,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "raise",
+          "duration": 133,
+          "x": 176,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 56, "y": 27, "width": 105, "height": 149 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 92, "y": 98 },
+            "attackAnchor": { "x": 152, "y": 34 },
+            "hurtAnchor": { "x": 93, "y": 89 },
+            "weaponAnchor": { "x": 152, "y": 34 },
+            "weakPointAnchor": { "x": 69, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 2,
+          "label": "wind-up",
+          "duration": 239,
+          "x": 352,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 53, "y": 16, "width": 79, "height": 160 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 89, "y": 98 },
+            "attackAnchor": { "x": 116, "y": 19 },
+            "hurtAnchor": { "x": 90, "y": 88 },
+            "weaponAnchor": { "x": 116, "y": 19 },
+            "weakPointAnchor": { "x": 65, "y": 86 }
+          },
+          "contacts": { "N": false, "F": true }
+        },
+        {
+          "index": 3,
+          "label": "slam",
+          "duration": 61,
+          "x": 528,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 67, "width": 95, "height": 109 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 104, "y": 109 },
+            "attackAnchor": { "x": 147, "y": 162 },
+            "hurtAnchor": { "x": 109, "y": 102 },
+            "weaponAnchor": { "x": 147, "y": 162 },
+            "weakPointAnchor": { "x": 90, "y": 87 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 133, "y": 148, "width": 28, "height": 28 },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 4,
+          "label": "impact",
+          "duration": 111,
+          "x": 704,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 69, "width": 107, "height": 107 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 105, "y": 111 },
+            "attackAnchor": { "x": 159, "y": 164 },
+            "hurtAnchor": { "x": 110, "y": 104 },
+            "weaponAnchor": { "x": 159, "y": 164 },
+            "weakPointAnchor": { "x": 92, "y": 88 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 145, "y": 150, "width": 28, "height": 28 },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 5,
+          "label": "recover",
+          "duration": 156,
+          "x": 880,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 62, "width": 93, "height": 114 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 100, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 157 },
+            "hurtAnchor": { "x": 103, "y": 96 },
+            "weaponAnchor": { "x": 146, "y": 157 },
+            "weakPointAnchor": { "x": 82, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 6,
+          "label": "settle",
+          "duration": 111,
+          "x": 1056,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 61, "y": 60, "width": 81, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 100 },
+            "attackAnchor": { "x": 130, "y": 154 },
+            "hurtAnchor": { "x": 98, "y": 92 },
+            "weaponAnchor": { "x": 130, "y": 154 },
+            "weakPointAnchor": { "x": 75, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 7,
+          "label": "return",
+          "duration": 111,
+          "x": 1232,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        }
+      ],
+      "events": [
+        { "frame": 3, "type": "ATTACK_START" },
+        { "frame": 4, "type": "EFFECT", "name": "ground_impact" },
+        { "frame": 5, "type": "ATTACK_END" }
+      ],
+      "attack": {
+        "activeFrames": [ 3, 4 ],
+        "activeFrameStart": 3,
+        "activeFrameEnd": 4,
+        "origin": { "x": 147, "y": 162 },
+        "reach": 28,
+        "width": 28,
+        "height": 28
+      }
+    },
+    "attack_2": {
+      "state": "ATTACK_2",
+      "label": "CLAW SWEEP",
+      "row": 3,
+      "strip": "attack_2.png",
+      "fps": 11,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 8,
+      "totalDuration": 818,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "neutral",
+          "duration": 91,
+          "x": 0,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "draw back",
+          "duration": 91,
+          "x": 176,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 44, "y": 59, "width": 95, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 91, "y": 98 },
+            "attackAnchor": { "x": 129, "y": 148 },
+            "hurtAnchor": { "x": 92, "y": 89 },
+            "weaponAnchor": { "x": 129, "y": 148 },
+            "weakPointAnchor": { "x": 68, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 2,
+          "label": "wind-up",
+          "duration": 195,
+          "x": 352,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 33, "y": 61, "width": 105, "height": 115 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 88, "y": 99 },
+            "attackAnchor": { "x": 128, "y": 147 },
+            "hurtAnchor": { "x": 89, "y": 90 },
+            "weaponAnchor": { "x": 128, "y": 147 },
+            "weakPointAnchor": { "x": 64, "y": 87 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 3,
+          "label": "sweep",
+          "duration": 50,
+          "x": 528,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 62, "width": 107, "height": 114 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 103, "y": 103 },
+            "attackAnchor": { "x": 173, "y": 97 },
+            "hurtAnchor": { "x": 107, "y": 96 },
+            "weaponAnchor": { "x": 134, "y": 162 },
+            "weakPointAnchor": { "x": 86, "y": 83 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 161, "y": 85, "width": 24, "height": 24 },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 4,
+          "label": "rake",
+          "duration": 91,
+          "x": 704,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 62, "width": 107, "height": 114 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 105, "y": 104 },
+            "attackAnchor": { "x": 173, "y": 71 },
+            "hurtAnchor": { "x": 109, "y": 96 },
+            "weaponAnchor": { "x": 135, "y": 163 },
+            "weakPointAnchor": { "x": 88, "y": 83 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 161, "y": 59, "width": 24, "height": 24 },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 5,
+          "label": "recover",
+          "duration": 118,
+          "x": 880,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 60, "width": 85, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 99, "y": 101 },
+            "attackAnchor": { "x": 149, "y": 131 },
+            "hurtAnchor": { "x": 102, "y": 93 },
+            "weaponAnchor": { "x": 129, "y": 157 },
+            "weakPointAnchor": { "x": 80, "y": 83 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 6,
+          "label": "settle",
+          "duration": 91,
+          "x": 1056,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 60, "y": 60, "width": 82, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 96, "y": 100 },
+            "attackAnchor": { "x": 125, "y": 154 },
+            "hurtAnchor": { "x": 98, "y": 91 },
+            "weaponAnchor": { "x": 125, "y": 154 },
+            "weakPointAnchor": { "x": 75, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 7,
+          "label": "return",
+          "duration": 91,
+          "x": 1232,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        }
+      ],
+      "events": [
+        { "frame": 3, "type": "ATTACK_START" },
+        { "frame": 5, "type": "ATTACK_END" }
+      ],
+      "attack": {
+        "activeFrames": [ 3, 4 ],
+        "activeFrameStart": 3,
+        "activeFrameEnd": 4,
+        "origin": { "x": 173, "y": 97 },
+        "reach": 24,
+        "width": 24,
+        "height": 24
+      }
+    },
+    "hit": {
+      "state": "HIT",
+      "row": 4,
+      "strip": "hit.png",
+      "fps": 12,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 4,
+      "totalDuration": 349,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "impact",
+          "duration": 83,
+          "x": 0,
+          "y": 704,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 54, "y": 59, "width": 83, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 90, "y": 98 },
+            "attackAnchor": { "x": 126, "y": 147 },
+            "hurtAnchor": { "x": 91, "y": 89 },
+            "weaponAnchor": { "x": 126, "y": 147 },
+            "weakPointAnchor": { "x": 66, "y": 86 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "recoil",
+          "duration": 100,
+          "x": 176,
+          "y": 704,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 54, "y": 60, "width": 79, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 90, "y": 99 },
+            "attackAnchor": { "x": 122, "y": 150 },
+            "hurtAnchor": { "x": 91, "y": 90 },
+            "weaponAnchor": { "x": 122, "y": 150 },
+            "weakPointAnchor": { "x": 67, "y": 86 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 2,
+          "label": "recover",
+          "duration": 83,
+          "x": 352,
+          "y": 704,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 57, "y": 60, "width": 81, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 93, "y": 99 },
+            "attackAnchor": { "x": 121, "y": 152 },
+            "hurtAnchor": { "x": 94, "y": 90 },
+            "weaponAnchor": { "x": 121, "y": 152 },
+            "weakPointAnchor": { "x": 71, "y": 85 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 3,
+          "label": "settle",
+          "duration": 83,
+          "x": 528,
+          "y": 704,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 99 },
+            "attackAnchor": { "x": 123, "y": 152 },
+            "hurtAnchor": { "x": 96, "y": 90 },
+            "weaponAnchor": { "x": 123, "y": 152 },
+            "weakPointAnchor": { "x": 73, "y": 84 }
+          },
+          "contacts": { "N": true, "F": true }
+        }
+      ],
+      "events": [
+        { "frame": 0, "type": "EFFECT", "name": "hit_flash" }
+      ]
+    },
+    "death": {
+      "state": "DEATH",
+      "row": 5,
+      "strip": "death.png",
+      "fps": 8,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 7,
+      "totalDuration": 874,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "stagger",
+          "duration": 107,
+          "x": 0,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 52, "y": 60, "width": 88, "height": 116 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 88, "y": 97 },
+            "attackAnchor": { "x": 130, "y": 144 },
+            "hurtAnchor": { "x": 89, "y": 89 },
+            "weaponAnchor": { "x": 130, "y": 144 },
+            "weakPointAnchor": { "x": 64, "y": 86 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 1,
+          "label": "sag",
+          "duration": 107,
+          "x": 176,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 59, "y": 68, "width": 83, "height": 108 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 94, "y": 108 },
+            "attackAnchor": { "x": 131, "y": 162 },
+            "hurtAnchor": { "x": 96, "y": 100 },
+            "weaponAnchor": { "x": 131, "y": 162 },
+            "weakPointAnchor": { "x": 73, "y": 92 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 2,
+          "label": "knees",
+          "duration": 107,
+          "x": 352,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 78, "width": 94, "height": 98 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 98, "y": 119 },
+            "attackAnchor": { "x": 148, "y": 169 },
+            "hurtAnchor": { "x": 102, "y": 111 },
+            "weaponAnchor": { "x": 148, "y": 169 },
+            "weakPointAnchor": { "x": 80, "y": 101 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 3,
+          "label": "slump",
+          "duration": 107,
+          "x": 528,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 86, "width": 105, "height": 90 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 101, "y": 127 },
+            "attackAnchor": { "x": 162, "y": 168 },
+            "hurtAnchor": { "x": 106, "y": 119 },
+            "weaponAnchor": { "x": 162, "y": 168 },
+            "weakPointAnchor": { "x": 85, "y": 106 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 4,
+          "label": "slump",
+          "duration": 107,
+          "x": 704,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 91, "width": 109, "height": 85 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 104, "y": 133 },
+            "attackAnchor": { "x": 167, "y": 169 },
+            "hurtAnchor": { "x": 109, "y": 126 },
+            "weaponAnchor": { "x": 167, "y": 169 },
+            "weakPointAnchor": { "x": 90, "y": 110 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 5,
+          "label": "collapse",
+          "duration": 125,
+          "x": 880,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 96, "width": 110, "height": 80 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 106, "y": 139 },
+            "attackAnchor": { "x": 169, "y": 171 },
+            "hurtAnchor": { "x": 111, "y": 132 },
+            "weaponAnchor": { "x": 169, "y": 171 },
+            "weakPointAnchor": { "x": 95, "y": 115 }
+          },
+          "contacts": { "N": true, "F": true }
+        },
+        {
+          "index": 6,
+          "label": "rest",
+          "duration": 214,
+          "x": 1056,
+          "y": 880,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 63, "y": 97, "width": 109, "height": 79 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 86, "y": 175 },
+            "footAnchor": { "x": 86, "y": 175 },
+            "bodyAnchor": { "x": 106, "y": 140 },
+            "attackAnchor": { "x": 169, "y": 171 },
+            "hurtAnchor": { "x": 111, "y": 134 },
+            "weaponAnchor": { "x": 169, "y": 171 },
+            "weakPointAnchor": { "x": 95, "y": 116 }
+          },
+          "contacts": { "N": true, "F": true }
+        }
+      ],
+      "events": [
+        { "frame": 0, "type": "EFFECT", "name": "tank_sparks" },
+        { "frame": 2, "type": "EFFECT", "name": "ground_impact" },
+        { "frame": 5, "type": "EFFECT", "name": "death_impact" }
+      ]
+    }
+  }
+}

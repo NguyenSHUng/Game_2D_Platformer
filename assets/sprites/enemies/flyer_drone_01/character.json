@@ -1,0 +1,793 @@
+{
+  "version": 1,
+  "format": "enemy-character/1",
+  "id": "flyer_drone_01",
+  "name": "Flyer",
+  "archetype": "FLYING",
+  "type": "FLYING",
+  "role": "POSITIONAL_THREAT",
+  "category": "AIR",
+  "size": "MEDIUM",
+  "seed": 1,
+  "logicalSize": { "width": 80, "height": 64 },
+  "drawScale": 0.5,
+  "dimensions": { "width": 80, "height": 64, "unit": "PIXEL", "worldWidth": 40, "worldHeight": 32 },
+  "facing": "RIGHT",
+  "directions": { "RIGHT": "SOURCE", "LEFT": "FLIP_X" },
+  "coordinates": {
+    "origin": "TOP_LEFT",
+    "yAxis": "DOWN",
+    "unit": "PIXEL",
+    "mirrorX": "width - 1 - x",
+    "libgdxY": "height - 1 - y"
+  },
+  "pivot": { "x": 38, "y": 27 },
+  "anchors": {
+    "origin": { "x": 0, "y": 0 },
+    "pivot": { "x": 38, "y": 27 },
+    "bodyAnchor": { "x": 38, "y": 27 },
+    "attackAnchor": { "x": 49, "y": 43 },
+    "hurtAnchor": { "x": 38, "y": 26 }
+  },
+  "palette": {
+    "HULL_0": "#10160d",
+    "HULL_1": "#323f26",
+    "HULL_2": "#5b6845",
+    "HULL_3": "#7c865f",
+    "HULL_4": "#999c86",
+    "METAL_0": "#383f47",
+    "METAL_1": "#58626a",
+    "METAL_2": "#7e868b",
+    "METAL_3": "#9ea1a3",
+    "METAL_4": "#bfbfbf",
+    "DARK_0": "#090a0b",
+    "DARK_1": "#111415",
+    "DARK_2": "#34383a",
+    "DARK_3": "#515455",
+    "DARK_4": "#727272",
+    "HAZARD_0": "#703412",
+    "HAZARD_1": "#a7661d",
+    "HAZARD_2": "#d6a536",
+    "HAZARD_3": "#ddc867",
+    "HAZARD_4": "#e4da9e",
+    "GLOW_0": "#a30012",
+    "GLOW_1": "#f00003",
+    "GLOW_2": "#ff4e3d",
+    "GLOW_3": "#f6a18e",
+    "GLOW_4": "#f7e4de",
+    "outline": "#11180e"
+  },
+  "parts": [
+    { "name": "far", "layer": "FAR", "kind": "LAYER" },
+    { "name": "body", "layer": "BODY", "kind": "LAYER" },
+    { "name": "arm", "layer": "ARM", "kind": "LAYER" },
+    { "name": "near", "layer": "NEAR", "kind": "LAYER" }
+  ],
+  "variation": {
+    "palette": "MILITARY_DRONE",
+    "chassis": "DRONE",
+    "optic": "LENS",
+    "antenna": true,
+    "stripe": true,
+    "timing": { "idleFps": 13, "moveFps": 13, "attackFps": 11, "windupHold": 1.7, "strikeSnap": 0.7 }
+  },
+  "gameplay": {
+    "role": "POSITIONAL_THREAT",
+    "size": "MEDIUM",
+    "threatTier": "POSITIONAL",
+    "locomotion": "AIR",
+    "speedClass": "MEDIUM",
+    "durabilityClass": "LOW",
+    "damageClass": "MEDIUM",
+    "attackStyle": "DIVE_FROM_ABOVE",
+    "space": "OPEN_AIR",
+    "moveSpeed": { "px": 52, "world": 26, "tilesPerSecond": 1.63 },
+    "hurtbox": {
+      "x": 15,
+      "y": 10,
+      "width": 47,
+      "height": 37,
+      "world": { "width": 23.5, "height": 18.5 }
+    },
+    "clearance": { "heightPx": 27, "heightTiles": 1 },
+    "attacks": {
+      "ATTACK": {
+        "label": "ATTACK",
+        "startupMs": 337,
+        "activeMs": 155,
+        "recoveryMs": 182,
+        "reach": { "px": 25, "world": 12.5 }
+      }
+    }
+  },
+  "spriteSheet": {
+    "image": "sprite-sheet.png",
+    "width": 640,
+    "height": 320,
+    "frameWidth": 80,
+    "frameHeight": 64,
+    "padding": 0,
+    "layout": "ROW_PER_ANIMATION",
+    "rows": [ "IDLE", "MOVE", "ATTACK", "HIT", "DEATH" ]
+  },
+  "spriteSheetLeft": { "image": "sprite-sheet-left.png", "sameLayoutAs": "sprite-sheet.png" },
+  "states": [ "IDLE", "MOVE", "ATTACK", "HIT", "DEATH" ],
+  "animations": {
+    "idle": {
+      "state": "IDLE",
+      "label": "HOVER",
+      "row": 0,
+      "strip": "idle.png",
+      "fps": 13,
+      "loop": true,
+      "playMode": "LOOP",
+      "frameCount": 8,
+      "totalDuration": 616,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "phase 0/8",
+          "duration": 77,
+          "x": 0,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 15, "y": 10, "width": 47, "height": 37 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 27 },
+            "attackAnchor": { "x": 48, "y": 44 },
+            "hurtAnchor": { "x": 38, "y": 26 }
+          }
+        },
+        {
+          "index": 1,
+          "label": "phase 1/8",
+          "duration": 77,
+          "x": 80,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 23, "y": 11, "width": 34, "height": 37 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 28 },
+            "attackAnchor": { "x": 47, "y": 45 },
+            "hurtAnchor": { "x": 38, "y": 27 }
+          }
+        },
+        {
+          "index": 2,
+          "label": "phase 2/8",
+          "duration": 77,
+          "x": 160,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 12, "width": 47, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 28 },
+            "attackAnchor": { "x": 48, "y": 46 },
+            "hurtAnchor": { "x": 38, "y": 27 }
+          }
+        },
+        {
+          "index": 3,
+          "label": "phase 3/8",
+          "duration": 77,
+          "x": 240,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 23, "y": 11, "width": 34, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 28 },
+            "attackAnchor": { "x": 49, "y": 44 },
+            "hurtAnchor": { "x": 38, "y": 27 }
+          }
+        },
+        {
+          "index": 4,
+          "label": "phase 4/8",
+          "duration": 77,
+          "x": 320,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 10, "width": 47, "height": 35 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 27 },
+            "attackAnchor": { "x": 50, "y": 43 },
+            "hurtAnchor": { "x": 38, "y": 26 }
+          }
+        },
+        {
+          "index": 5,
+          "label": "phase 5/8",
+          "duration": 77,
+          "x": 400,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 23, "y": 9, "width": 34, "height": 35 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 25 },
+            "attackAnchor": { "x": 50, "y": 41 },
+            "hurtAnchor": { "x": 38, "y": 24 }
+          }
+        },
+        {
+          "index": 6,
+          "label": "phase 6/8",
+          "duration": 77,
+          "x": 480,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 8, "width": 47, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 25 },
+            "attackAnchor": { "x": 50, "y": 41 },
+            "hurtAnchor": { "x": 38, "y": 24 }
+          }
+        },
+        {
+          "index": 7,
+          "label": "phase 7/8",
+          "duration": 77,
+          "x": 560,
+          "y": 0,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 23, "y": 9, "width": 34, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 25 },
+            "attackAnchor": { "x": 49, "y": 42 },
+            "hurtAnchor": { "x": 38, "y": 24 }
+          }
+        }
+      ],
+      "events": []
+    },
+    "move": {
+      "state": "MOVE",
+      "row": 1,
+      "strip": "move.png",
+      "fps": 13,
+      "loop": true,
+      "playMode": "LOOP",
+      "frameCount": 8,
+      "totalDuration": 616,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "phase 0/8",
+          "duration": 77,
+          "x": 0,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 19, "y": 6, "width": 46, "height": 42 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 27 },
+            "attackAnchor": { "x": 44, "y": 45 },
+            "hurtAnchor": { "x": 39, "y": 26 }
+          }
+        },
+        {
+          "index": 1,
+          "label": "phase 1/8",
+          "duration": 77,
+          "x": 80,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 24, "y": 9, "width": 34, "height": 40 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 27 },
+            "attackAnchor": { "x": 43, "y": 46 },
+            "hurtAnchor": { "x": 39, "y": 26 }
+          }
+        },
+        {
+          "index": 2,
+          "label": "phase 2/8",
+          "duration": 77,
+          "x": 160,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 20, "y": 6, "width": 45, "height": 43 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 28 },
+            "attackAnchor": { "x": 43, "y": 47 },
+            "hurtAnchor": { "x": 39, "y": 27 }
+          }
+        },
+        {
+          "index": 3,
+          "label": "phase 3/8",
+          "duration": 77,
+          "x": 240,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 24, "y": 9, "width": 34, "height": 40 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 27 },
+            "attackAnchor": { "x": 43, "y": 46 },
+            "hurtAnchor": { "x": 39, "y": 26 }
+          }
+        },
+        {
+          "index": 4,
+          "label": "phase 4/8",
+          "duration": 77,
+          "x": 320,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 19, "y": 6, "width": 46, "height": 42 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 27 },
+            "attackAnchor": { "x": 44, "y": 45 },
+            "hurtAnchor": { "x": 39, "y": 26 }
+          }
+        },
+        {
+          "index": 5,
+          "label": "phase 5/8",
+          "duration": 77,
+          "x": 400,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 24, "y": 8, "width": 34, "height": 39 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 26 },
+            "attackAnchor": { "x": 44, "y": 45 },
+            "hurtAnchor": { "x": 39, "y": 25 }
+          }
+        },
+        {
+          "index": 6,
+          "label": "phase 6/8",
+          "duration": 77,
+          "x": 480,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 19, "y": 5, "width": 46, "height": 42 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 26 },
+            "attackAnchor": { "x": 44, "y": 44 },
+            "hurtAnchor": { "x": 39, "y": 25 }
+          }
+        },
+        {
+          "index": 7,
+          "label": "phase 7/8",
+          "duration": 77,
+          "x": 560,
+          "y": 64,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 24, "y": 8, "width": 34, "height": 39 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 26 },
+            "attackAnchor": { "x": 44, "y": 45 },
+            "hurtAnchor": { "x": 39, "y": 25 }
+          }
+        }
+      ],
+      "events": [],
+      "move": { "airSpeed": 52 }
+    },
+    "attack": {
+      "state": "ATTACK",
+      "row": 2,
+      "strip": "attack.png",
+      "fps": 11,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 7,
+      "totalDuration": 674,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "neutral",
+          "duration": 91,
+          "x": 0,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 10, "width": 47, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 27 },
+            "attackAnchor": { "x": 49, "y": 43 },
+            "hurtAnchor": { "x": 38, "y": 26 }
+          }
+        },
+        {
+          "index": 1,
+          "label": "rise",
+          "duration": 91,
+          "x": 80,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 18, "y": 4, "width": 36, "height": 34 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 35, "y": 23 },
+            "attackAnchor": { "x": 47, "y": 35 },
+            "hurtAnchor": { "x": 35, "y": 22 }
+          }
+        },
+        {
+          "index": 2,
+          "label": "rear",
+          "duration": 155,
+          "x": 160,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 7, "y": 1, "width": 46, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 34, "y": 23 },
+            "attackAnchor": { "x": 46, "y": 34 },
+            "hurtAnchor": { "x": 34, "y": 22 }
+          }
+        },
+        {
+          "index": 3,
+          "label": "dive",
+          "duration": 64,
+          "x": 240,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 28, "y": 13, "width": 34, "height": 44 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 43, "y": 34 },
+            "attackAnchor": { "x": 54, "y": 53 },
+            "hurtAnchor": { "x": 43, "y": 33 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 48, "y": 47, "width": 12, "height": 12 }
+        },
+        {
+          "index": 4,
+          "label": "strike",
+          "duration": 91,
+          "x": 320,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 27, "y": 11, "width": 44, "height": 44 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 44, "y": 35 },
+            "attackAnchor": { "x": 57, "y": 53 },
+            "hurtAnchor": { "x": 44, "y": 34 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 51, "y": 47, "width": 12, "height": 12 }
+        },
+        {
+          "index": 5,
+          "label": "pull up",
+          "duration": 91,
+          "x": 400,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 26, "y": 12, "width": 35, "height": 34 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 42, "y": 30 },
+            "attackAnchor": { "x": 57, "y": 44 },
+            "hurtAnchor": { "x": 42, "y": 29 }
+          }
+        },
+        {
+          "index": 6,
+          "label": "return",
+          "duration": 91,
+          "x": 480,
+          "y": 128,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 10, "width": 47, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 27 },
+            "attackAnchor": { "x": 49, "y": 43 },
+            "hurtAnchor": { "x": 38, "y": 26 }
+          }
+        }
+      ],
+      "events": [
+        { "frame": 3, "type": "ATTACK_START" },
+        { "frame": 5, "type": "ATTACK_END" }
+      ],
+      "attack": {
+        "activeFrames": [ 3, 4 ],
+        "activeFrameStart": 3,
+        "activeFrameEnd": 4,
+        "origin": { "x": 54, "y": 53 },
+        "reach": 12,
+        "width": 12,
+        "height": 12
+      }
+    },
+    "hit": {
+      "state": "HIT",
+      "row": 3,
+      "strip": "hit.png",
+      "fps": 12,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 4,
+      "totalDuration": 357,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "impact",
+          "duration": 83,
+          "x": 0,
+          "y": 192,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 17, "y": 6, "width": 37, "height": 34 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 35, "y": 25 },
+            "attackAnchor": { "x": 50, "y": 37 },
+            "hurtAnchor": { "x": 35, "y": 24 }
+          }
+        },
+        {
+          "index": 1,
+          "label": "wobble",
+          "duration": 108,
+          "x": 80,
+          "y": 192,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 15, "y": 8, "width": 46, "height": 41 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 36, "y": 28 },
+            "attackAnchor": { "x": 44, "y": 46 },
+            "hurtAnchor": { "x": 36, "y": 27 }
+          }
+        },
+        {
+          "index": 2,
+          "label": "recover",
+          "duration": 83,
+          "x": 160,
+          "y": 192,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 22, "y": 10, "width": 34, "height": 35 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 37, "y": 27 },
+            "attackAnchor": { "x": 49, "y": 43 },
+            "hurtAnchor": { "x": 37, "y": 26 }
+          }
+        },
+        {
+          "index": 3,
+          "label": "settle",
+          "duration": 83,
+          "x": 240,
+          "y": 192,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 14, "y": 10, "width": 47, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 27 },
+            "attackAnchor": { "x": 49, "y": 43 },
+            "hurtAnchor": { "x": 38, "y": 26 }
+          }
+        }
+      ],
+      "events": [
+        { "frame": 0, "type": "EFFECT", "name": "hit_sparks" }
+      ]
+    },
+    "death": {
+      "state": "DEATH",
+      "row": 4,
+      "strip": "death.png",
+      "fps": 10,
+      "loop": false,
+      "playMode": "NORMAL",
+      "frameCount": 7,
+      "totalDuration": 701,
+      "source": "PROCEDURAL",
+      "mirror": "FLIP_X",
+      "frames": [
+        {
+          "index": 0,
+          "label": "hit",
+          "duration": 86,
+          "x": 0,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 18, "y": 5, "width": 37, "height": 35 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 36, "y": 25 },
+            "attackAnchor": { "x": 52, "y": 36 },
+            "hurtAnchor": { "x": 36, "y": 24 }
+          }
+        },
+        {
+          "index": 1,
+          "label": "spin out",
+          "duration": 86,
+          "x": 80,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 22, "y": 6, "width": 43, "height": 47 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 36, "y": 31 },
+            "attackAnchor": { "x": 28, "y": 50 },
+            "hurtAnchor": { "x": 36, "y": 30 }
+          }
+        },
+        {
+          "index": 2,
+          "label": "fall",
+          "duration": 86,
+          "x": 160,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 19, "y": 13, "width": 46, "height": 46 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 38, "y": 41 },
+            "attackAnchor": { "x": 21, "y": 52 },
+            "hurtAnchor": { "x": 38, "y": 40 }
+          }
+        },
+        {
+          "index": 3,
+          "label": "crash",
+          "duration": 86,
+          "x": 240,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 21, "y": 19, "width": 44, "height": 42 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 39, "y": 45 },
+            "attackAnchor": { "x": 23, "y": 56 },
+            "hurtAnchor": { "x": 39, "y": 44 }
+          }
+        },
+        {
+          "index": 4,
+          "label": "crash",
+          "duration": 86,
+          "x": 320,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 25, "y": 24, "width": 40, "height": 39 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 40, "y": 46 },
+            "attackAnchor": { "x": 27, "y": 60 },
+            "hurtAnchor": { "x": 40, "y": 45 }
+          }
+        },
+        {
+          "index": 5,
+          "label": "bounce",
+          "duration": 100,
+          "x": 400,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 23, "y": 21, "width": 41, "height": 40 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 40, "y": 42 },
+            "attackAnchor": { "x": 29, "y": 58 },
+            "hurtAnchor": { "x": 40, "y": 41 }
+          }
+        },
+        {
+          "index": 6,
+          "label": "rest",
+          "duration": 171,
+          "x": 480,
+          "y": 256,
+          "width": 80,
+          "height": 64,
+          "bounds": { "x": 22, "y": 28, "width": 41, "height": 36 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 38, "y": 27 },
+            "bodyAnchor": { "x": 40, "y": 48 },
+            "attackAnchor": { "x": 28, "y": 61 },
+            "hurtAnchor": { "x": 40, "y": 47 }
+          }
+        }
+      ],
+      "events": [
+        { "frame": 0, "type": "EFFECT", "name": "death_sparks" },
+        { "frame": 4, "type": "EFFECT", "name": "death_impact" }
+      ]
+    }
+  }
+}

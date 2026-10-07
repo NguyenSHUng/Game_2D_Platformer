@@ -1,0 +1,245 @@
+{
+  "id": "combat_knife",
+  "name": "Combat Knife",
+  "texture": "sprites/weapons/combat_knife/combat_knife.png",
+  "drawScale": 1,
+  "pivot": {
+    "x": 5,
+    "y": 4
+  },
+  "rotation": 0,
+  "tipAnchor": {
+    "x": 22,
+    "y": 3
+  },
+  "muzzleAnchor": null,
+  "ejectionAnchor": null,
+  "supportAnchor": null,
+  "category": "MELEE",
+  "stance": null,
+  "generator": {
+    "version": 1,
+    "format": "pixel-weapon/1",
+    "id": "combat_knife",
+    "name": "Combat Knife",
+    "category": "MELEE",
+    "type": "KNIFE",
+    "sizeClass": "SMALL",
+    "width": 24,
+    "height": 9,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "pivot": {
+      "x": 5,
+      "y": 4
+    },
+    "gripAnchor": {
+      "x": 5,
+      "y": 4
+    },
+    "supportAnchor": null,
+    "handOffset": {
+      "x": 0,
+      "y": 0
+    },
+    "muzzleAnchor": null,
+    "ejectionAnchor": null,
+    "tipAnchor": {
+      "x": 22,
+      "y": 3
+    },
+    "reach": 17.03,
+    "stance": null,
+    "hands": 1,
+    "orientation": "RIGHT",
+    "palette": "MILITARY_DARK",
+    "detailLevel": "HIGH",
+    "scale": 1,
+    "seed": 1001,
+    "coordinates": {
+      "origin": "TOP_LEFT",
+      "yAxis": "DOWN",
+      "unit": "PIXEL",
+      "mirrorX": "width - 1 - x",
+      "rotation": "DEGREES_CCW_FACING_RIGHT"
+    },
+    "attachment": {
+      "hand": "handFront",
+      "supportHand": null,
+      "socket": "weaponAnchor",
+      "rule": "pivot (= gripAnchor) is placed on the character frame's weapon anchor; rotation turns around the pivot",
+      "composition": [
+        "BACKGROUND",
+        "PLAYER_BODY",
+        "BACK_ARM_HAND",
+        "WEAPON",
+        "FRONT_HAND",
+        "PLAYER_FRONT_DETAILS"
+      ]
+    },
+    "poses": {
+      "KNIFE_IDLE": {
+        "rotation": 0,
+        "hand": "handFront",
+        "note": "blade forward, held low"
+      },
+      "KNIFE_READY": {
+        "rotation": 10,
+        "hand": "handFront",
+        "note": "tip slightly raised"
+      },
+      "KNIFE_ATTACK_START": {
+        "rotation": 25,
+        "hand": "handFront",
+        "note": "wind-up, blade drawn back"
+      },
+      "KNIFE_ATTACK": {
+        "rotation": 0,
+        "hand": "handFront",
+        "note": "thrust, blade level at full reach"
+      },
+      "KNIFE_ATTACK_END": {
+        "rotation": -15,
+        "hand": "handFront",
+        "note": "follow-through, tip dropping"
+      }
+    },
+    "regions": {
+      "pommel": {
+        "x": 1,
+        "y": 3,
+        "width": 1,
+        "height": 3
+      },
+      "handle": {
+        "x": 2,
+        "y": 3,
+        "width": 6,
+        "height": 3
+      },
+      "guard": {
+        "x": 8,
+        "y": 1,
+        "width": 1,
+        "height": 7
+      },
+      "blade": {
+        "x": 9,
+        "y": 2,
+        "width": 14,
+        "height": 4
+      }
+    },
+    "layers": [
+      {
+        "name": "SILHOUETTE",
+        "applied": true
+      },
+      {
+        "name": "BASE_MATERIAL",
+        "applied": true
+      },
+      {
+        "name": "SECONDARY_MATERIAL",
+        "applied": true
+      },
+      {
+        "name": "SHADOW",
+        "applied": true
+      },
+      {
+        "name": "HIGHLIGHT",
+        "applied": true
+      },
+      {
+        "name": "MICRO_DETAILS",
+        "applied": false
+      },
+      {
+        "name": "GRIP_DETAIL",
+        "applied": true
+      },
+      {
+        "name": "EDGE_CLEANUP",
+        "applied": true
+      }
+    ],
+    "materials": {
+      "BLADE": "COATED",
+      "EDGE": "STEEL",
+      "HANDLE": "POLYMER",
+      "GUARD": "DARK_METAL",
+      "POMMEL": "DARK_METAL"
+    },
+    "details": {
+      "bladeType": "TACTICAL",
+      "finish": "BLACKENED",
+      "bladeLength": 14,
+      "handleLength": 6,
+      "bladeHeight": 4,
+      "guardDrop": 2,
+      "palmSwell": false
+    },
+    "colors": {
+      "outline": "#12160f",
+      "tones": [
+        "DEEP_SHADOW",
+        "SHADOW",
+        "BASE",
+        "LIGHT",
+        "HIGHLIGHT"
+      ],
+      "STEEL": [
+        "#2b3034",
+        "#4c5258",
+        "#868c91",
+        "#c9cdcf",
+        "#eef0ec"
+      ],
+      "COATED": [
+        "#15181a",
+        "#24282b",
+        "#353a3e",
+        "#565d63",
+        "#9aa1a6"
+      ],
+      "POLYMER": [
+        "#120f0c",
+        "#1b1712",
+        "#2c251d",
+        "#463b2d",
+        "#655440"
+      ],
+      "DARK_METAL": [
+        "#141618",
+        "#23272a",
+        "#41474c",
+        "#656d73",
+        "#a3aaaf"
+      ],
+      "FABRIC": [
+        "#16190f",
+        "#2d3223",
+        "#434a33",
+        "#626644",
+        "#7d7b57"
+      ],
+      "POLYMER_OD": [
+        "#14170e",
+        "#262a1c",
+        "#3a402b",
+        "#555b3d",
+        "#6f7350"
+      ]
+    },
+    "polish": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0
+    },
+    "generator": "pixel-weapon-generator",
+    "phase": 2
+  }
+}

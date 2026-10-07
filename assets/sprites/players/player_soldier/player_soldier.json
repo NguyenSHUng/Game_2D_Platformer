@@ -1,0 +1,8569 @@
+{
+  "version": 1,
+  "format": "player-character/1",
+  "id": "player_soldier",
+  "name": "Soldier",
+  "type": "PLAYER",
+  "characterType": "SOLDIER",
+  "bodyType": "HUMAN",
+  "style": "MILITARY",
+  "view": "SIDE_VIEW_2D",
+  "seed": 12345,
+  "logicalSize": {
+    "width": 64,
+    "height": 64
+  },
+  "orientation": "RIGHT",
+  "directions": {
+    "RIGHT": "SOURCE",
+    "LEFT": "FLIP_X"
+  },
+  "coordinates": {
+    "origin": "TOP_LEFT",
+    "yAxis": "DOWN",
+    "unit": "PIXEL",
+    "mirrorX": "width - 1 - x",
+    "libgdxY": "height - 1 - y"
+  },
+  "frameWidth": 64,
+  "frameHeight": 64,
+  "drawScale": 0.5,
+  "footOffset": 0,
+  "colliderWidth": 14,
+  "colliderHeight": 53,
+  "pivot": {
+    "x": 32,
+    "y": 63
+  },
+  "anchors": {
+    "root": {
+      "x": 32,
+      "y": 63
+    },
+    "head": {
+      "x": 32,
+      "y": 20
+    },
+    "neck": {
+      "x": 31,
+      "y": 25
+    },
+    "shoulder_front": {
+      "x": 30,
+      "y": 29
+    },
+    "shoulder_back": {
+      "x": 28,
+      "y": 29
+    },
+    "hand_front": {
+      "x": 39,
+      "y": 38
+    },
+    "hand_back": {
+      "x": 28,
+      "y": 43
+    },
+    "hip": {
+      "x": 28,
+      "y": 42
+    },
+    "body_center": {
+      "x": 29,
+      "y": 35
+    },
+    "foot_front": {
+      "x": 33,
+      "y": 63
+    },
+    "foot_back": {
+      "x": 23,
+      "y": 63
+    },
+    "weapon_anchor": {
+      "x": 39,
+      "y": 38
+    },
+    "attack_origin": {
+      "x": 50,
+      "y": 38
+    }
+  },
+  "hurtbox": {
+    "x": 21,
+    "y": 11,
+    "width": 14,
+    "height": 53
+  },
+  "parts": [
+    {
+      "name": "leg_back",
+      "layer": "BACK",
+      "kind": "LIMB",
+      "material": "CLOTH"
+    },
+    {
+      "name": "boot_back",
+      "layer": "BACK",
+      "kind": "BOOT",
+      "material": "GEAR"
+    },
+    {
+      "name": "arm_back",
+      "layer": "BACK",
+      "kind": "LIMB",
+      "material": "CLOTH"
+    },
+    {
+      "name": "hand_back",
+      "layer": "BACK",
+      "kind": "HAND",
+      "material": "GEAR"
+    },
+    {
+      "name": "backpack",
+      "layer": "PACK",
+      "kind": "BACKPACK",
+      "material": "PACK"
+    },
+    {
+      "name": "torso",
+      "layer": "TORSO",
+      "kind": "TORSO",
+      "material": "CLOTH"
+    },
+    {
+      "name": "equipment",
+      "layer": "TORSO",
+      "kind": "EQUIPMENT",
+      "material": "VEST"
+    },
+    {
+      "name": "leg_front",
+      "layer": "LEG_FRONT",
+      "kind": "LIMB",
+      "material": "CLOTH"
+    },
+    {
+      "name": "boot_front",
+      "layer": "LEG_FRONT",
+      "kind": "BOOT",
+      "material": "GEAR"
+    },
+    {
+      "name": "head",
+      "layer": "HEAD",
+      "kind": "HEAD",
+      "material": "MASK"
+    },
+    {
+      "name": "helmet",
+      "layer": "HEAD",
+      "kind": "HELMET",
+      "material": "HELMET"
+    },
+    {
+      "name": "arm_front",
+      "layer": "ARM_FRONT",
+      "kind": "LIMB",
+      "material": "CLOTH"
+    },
+    {
+      "name": "temporary_melee_weapon",
+      "layer": "HAND_FRONT",
+      "kind": "WEAPON",
+      "material": "METAL",
+      "attachment": "weapon_anchor",
+      "equipment": "knife"
+    },
+    {
+      "name": "hand_front",
+      "layer": "HAND_FRONT",
+      "kind": "HAND",
+      "material": "GEAR"
+    }
+  ],
+  "equipment": [
+    {
+      "id": "helmet",
+      "slot": "head",
+      "style": "STANDARD"
+    },
+    {
+      "id": "face_covering",
+      "slot": "face",
+      "style": "RESPIRATOR",
+      "neck": "GAITER"
+    },
+    {
+      "id": "visor",
+      "slot": "eyes"
+    },
+    {
+      "id": "tactical_vest",
+      "slot": "torso",
+      "pouches": 2
+    },
+    {
+      "id": "backpack",
+      "slot": "back",
+      "size": "LARGE",
+      "bedroll": true
+    },
+    {
+      "id": "gloves",
+      "slot": "hands"
+    },
+    {
+      "id": "utility_belt",
+      "slot": "waist",
+      "holster": false
+    },
+    {
+      "id": "boots",
+      "slot": "feet"
+    },
+    {
+      "id": "knife",
+      "slot": "temporary_weapon",
+      "type": "MELEE",
+      "temporary": true,
+      "attachTo": "weapon_anchor",
+      "sprite": "weapons/knife.png",
+      "definition": "weapons/knife.json",
+      "gripAnchor": {
+        "x": 3,
+        "y": 1
+      },
+      "tipAnchor": {
+        "x": 14,
+        "y": 1
+      },
+      "muzzleAnchor": null
+    }
+  ],
+  "sockets": {
+    "primary": {
+      "anchor": "weapon_anchor",
+      "accepts": [
+        "MELEE",
+        "SIDEARM",
+        "SMG",
+        "RIFLE",
+        "HEAVY"
+      ],
+      "current": "knife"
+    },
+    "support": {
+      "anchor": "hand_back",
+      "accepts": [
+        "RIFLE",
+        "SMG",
+        "HEAVY"
+      ],
+      "current": null
+    }
+  },
+  "palette": {
+    "outline": "#12160f",
+    "deep": "#20261b",
+    "skinDeep": "#2c1c15",
+    "skinShadow": "#3f2a20",
+    "skin": "#5f3f2e",
+    "skinLight": "#75503a",
+    "clothShadow": "#2d3223",
+    "cloth": "#434a33",
+    "clothLight": "#626644",
+    "clothHighlight": "#7d7b57",
+    "vestShadow": "#1e1f1b",
+    "vest": "#2c2d28",
+    "vestLight": "#46433a",
+    "vestHighlight": "#625d4f",
+    "gearShadow": "#1b1712",
+    "gear": "#2c251d",
+    "gearLight": "#463b2d",
+    "gearHighlight": "#655440",
+    "metalShadow": "#4c5258",
+    "metal": "#868c91",
+    "metalLight": "#c9cdcf",
+    "metalHighlight": "#eef0ec",
+    "accent": "#7d9a93",
+    "lens": "#182122",
+    "lensLight": "#33494a"
+  },
+  "metadata": {
+    "palette": "MILITARY_DARK",
+    "generator": "player-character-generator",
+    "phase": 1,
+    "loadout": {
+      "helmet": true,
+      "vest": true,
+      "backpack": true,
+      "gloves": true,
+      "weaponMode": "KNIFE"
+    },
+    "variation": {
+      "palette": "MILITARY_DARK",
+      "skinTone": "DARK",
+      "clothDrift": -6,
+      "helmet": "STANDARD",
+      "hair": "UNDER_HELMET",
+      "mask": "RESPIRATOR",
+      "eyewear": "VISOR",
+      "backpack": "LARGE+BEDROLL",
+      "pouches": 2,
+      "kneePads": true,
+      "elbowPads": true,
+      "sleeves": "FULL",
+      "chinStrap": true,
+      "holster": false,
+      "radio": false,
+      "timing": {
+        "idleFps": 6,
+        "walkFps": 10,
+        "attackFps": 12,
+        "windupHold": 1.75,
+        "strikeSnap": 0.66
+      }
+    },
+    "art": {
+      "style": "DARK_MILITARY_PIXEL_ART",
+      "detail": "HIGH",
+      "pipeline": [
+        "silhouette",
+        "basePalette",
+        "equipment",
+        "anatomy",
+        "material",
+        "micro",
+        "lighting",
+        "cleanup",
+        "polish"
+      ],
+      "face": {
+        "concealed": true,
+        "mask": "RESPIRATOR",
+        "eyewear": "VISOR",
+        "neck": "GAITER"
+      },
+      "outline": {
+        "outer": "outline",
+        "inner": "deep"
+      },
+      "light": "TOP_FRONT_WARM",
+      "paletteSlots": 25
+    },
+    "game": {
+      "drawScale": 0.5,
+      "exportedBy": "tools/export-game.mjs",
+      "weapon": "separate"
+    }
+  },
+  "spriteSheet": {
+    "image": "sprite-sheet.png",
+    "width": 512,
+    "height": 1088,
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "layout": "ROW_PER_ANIMATION",
+    "rows": [
+      "IDLE",
+      "WALK",
+      "ATTACK_KNIFE",
+      "HIT",
+      "DEATH",
+      "CROUCH",
+      "JUMP",
+      "IDLE_PISTOL",
+      "WALK_PISTOL",
+      "CROUCH_PISTOL",
+      "JUMP_PISTOL",
+      "SHOOT_PISTOL",
+      "IDLE_RIFLE",
+      "WALK_RIFLE",
+      "CROUCH_RIFLE",
+      "JUMP_RIFLE",
+      "SHOOT_RIFLE"
+    ]
+  },
+  "animations": [
+    {
+      "id": "IDLE",
+      "type": "IDLE",
+      "sheet": "idle.png",
+      "handSheet": "idle_hand.png",
+      "row": 0,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 6,
+      "frameCount": 6,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1667,
+      "totalDuration": 1002,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 167,
+          "sprite": "frames/idle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 38,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 167,
+          "sprite": "frames/idle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 38,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 37
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 37
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 37
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 167,
+          "sprite": "frames/idle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 44
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/idle_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/6",
+          "bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 38,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 22
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 40
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 45
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 40
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 40
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 167,
+          "sprite": "frames/idle_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 38,
+              "y": 40
+            },
+            "hand_back": {
+              "x": 26,
+              "y": 44
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 38,
+              "y": 40
+            },
+            "attack_origin": {
+              "x": 49,
+              "y": 40
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 5,
+          "duration": 167,
+          "sprite": "frames/idle_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 37,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 38,
+              "y": 39
+            },
+            "hand_back": {
+              "x": 26,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 38,
+              "y": 39
+            },
+            "attack_origin": {
+              "x": 49,
+              "y": 39
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 39,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 37,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 40,
+          "rotation": 0
+        },
+        {
+          "x": 38,
+          "y": 40,
+          "rotation": 0
+        },
+        {
+          "x": 38,
+          "y": 39,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "WALK",
+      "type": "WALK",
+      "sheet": "walk.png",
+      "handSheet": "walk_hand.png",
+      "row": 1,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 10,
+      "frameCount": 8,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1,
+      "totalDuration": 800,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 100,
+          "sprite": "frames/walk_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 36,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 38,
+              "y": 42
+            },
+            "hand_back": {
+              "x": 35,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 21,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 38,
+              "y": 42
+            },
+            "attack_origin": {
+              "x": 49,
+              "y": 42
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 1,
+          "duration": 100,
+          "sprite": "frames/walk_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 40
+            },
+            "hand_back": {
+              "x": 34,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 32,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 40
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 40
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 100,
+          "sprite": "frames/walk_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 59
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 100,
+          "sprite": "frames/walk_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 37
+            },
+            "hand_back": {
+              "x": 26,
+              "y": 44
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 26,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 32,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 37
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 37
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 100,
+          "sprite": "frames/walk_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 24,
+              "y": 45
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 23,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 33,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 5,
+          "duration": 100,
+          "sprite": "frames/walk_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 37
+            },
+            "hand_back": {
+              "x": 26,
+              "y": 44
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 24,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 30,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 37
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 37
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 6,
+          "duration": 100,
+          "sprite": "frames/walk_06.png",
+          "x": 384,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 6/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 59
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 7,
+          "duration": 100,
+          "sprite": "frames/walk_07.png",
+          "x": 448,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 7/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 40
+            },
+            "hand_back": {
+              "x": 34,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 40
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 40
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "FOOTSTEP"
+        },
+        {
+          "frame": 4,
+          "type": "FOOTSTEP"
+        }
+      ],
+      "hitFrames": [],
+      "walk": {
+        "stride": 12,
+        "groundSpeed": 30
+      },
+      "handFrames": [
+        {
+          "x": 38,
+          "y": 42,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 40,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 37,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 37,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 39,
+          "y": 40,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "ATTACK_KNIFE",
+      "type": "ATTACK",
+      "sheet": "attack_knife.png",
+      "handSheet": "attack_knife_hand.png",
+      "row": 2,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 12,
+      "frameCount": 7,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.0833,
+      "totalDuration": 616,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 83,
+          "sprite": "frames/attack_knife_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "ready",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 38,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 39,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 39,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 50,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 83,
+          "sprite": "frames/attack_knife_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "prepare",
+          "bounds": {
+            "x": 14,
+            "y": 12,
+            "width": 35,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 30,
+              "y": 21
+            },
+            "neck": {
+              "x": 29,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 28,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 26,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 35,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 33,
+              "y": 42
+            },
+            "hip": {
+              "x": 27,
+              "y": 43
+            },
+            "body_center": {
+              "x": 27,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 35,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 46,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "ATTACK_START"
+        },
+        {
+          "index": 2,
+          "duration": 146,
+          "sprite": "frames/attack_knife_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "swing",
+          "bounds": {
+            "x": 12,
+            "y": 13,
+            "width": 30,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 27,
+              "y": 22
+            },
+            "neck": {
+              "x": 27,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 26,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 24,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 28,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 35,
+              "y": 40
+            },
+            "hip": {
+              "x": 26,
+              "y": 44
+            },
+            "body_center": {
+              "x": 26,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 28,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 39,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 55,
+          "sprite": "frames/attack_knife_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "hit",
+          "bounds": {
+            "x": 19,
+            "y": 15,
+            "width": 44,
+            "height": 49
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 39,
+              "y": 24
+            },
+            "neck": {
+              "x": 35,
+              "y": 28
+            },
+            "shoulder_front": {
+              "x": 34,
+              "y": 32
+            },
+            "shoulder_back": {
+              "x": 32,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 49,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 25,
+              "y": 44
+            },
+            "hip": {
+              "x": 29,
+              "y": 44
+            },
+            "body_center": {
+              "x": 31,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 37,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 49,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 60,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "HIT",
+          "attackBox": {
+            "x": 50,
+            "y": 29,
+            "width": 14,
+            "height": 9
+          }
+        },
+        {
+          "index": 4,
+          "duration": 83,
+          "sprite": "frames/attack_knife_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "follow-through",
+          "bounds": {
+            "x": 18,
+            "y": 15,
+            "width": 42,
+            "height": 49
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 37,
+              "y": 24
+            },
+            "neck": {
+              "x": 34,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 32
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 47,
+              "y": 36
+            },
+            "hand_back": {
+              "x": 25,
+              "y": 45
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 30,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 37,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 47,
+              "y": 36
+            },
+            "attack_origin": {
+              "x": 58,
+              "y": 39
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 75,
+            "rotation": -15
+          },
+          "event": null
+        },
+        {
+          "index": 5,
+          "duration": 83,
+          "sprite": "frames/attack_knife_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recover",
+          "bounds": {
+            "x": 17,
+            "y": 13,
+            "width": 41,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 22
+            },
+            "neck": {
+              "x": 33,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 44
+            },
+            "hip": {
+              "x": 29,
+              "y": 43
+            },
+            "body_center": {
+              "x": 30,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "RECOVER"
+        },
+        {
+          "index": 6,
+          "duration": 83,
+          "sprite": "frames/attack_knife_06.png",
+          "x": 384,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "settle",
+          "bounds": {
+            "x": 16,
+            "y": 11,
+            "width": 38,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 43
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 1,
+          "type": "ATTACK_START"
+        },
+        {
+          "frame": 3,
+          "type": "HIT"
+        },
+        {
+          "frame": 5,
+          "type": "RECOVER"
+        }
+      ],
+      "hitFrames": [
+        3
+      ],
+      "attackBox": {
+        "x": 50,
+        "y": 29,
+        "width": 14,
+        "height": 9
+      },
+      "handFrames": [
+        {
+          "x": 39,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 35,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 28,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 49,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 47,
+          "y": 36,
+          "rotation": -15
+        },
+        {
+          "x": 44,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 38,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "HIT",
+      "type": "HIT",
+      "sheet": "hit.png",
+      "handSheet": "hit_hand.png",
+      "row": 3,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 10,
+      "frameCount": 3,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1,
+      "totalDuration": 340,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 100,
+          "sprite": "frames/hit_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "impact",
+          "bounds": {
+            "x": 11,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 25,
+              "y": 21
+            },
+            "neck": {
+              "x": 25,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 25,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 23,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 36,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 30,
+              "y": 42
+            },
+            "hip": {
+              "x": 26,
+              "y": 43
+            },
+            "body_center": {
+              "x": 25,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 36,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 47,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 105,
+            "rotation": 15
+          },
+          "event": "HURT"
+        },
+        {
+          "index": 1,
+          "duration": 140,
+          "sprite": "frames/hit_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recoil",
+          "bounds": {
+            "x": 9,
+            "y": 13,
+            "width": 39,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 21,
+              "y": 22
+            },
+            "neck": {
+              "x": 23,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 23,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 21,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 36,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 31,
+              "y": 41
+            },
+            "hip": {
+              "x": 25,
+              "y": 44
+            },
+            "body_center": {
+              "x": 24,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 36,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 46,
+              "y": 29
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 120,
+            "rotation": 30
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 100,
+          "sprite": "frames/hit_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recover",
+          "bounds": {
+            "x": 14,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 30,
+              "y": 21
+            },
+            "neck": {
+              "x": 29,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 28,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 26,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 38,
+              "y": 39
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 44
+            },
+            "hip": {
+              "x": 27,
+              "y": 43
+            },
+            "body_center": {
+              "x": 27,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 38,
+              "y": 39
+            },
+            "attack_origin": {
+              "x": 49,
+              "y": 39
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "HURT"
+        }
+      ],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 36,
+          "y": 35,
+          "rotation": 15
+        },
+        {
+          "x": 36,
+          "y": 34,
+          "rotation": 30
+        },
+        {
+          "x": 38,
+          "y": 39,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "DEATH",
+      "type": "DEATH",
+      "sheet": "death.png",
+      "handSheet": "death_hand.png",
+      "row": 4,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 9,
+      "frameCount": 6,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1111,
+      "totalDuration": 833,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 111,
+          "sprite": "frames/death_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recoil",
+          "bounds": {
+            "x": 10,
+            "y": 12,
+            "width": 40,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 24,
+              "y": 21
+            },
+            "neck": {
+              "x": 25,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 25,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 23,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 37,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 31,
+              "y": 42
+            },
+            "hip": {
+              "x": 26,
+              "y": 43
+            },
+            "body_center": {
+              "x": 25,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 37,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 48,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 105,
+            "rotation": 15
+          },
+          "event": "HURT"
+        },
+        {
+          "index": 1,
+          "duration": 111,
+          "sprite": "frames/death_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "stagger",
+          "bounds": {
+            "x": 7,
+            "y": 14,
+            "width": 41,
+            "height": 50
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 18,
+              "y": 23
+            },
+            "neck": {
+              "x": 21,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 22,
+              "y": 32
+            },
+            "shoulder_back": {
+              "x": 20,
+              "y": 32
+            },
+            "hand_front": {
+              "x": 36,
+              "y": 30
+            },
+            "hand_back": {
+              "x": 34,
+              "y": 36
+            },
+            "hip": {
+              "x": 26,
+              "y": 44
+            },
+            "body_center": {
+              "x": 23,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 59
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 36,
+              "y": 30
+            },
+            "attack_origin": {
+              "x": 46,
+              "y": 25
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 120,
+            "rotation": 30
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 111,
+          "sprite": "frames/death_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "lose balance",
+          "bounds": {
+            "x": 2,
+            "y": 16,
+            "width": 44,
+            "height": 48
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 12,
+              "y": 31
+            },
+            "neck": {
+              "x": 16,
+              "y": 34
+            },
+            "shoulder_front": {
+              "x": 19,
+              "y": 38
+            },
+            "shoulder_back": {
+              "x": 17,
+              "y": 39
+            },
+            "hand_front": {
+              "x": 28,
+              "y": 27
+            },
+            "hand_back": {
+              "x": 29,
+              "y": 31
+            },
+            "hip": {
+              "x": 27,
+              "y": 48
+            },
+            "body_center": {
+              "x": 22,
+              "y": 43
+            },
+            "foot_front": {
+              "x": 38,
+              "y": 57
+            },
+            "foot_back": {
+              "x": 26,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 28,
+              "y": 27
+            },
+            "attack_origin": {
+              "x": 34,
+              "y": 17
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 150,
+            "rotation": 60
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 111,
+          "sprite": "frames/death_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fall",
+          "bounds": {
+            "x": 3,
+            "y": 25,
+            "width": 49,
+            "height": 39
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 12,
+              "y": 44
+            },
+            "neck": {
+              "x": 16,
+              "y": 45
+            },
+            "shoulder_front": {
+              "x": 20,
+              "y": 48
+            },
+            "shoulder_back": {
+              "x": 19,
+              "y": 50
+            },
+            "hand_front": {
+              "x": 27,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 28,
+              "y": 37
+            },
+            "hip": {
+              "x": 32,
+              "y": 53
+            },
+            "body_center": {
+              "x": 25,
+              "y": 50
+            },
+            "foot_front": {
+              "x": 44,
+              "y": 56
+            },
+            "foot_back": {
+              "x": 39,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 27,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 35,
+              "y": 26
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 135,
+            "rotation": 45
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 111,
+          "sprite": "frames/death_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "impact",
+          "bounds": {
+            "x": 2,
+            "y": 40,
+            "width": 54,
+            "height": 24
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 11,
+              "y": 55
+            },
+            "neck": {
+              "x": 15,
+              "y": 49
+            },
+            "shoulder_front": {
+              "x": 20,
+              "y": 49
+            },
+            "shoulder_back": {
+              "x": 20,
+              "y": 52
+            },
+            "hand_front": {
+              "x": 34,
+              "y": 44
+            },
+            "hand_back": {
+              "x": 34,
+              "y": 47
+            },
+            "hip": {
+              "x": 33,
+              "y": 50
+            },
+            "body_center": {
+              "x": 26,
+              "y": 50
+            },
+            "foot_front": {
+              "x": 49,
+              "y": 58
+            },
+            "foot_back": {
+              "x": 46,
+              "y": 61
+            },
+            "weapon_anchor": {
+              "x": 34,
+              "y": 44
+            },
+            "attack_origin": {
+              "x": 45,
+              "y": 41
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 105,
+            "rotation": 15
+          },
+          "event": "BODY_FALL"
+        },
+        {
+          "index": 5,
+          "duration": 278,
+          "sprite": "frames/death_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "rest",
+          "bounds": {
+            "x": 2,
+            "y": 42,
+            "width": 54,
+            "height": 22
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 11,
+              "y": 55
+            },
+            "neck": {
+              "x": 15,
+              "y": 49
+            },
+            "shoulder_front": {
+              "x": 20,
+              "y": 49
+            },
+            "shoulder_back": {
+              "x": 20,
+              "y": 52
+            },
+            "hand_front": {
+              "x": 35,
+              "y": 48
+            },
+            "hand_back": {
+              "x": 35,
+              "y": 49
+            },
+            "hip": {
+              "x": 33,
+              "y": 50
+            },
+            "body_center": {
+              "x": 26,
+              "y": 50
+            },
+            "foot_front": {
+              "x": 49,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 46,
+              "y": 62
+            },
+            "weapon_anchor": {
+              "x": 35,
+              "y": 48
+            },
+            "attack_origin": {
+              "x": 46,
+              "y": 48
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "HURT"
+        },
+        {
+          "frame": 4,
+          "type": "BODY_FALL"
+        }
+      ],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 37,
+          "y": 35,
+          "rotation": 15
+        },
+        {
+          "x": 36,
+          "y": 30,
+          "rotation": 30
+        },
+        {
+          "x": 28,
+          "y": 27,
+          "rotation": 60
+        },
+        {
+          "x": 27,
+          "y": 34,
+          "rotation": 45
+        },
+        {
+          "x": 34,
+          "y": 44,
+          "rotation": 15
+        },
+        {
+          "x": 35,
+          "y": 48,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "CROUCH",
+      "type": "CROUCH",
+      "sheet": "crouch.png",
+      "handSheet": "crouch_hand.png",
+      "row": 5,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 12,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.0833,
+      "totalDuration": 416,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 83,
+          "sprite": "frames/crouch_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "stand",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 38,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 39
+            },
+            "hand_back": {
+              "x": 29,
+              "y": 44
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 39
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 39
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 83,
+          "sprite": "frames/crouch_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "dip",
+          "bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 39,
+            "height": 47
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 26
+            },
+            "neck": {
+              "x": 32,
+              "y": 30
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 35
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 34
+            },
+            "hand_front": {
+              "x": 41,
+              "y": 42
+            },
+            "hand_back": {
+              "x": 32,
+              "y": 48
+            },
+            "hip": {
+              "x": 27,
+              "y": 47
+            },
+            "body_center": {
+              "x": 29,
+              "y": 40
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 41,
+              "y": 42
+            },
+            "attack_origin": {
+              "x": 52,
+              "y": 42
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 83,
+          "sprite": "frames/crouch_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "crouch",
+          "bounds": {
+            "x": 18,
+            "y": 23,
+            "width": 39,
+            "height": 41
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 32
+            },
+            "neck": {
+              "x": 35,
+              "y": 35
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 39
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 38
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 45
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 51
+            },
+            "hip": {
+              "x": 27,
+              "y": 51
+            },
+            "body_center": {
+              "x": 30,
+              "y": 44
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 45
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 45
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/crouch_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "hold",
+          "bounds": {
+            "x": 17,
+            "y": 21,
+            "width": 39,
+            "height": 43
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 30
+            },
+            "neck": {
+              "x": 34,
+              "y": 34
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 38
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 37
+            },
+            "hand_front": {
+              "x": 42,
+              "y": 45
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 50
+            },
+            "hip": {
+              "x": 27,
+              "y": 50
+            },
+            "body_center": {
+              "x": 30,
+              "y": 43
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 42,
+              "y": 45
+            },
+            "attack_origin": {
+              "x": 53,
+              "y": 45
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 40,
+          "y": 39,
+          "rotation": 0
+        },
+        {
+          "x": 41,
+          "y": 42,
+          "rotation": 0
+        },
+        {
+          "x": 43,
+          "y": 45,
+          "rotation": 0
+        },
+        {
+          "x": 42,
+          "y": 45,
+          "rotation": 0
+        }
+      ],
+      "hurtbox": {
+        "x": 21,
+        "y": 21,
+        "width": 14,
+        "height": 43
+      }
+    },
+    {
+      "id": "JUMP",
+      "type": "JUMP",
+      "sheet": "jump.png",
+      "handSheet": "jump_hand.png",
+      "row": 6,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 8,
+      "frameCount": 5,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.125,
+      "totalDuration": 625,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 125,
+          "sprite": "frames/jump_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "launch",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 37,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 37
+            },
+            "hand_back": {
+              "x": 41,
+              "y": 37
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 30,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 22,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 37
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 37
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 125,
+          "sprite": "frames/jump_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "rise",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 37,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 19
+            },
+            "neck": {
+              "x": 33,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 57
+            },
+            "foot_back": {
+              "x": 25,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 125,
+          "sprite": "frames/jump_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "tuck",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 39,
+            "height": 48
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 36,
+              "y": 19
+            },
+            "neck": {
+              "x": 34,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 42,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 54
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 55
+            },
+            "weapon_anchor": {
+              "x": 42,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 53,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 125,
+          "sprite": "frames/jump_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "apex",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 38,
+            "height": 49
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 41,
+              "y": 36
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 56
+            },
+            "foot_back": {
+              "x": 26,
+              "y": 57
+            },
+            "weapon_anchor": {
+              "x": 41,
+              "y": 36
+            },
+            "attack_origin": {
+              "x": 52,
+              "y": 36
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 125,
+          "sprite": "frames/jump_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fall",
+          "bounds": {
+            "x": 16,
+            "y": 10,
+            "width": 38,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 19
+            },
+            "neck": {
+              "x": 32,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 40,
+              "y": 37
+            },
+            "hand_back": {
+              "x": 39,
+              "y": 38
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 29,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 40,
+              "y": 37
+            },
+            "attack_origin": {
+              "x": 51,
+              "y": 37
+            }
+          },
+          "weapon": {
+            "id": "knife",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 40,
+          "y": 37,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 35,
+          "rotation": 0
+        },
+        {
+          "x": 42,
+          "y": 35,
+          "rotation": 0
+        },
+        {
+          "x": 41,
+          "y": 36,
+          "rotation": 0
+        },
+        {
+          "x": 40,
+          "y": 37,
+          "rotation": 0
+        }
+      ]
+    },
+    {
+      "id": "IDLE_PISTOL",
+      "type": "IDLE",
+      "stance": "PISTOL",
+      "sheet": "idle_pistol.png",
+      "handSheet": "idle_pistol_hand.png",
+      "row": 7,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 6,
+      "frameCount": 6,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1667,
+      "totalDuration": 1002,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 34
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/6",
+          "bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 32,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 22
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 36
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 41,
+              "y": 36
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 5,
+          "duration": 167,
+          "sprite": "frames/idle_pistol_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 41,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 34
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 43,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 34,
+          "rotation": 0
+        },
+        {
+          "x": 43,
+          "y": 35,
+          "rotation": 0
+        },
+        {
+          "x": 43,
+          "y": 35,
+          "rotation": 0
+        },
+        {
+          "x": 43,
+          "y": 34,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 42,
+          "y": 34
+        },
+        {
+          "x": 42,
+          "y": 34
+        },
+        {
+          "x": 42,
+          "y": 35
+        },
+        {
+          "x": 42,
+          "y": 36
+        },
+        {
+          "x": 41,
+          "y": 36
+        },
+        {
+          "x": 41,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "WALK_PISTOL",
+      "type": "WALK",
+      "stance": "PISTOL",
+      "sheet": "walk_pistol.png",
+      "handSheet": "walk_pistol_hand.png",
+      "row": 8,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 10,
+      "frameCount": 8,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1,
+      "totalDuration": 800,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 31,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 36
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 37
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 21,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 36
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 36
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 1,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 31,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 36
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 32,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 59
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 26,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 32,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 23,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 33,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 34
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 5,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 24,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 30,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 6,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_06.png",
+          "x": 384,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 6/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 59
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 7,
+          "duration": 100,
+          "sprite": "frames/walk_pistol_07.png",
+          "x": 448,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 7/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 31,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 35
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 36
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 35
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 35
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "FOOTSTEP"
+        },
+        {
+          "frame": 4,
+          "type": "FOOTSTEP"
+        }
+      ],
+      "hitFrames": [],
+      "walk": {
+        "stride": 12,
+        "groundSpeed": 30
+      },
+      "handFrames": [
+        {
+          "x": 44,
+          "y": 36,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 35,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 34,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 35,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 42,
+          "y": 37
+        },
+        {
+          "x": 42,
+          "y": 36
+        },
+        {
+          "x": 42,
+          "y": 34
+        },
+        {
+          "x": 43,
+          "y": 34
+        },
+        {
+          "x": 43,
+          "y": 35
+        },
+        {
+          "x": 43,
+          "y": 34
+        },
+        {
+          "x": 42,
+          "y": 34
+        },
+        {
+          "x": 42,
+          "y": 36
+        }
+      ]
+    },
+    {
+      "id": "CROUCH_PISTOL",
+      "type": "CROUCH",
+      "stance": "PISTOL",
+      "sheet": "crouch_pistol.png",
+      "handSheet": "crouch_pistol_hand.png",
+      "row": 9,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 12,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.0833,
+      "totalDuration": 416,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 83,
+          "sprite": "frames/crouch_pistol_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "stand",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 31,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 34
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 83,
+          "sprite": "frames/crouch_pistol_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "dip",
+          "bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 32,
+            "height": 47
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 26
+            },
+            "neck": {
+              "x": 32,
+              "y": 30
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 35
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 34
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 38
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 39
+            },
+            "hip": {
+              "x": 27,
+              "y": 47
+            },
+            "body_center": {
+              "x": 29,
+              "y": 40
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 38
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 38
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 83,
+          "sprite": "frames/crouch_pistol_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "crouch",
+          "bounds": {
+            "x": 18,
+            "y": 23,
+            "width": 32,
+            "height": 41
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 32
+            },
+            "neck": {
+              "x": 35,
+              "y": 35
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 39
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 38
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 41
+            },
+            "hand_back": {
+              "x": 45,
+              "y": 43
+            },
+            "hip": {
+              "x": 27,
+              "y": 51
+            },
+            "body_center": {
+              "x": 30,
+              "y": 44
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 41
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 41
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/crouch_pistol_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "hold",
+          "bounds": {
+            "x": 17,
+            "y": 21,
+            "width": 33,
+            "height": 43
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 30
+            },
+            "neck": {
+              "x": 34,
+              "y": 34
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 38
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 37
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 41
+            },
+            "hand_back": {
+              "x": 45,
+              "y": 42
+            },
+            "hip": {
+              "x": 27,
+              "y": 50
+            },
+            "body_center": {
+              "x": 30,
+              "y": 43
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 41
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 41
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 44,
+          "y": 34,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 38,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 41,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 41,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 42,
+          "y": 35
+        },
+        {
+          "x": 43,
+          "y": 39
+        },
+        {
+          "x": 45,
+          "y": 43
+        },
+        {
+          "x": 45,
+          "y": 42
+        }
+      ],
+      "hurtbox": {
+        "x": 21,
+        "y": 21,
+        "width": 14,
+        "height": 43
+      }
+    },
+    {
+      "id": "JUMP_PISTOL",
+      "type": "JUMP",
+      "stance": "PISTOL",
+      "sheet": "jump_pistol.png",
+      "handSheet": "jump_pistol_hand.png",
+      "row": 10,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 8,
+      "frameCount": 5,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.125,
+      "totalDuration": 625,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 125,
+          "sprite": "frames/jump_pistol_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "launch",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 32,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 44,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 30,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 22,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 125,
+          "sprite": "frames/jump_pistol_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "rise",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 31,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 19
+            },
+            "neck": {
+              "x": 33,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 57
+            },
+            "foot_back": {
+              "x": 25,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 125,
+          "sprite": "frames/jump_pistol_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "tuck",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 32,
+            "height": 48
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 36,
+              "y": 19
+            },
+            "neck": {
+              "x": 34,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 44,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 54
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 55
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 125,
+          "sprite": "frames/jump_pistol_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "apex",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 32,
+            "height": 49
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 44,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 56
+            },
+            "foot_back": {
+              "x": 26,
+              "y": 57
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 125,
+          "sprite": "frames/jump_pistol_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fall",
+          "bounds": {
+            "x": 16,
+            "y": 10,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 19
+            },
+            "neck": {
+              "x": 32,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 43,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 29,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 45,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 32,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 44,
+          "y": 34
+        },
+        {
+          "x": 43,
+          "y": 32
+        },
+        {
+          "x": 44,
+          "y": 32
+        },
+        {
+          "x": 44,
+          "y": 33
+        },
+        {
+          "x": 43,
+          "y": 33
+        }
+      ]
+    },
+    {
+      "id": "SHOOT_PISTOL",
+      "type": "SHOOT",
+      "stance": "PISTOL",
+      "sheet": "shoot_pistol.png",
+      "handSheet": "shoot_pistol_hand.png",
+      "row": 11,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 14,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.0714,
+      "totalDuration": 292,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 71,
+          "sprite": "frames/shoot_pistol_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "aim",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 57,
+          "sprite": "frames/shoot_pistol_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fire",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 31,
+              "y": 20
+            },
+            "neck": {
+              "x": 30,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 29,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 27,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 28
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 105,
+            "rotation": 15
+          },
+          "event": "FIRE"
+        },
+        {
+          "index": 2,
+          "duration": 71,
+          "sprite": "frames/shoot_pistol_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recoil",
+          "bounds": {
+            "x": 14,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 30,
+              "y": 20
+            },
+            "neck": {
+              "x": 29,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 28,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 26,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 42,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 41,
+              "y": 33
+            },
+            "hip": {
+              "x": 27,
+              "y": 42
+            },
+            "body_center": {
+              "x": 27,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 42,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 53,
+              "y": 29
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 105,
+            "rotation": 15
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 93,
+          "sprite": "frames/shoot_pistol_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recover",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 32,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 44,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 42,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 44,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 55,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "PISTOL",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 1,
+          "type": "FIRE"
+        }
+      ],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 43,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 44,
+          "y": 31,
+          "rotation": 15
+        },
+        {
+          "x": 42,
+          "y": 32,
+          "rotation": 15
+        },
+        {
+          "x": 44,
+          "y": 33,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 42,
+          "y": 34
+        },
+        {
+          "x": 42,
+          "y": 32
+        },
+        {
+          "x": 41,
+          "y": 33
+        },
+        {
+          "x": 42,
+          "y": 34
+        }
+      ]
+    },
+    {
+      "id": "IDLE_RIFLE",
+      "type": "IDLE",
+      "stance": "RIFLE",
+      "sheet": "idle_rifle.png",
+      "handSheet": "idle_rifle_hand.png",
+      "row": 12,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 6,
+      "frameCount": 6,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1667,
+      "totalDuration": 1002,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/6",
+          "bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 33,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 22
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 33
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 34
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 33
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 33
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/6",
+          "bounds": {
+            "x": 15,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 5,
+          "duration": 167,
+          "sprite": "frames/idle_rifle_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/6",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 33,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 33
+        },
+        {
+          "x": 36,
+          "y": 34
+        },
+        {
+          "x": 36,
+          "y": 33
+        },
+        {
+          "x": 36,
+          "y": 32
+        }
+      ]
+    },
+    {
+      "id": "WALK_RIFLE",
+      "type": "WALK",
+      "stance": "RIFLE",
+      "sheet": "walk_rifle.png",
+      "handSheet": "walk_rifle_hand.png",
+      "row": 13,
+      "loop": true,
+      "playMode": "LOOP",
+      "fps": 10,
+      "frameCount": 8,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.1,
+      "totalDuration": 800,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 0/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 34
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 35
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 21,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 34
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 34
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 1,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 1/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 32,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 2/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 59
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 3/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 26,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 32,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 4/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 27
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 31
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 31
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 44
+            },
+            "body_center": {
+              "x": 29,
+              "y": 37
+            },
+            "foot_front": {
+              "x": 23,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 33,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FOOTSTEP"
+        },
+        {
+          "index": 5,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_05.png",
+          "x": 320,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 5/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 24,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 30,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 6,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_06.png",
+          "x": 384,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 6/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 29,
+              "y": 59
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 7,
+          "duration": 100,
+          "sprite": "frames/walk_rifle_07.png",
+          "x": 448,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "phase 7/8",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 0,
+          "type": "FOOTSTEP"
+        },
+        {
+          "frame": 4,
+          "type": "FOOTSTEP"
+        }
+      ],
+      "hitFrames": [],
+      "walk": {
+        "stride": 12,
+        "groundSpeed": 30
+      },
+      "handFrames": [
+        {
+          "x": 45,
+          "y": 34,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 36,
+          "y": 35
+        },
+        {
+          "x": 36,
+          "y": 33
+        },
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 33
+        },
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 36,
+          "y": 33
+        }
+      ]
+    },
+    {
+      "id": "CROUCH_RIFLE",
+      "type": "CROUCH",
+      "stance": "RIFLE",
+      "sheet": "crouch_rifle.png",
+      "handSheet": "crouch_rifle_hand.png",
+      "row": 14,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 12,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.0833,
+      "totalDuration": 416,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 83,
+          "sprite": "frames/crouch_rifle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "stand",
+          "bounds": {
+            "x": 16,
+            "y": 12,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 21
+            },
+            "neck": {
+              "x": 31,
+              "y": 26
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 30
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 30
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 32
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 33
+            },
+            "hip": {
+              "x": 28,
+              "y": 43
+            },
+            "body_center": {
+              "x": 29,
+              "y": 36
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 32
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 32
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 83,
+          "sprite": "frames/crouch_rifle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "dip",
+          "bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 33,
+            "height": 47
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 26
+            },
+            "neck": {
+              "x": 32,
+              "y": 30
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 35
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 34
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 36
+            },
+            "hand_back": {
+              "x": 37,
+              "y": 37
+            },
+            "hip": {
+              "x": 27,
+              "y": 47
+            },
+            "body_center": {
+              "x": 29,
+              "y": 40
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 36
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 36
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 83,
+          "sprite": "frames/crouch_rifle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "crouch",
+          "bounds": {
+            "x": 18,
+            "y": 23,
+            "width": 33,
+            "height": 41
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 32
+            },
+            "neck": {
+              "x": 35,
+              "y": 35
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 39
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 38
+            },
+            "hand_front": {
+              "x": 47,
+              "y": 40
+            },
+            "hand_back": {
+              "x": 38,
+              "y": 41
+            },
+            "hip": {
+              "x": 27,
+              "y": 51
+            },
+            "body_center": {
+              "x": 30,
+              "y": 44
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 47,
+              "y": 40
+            },
+            "attack_origin": {
+              "x": 58,
+              "y": 40
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 167,
+          "sprite": "frames/crouch_rifle_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "hold",
+          "bounds": {
+            "x": 17,
+            "y": 21,
+            "width": 34,
+            "height": 43
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 38,
+              "y": 30
+            },
+            "neck": {
+              "x": 34,
+              "y": 34
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 38
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 37
+            },
+            "hand_front": {
+              "x": 47,
+              "y": 39
+            },
+            "hand_back": {
+              "x": 38,
+              "y": 40
+            },
+            "hip": {
+              "x": 27,
+              "y": 50
+            },
+            "body_center": {
+              "x": 30,
+              "y": 43
+            },
+            "foot_front": {
+              "x": 35,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 47,
+              "y": 39
+            },
+            "attack_origin": {
+              "x": 58,
+              "y": 39
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 45,
+          "y": 32,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 36,
+          "rotation": 0
+        },
+        {
+          "x": 47,
+          "y": 40,
+          "rotation": 0
+        },
+        {
+          "x": 47,
+          "y": 39,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 36,
+          "y": 33
+        },
+        {
+          "x": 37,
+          "y": 37
+        },
+        {
+          "x": 38,
+          "y": 41
+        },
+        {
+          "x": 38,
+          "y": 40
+        }
+      ],
+      "hurtbox": {
+        "x": 21,
+        "y": 21,
+        "width": 14,
+        "height": 43
+      }
+    },
+    {
+      "id": "JUMP_RIFLE",
+      "type": "JUMP",
+      "stance": "RIFLE",
+      "sheet": "jump_rifle.png",
+      "handSheet": "jump_rifle_hand.png",
+      "row": 15,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 8,
+      "frameCount": 5,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.125,
+      "totalDuration": 625,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 125,
+          "sprite": "frames/jump_rifle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "launch",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 33,
+            "height": 52
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 35,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 47,
+              "y": 30
+            },
+            "hand_back": {
+              "x": 38,
+              "y": 31
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 30,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 22,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 47,
+              "y": 30
+            },
+            "attack_origin": {
+              "x": 58,
+              "y": 30
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 125,
+          "sprite": "frames/jump_rifle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "rise",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 33,
+            "height": 51
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 19
+            },
+            "neck": {
+              "x": 33,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 29
+            },
+            "hand_back": {
+              "x": 37,
+              "y": 30
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 57
+            },
+            "foot_back": {
+              "x": 25,
+              "y": 58
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 29
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 29
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 2,
+          "duration": 125,
+          "sprite": "frames/jump_rifle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "tuck",
+          "bounds": {
+            "x": 17,
+            "y": 10,
+            "width": 33,
+            "height": 48
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 36,
+              "y": 19
+            },
+            "neck": {
+              "x": 34,
+              "y": 23
+            },
+            "shoulder_front": {
+              "x": 32,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 30,
+              "y": 27
+            },
+            "hand_front": {
+              "x": 47,
+              "y": 29
+            },
+            "hand_back": {
+              "x": 38,
+              "y": 30
+            },
+            "hip": {
+              "x": 28,
+              "y": 40
+            },
+            "body_center": {
+              "x": 30,
+              "y": 33
+            },
+            "foot_front": {
+              "x": 34,
+              "y": 54
+            },
+            "foot_back": {
+              "x": 27,
+              "y": 55
+            },
+            "weapon_anchor": {
+              "x": 47,
+              "y": 29
+            },
+            "attack_origin": {
+              "x": 58,
+              "y": 29
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 3,
+          "duration": 125,
+          "sprite": "frames/jump_rifle_03.png",
+          "x": 192,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "apex",
+          "bounds": {
+            "x": 17,
+            "y": 11,
+            "width": 33,
+            "height": 49
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 34,
+              "y": 20
+            },
+            "neck": {
+              "x": 33,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 29,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 30
+            },
+            "hand_back": {
+              "x": 37,
+              "y": 31
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 30,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 56
+            },
+            "foot_back": {
+              "x": 26,
+              "y": 57
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 30
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 30
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 4,
+          "duration": 125,
+          "sprite": "frames/jump_rifle_04.png",
+          "x": 256,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fall",
+          "bounds": {
+            "x": 16,
+            "y": 10,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 33,
+              "y": 19
+            },
+            "neck": {
+              "x": 32,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 31,
+              "y": 28
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 28
+            },
+            "hand_front": {
+              "x": 46,
+              "y": 30
+            },
+            "hand_back": {
+              "x": 37,
+              "y": 31
+            },
+            "hip": {
+              "x": 28,
+              "y": 41
+            },
+            "body_center": {
+              "x": 29,
+              "y": 34
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 60
+            },
+            "foot_back": {
+              "x": 24,
+              "y": 60
+            },
+            "weapon_anchor": {
+              "x": 46,
+              "y": 30
+            },
+            "attack_origin": {
+              "x": 57,
+              "y": 30
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 47,
+          "y": 30,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 29,
+          "rotation": 0
+        },
+        {
+          "x": 47,
+          "y": 29,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 30,
+          "rotation": 0
+        },
+        {
+          "x": 46,
+          "y": 30,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 38,
+          "y": 31
+        },
+        {
+          "x": 37,
+          "y": 30
+        },
+        {
+          "x": 38,
+          "y": 30
+        },
+        {
+          "x": 37,
+          "y": 31
+        },
+        {
+          "x": 37,
+          "y": 31
+        }
+      ]
+    },
+    {
+      "id": "SHOOT_RIFLE",
+      "type": "SHOOT",
+      "stance": "RIFLE",
+      "sheet": "shoot_rifle.png",
+      "handSheet": "shoot_rifle_hand.png",
+      "row": 16,
+      "loop": false,
+      "playMode": "NORMAL",
+      "fps": 20,
+      "frameCount": 3,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "frameDuration": 0.05,
+      "totalDuration": 150,
+      "source": "PROCEDURAL",
+      "frames": [
+        {
+          "index": 0,
+          "duration": 50,
+          "sprite": "frames/shoot_rifle_00.png",
+          "x": 0,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "aim",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 32,
+              "y": 20
+            },
+            "neck": {
+              "x": 31,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 30,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 28,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        },
+        {
+          "index": 1,
+          "duration": 50,
+          "sprite": "frames/shoot_rifle_01.png",
+          "x": 64,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "fire",
+          "bounds": {
+            "x": 14,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 30,
+              "y": 20
+            },
+            "neck": {
+              "x": 29,
+              "y": 24
+            },
+            "shoulder_front": {
+              "x": 28,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 26,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 43,
+              "y": 30
+            },
+            "hand_back": {
+              "x": 34,
+              "y": 31
+            },
+            "hip": {
+              "x": 27,
+              "y": 42
+            },
+            "body_center": {
+              "x": 27,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 43,
+              "y": 30
+            },
+            "attack_origin": {
+              "x": 54,
+              "y": 30
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": "FIRE"
+        },
+        {
+          "index": 2,
+          "duration": 50,
+          "sprite": "frames/shoot_rifle_02.png",
+          "x": 128,
+          "y": 0,
+          "width": 64,
+          "height": 64,
+          "label": "recover",
+          "bounds": {
+            "x": 15,
+            "y": 11,
+            "width": 33,
+            "height": 53
+          },
+          "anchors": {
+            "root": {
+              "x": 32,
+              "y": 63
+            },
+            "head": {
+              "x": 31,
+              "y": 20
+            },
+            "neck": {
+              "x": 30,
+              "y": 25
+            },
+            "shoulder_front": {
+              "x": 29,
+              "y": 29
+            },
+            "shoulder_back": {
+              "x": 27,
+              "y": 29
+            },
+            "hand_front": {
+              "x": 45,
+              "y": 31
+            },
+            "hand_back": {
+              "x": 36,
+              "y": 32
+            },
+            "hip": {
+              "x": 28,
+              "y": 42
+            },
+            "body_center": {
+              "x": 29,
+              "y": 35
+            },
+            "foot_front": {
+              "x": 33,
+              "y": 63
+            },
+            "foot_back": {
+              "x": 23,
+              "y": 63
+            },
+            "weapon_anchor": {
+              "x": 45,
+              "y": 31
+            },
+            "attack_origin": {
+              "x": 56,
+              "y": 31
+            }
+          },
+          "weapon": {
+            "stance": "RIFLE",
+            "angle": 90,
+            "rotation": 0
+          },
+          "event": null
+        }
+      ],
+      "events": [
+        {
+          "frame": 1,
+          "type": "FIRE"
+        }
+      ],
+      "hitFrames": [],
+      "handFrames": [
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        },
+        {
+          "x": 43,
+          "y": 30,
+          "rotation": 0
+        },
+        {
+          "x": 45,
+          "y": 31,
+          "rotation": 0
+        }
+      ],
+      "supportFrames": [
+        {
+          "x": 36,
+          "y": 32
+        },
+        {
+          "x": 34,
+          "y": 31
+        },
+        {
+          "x": 36,
+          "y": 32
+        }
+      ]
+    }
+  ],
+  "extraAnimations": [],
+  "weaponLayer": "SEPARATE"
+}

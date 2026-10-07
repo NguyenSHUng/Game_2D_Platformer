@@ -1,0 +1,435 @@
+{
+  "id": "assault_rifle",
+  "name": "Assault Rifle",
+  "texture": "sprites/weapons/assault_rifle/assault_rifle.png",
+  "drawScale": 1,
+  "pivot": {
+    "x": 18,
+    "y": 6
+  },
+  "rotation": 0,
+  "tipAnchor": null,
+  "muzzleAnchor": {
+    "x": 30,
+    "y": 5
+  },
+  "ejectionAnchor": {
+    "x": 11,
+    "y": 4
+  },
+  "supportAnchor": {
+    "x": 9,
+    "y": 7
+  },
+  "category": "RIFLE",
+  "stance": "RIFLE",
+  "fire": {
+    "mode": "AUTO",
+    "roundsPerSecond": 9,
+    "damage": 11,
+    "magazine": 30,
+    "reloadSeconds": 1.8,
+    "projectileSpeedTiles": 40,
+    "rangeTiles": 32,
+    "spreadDegrees": 2.5,
+    "recoilDegrees": 0,
+    "shellEject": {
+      "speedTiles": 5,
+      "angleDegrees": 100
+    }
+  },
+  "effects": {
+    "muzzleFlash": {
+      "texture": "sprites/weapons/assault_rifle/fx/muzzle_flash.png",
+      "frameWidth": 14,
+      "frameHeight": 9,
+      "frameCount": 3,
+      "durations": [
+        40,
+        40,
+        70
+      ],
+      "origin": {
+        "x": 0,
+        "y": 4
+      },
+      "loop": false
+    },
+    "tracer": {
+      "texture": "sprites/weapons/assault_rifle/fx/tracer.png",
+      "frameWidth": 10,
+      "frameHeight": 1,
+      "frameCount": 1,
+      "durations": [
+        100
+      ],
+      "origin": {
+        "x": 9,
+        "y": 0
+      },
+      "loop": true
+    },
+    "casing": {
+      "texture": "sprites/weapons/assault_rifle/fx/casing.png",
+      "frameWidth": 4,
+      "frameHeight": 4,
+      "frameCount": 2,
+      "durations": [
+        60,
+        60
+      ],
+      "origin": {
+        "x": 2,
+        "y": 2
+      },
+      "loop": true
+    },
+    "impact": {
+      "texture": "sprites/weapons/assault_rifle/fx/impact.png",
+      "frameWidth": 9,
+      "frameHeight": 9,
+      "frameCount": 4,
+      "durations": [
+        40,
+        50,
+        60,
+        80
+      ],
+      "origin": {
+        "x": 4,
+        "y": 4
+      },
+      "loop": false
+    }
+  },
+  "generator": {
+    "version": 1,
+    "format": "pixel-weapon/1",
+    "id": "assault_rifle",
+    "name": "Assault Rifle",
+    "category": "RIFLE",
+    "type": "RIFLE",
+    "sizeClass": "LARGE",
+    "width": 31,
+    "height": 14,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "pivot": {
+      "x": 18,
+      "y": 6
+    },
+    "gripAnchor": {
+      "x": 18,
+      "y": 6
+    },
+    "supportAnchor": {
+      "x": 9,
+      "y": 7
+    },
+    "handOffset": {
+      "x": 0,
+      "y": 0
+    },
+    "muzzleAnchor": {
+      "x": 30,
+      "y": 5
+    },
+    "ejectionAnchor": {
+      "x": 11,
+      "y": 4
+    },
+    "stockAnchor": {
+      "x": 1,
+      "y": 5
+    },
+    "tipAnchor": null,
+    "reach": 0,
+    "stance": "RIFLE",
+    "hands": 2,
+    "fire": {
+      "mode": "AUTO",
+      "roundsPerSecond": 9,
+      "damage": 11,
+      "magazine": 30,
+      "reloadSeconds": 1.8,
+      "projectileSpeedTiles": 40,
+      "rangeTiles": 32,
+      "spreadDegrees": 2.5,
+      "recoilDegrees": 0,
+      "shellEject": {
+        "speedTiles": 5,
+        "angleDegrees": 100
+      }
+    },
+    "fx": {
+      "muzzleFlash": {
+        "image": "fx/muzzle_flash.png",
+        "frameWidth": 14,
+        "frameHeight": 9,
+        "frameCount": 3,
+        "durations": [
+          40,
+          40,
+          70
+        ],
+        "origin": {
+          "x": 0,
+          "y": 4
+        },
+        "loop": false
+      },
+      "tracer": {
+        "image": "fx/tracer.png",
+        "frameWidth": 10,
+        "frameHeight": 1,
+        "frameCount": 1,
+        "durations": [
+          100
+        ],
+        "origin": {
+          "x": 9,
+          "y": 0
+        },
+        "loop": true
+      },
+      "casing": {
+        "image": "fx/casing.png",
+        "frameWidth": 4,
+        "frameHeight": 4,
+        "frameCount": 2,
+        "durations": [
+          60,
+          60
+        ],
+        "origin": {
+          "x": 2,
+          "y": 2
+        },
+        "loop": true
+      },
+      "impact": {
+        "image": "fx/impact.png",
+        "frameWidth": 9,
+        "frameHeight": 9,
+        "frameCount": 4,
+        "durations": [
+          40,
+          50,
+          60,
+          80
+        ],
+        "origin": {
+          "x": 4,
+          "y": 4
+        },
+        "loop": false
+      }
+    },
+    "orientation": "RIGHT",
+    "palette": "MILITARY_DARK",
+    "detailLevel": "HIGH",
+    "scale": 1,
+    "seed": 1001,
+    "coordinates": {
+      "origin": "TOP_LEFT",
+      "yAxis": "DOWN",
+      "unit": "PIXEL",
+      "mirrorX": "width - 1 - x",
+      "rotation": "DEGREES_CCW_FACING_RIGHT"
+    },
+    "attachment": {
+      "hand": "handFront",
+      "supportHand": "handBack",
+      "socket": "weaponAnchor",
+      "rule": "pivot (= gripAnchor) is placed on the character frame's weapon anchor; rotation turns around the pivot",
+      "composition": [
+        "BACKGROUND",
+        "PLAYER_BODY",
+        "BACK_ARM_HAND",
+        "WEAPON",
+        "FRONT_HAND",
+        "PLAYER_FRONT_DETAILS"
+      ]
+    },
+    "poses": {
+      "RIFLE_AIM": {
+        "rotation": 0,
+        "hands": [
+          "handFront: handguard",
+          "handBack: pistol grip"
+        ],
+        "note": "stock to the shoulder, level"
+      },
+      "RIFLE_FIRE": {
+        "rotation": 0,
+        "hands": [
+          "handFront: handguard",
+          "handBack: pistol grip"
+        ],
+        "note": "FIRE frame: the body rocks back, the rifle stays level (full-auto)"
+      }
+    },
+    "regions": {
+      "handle": {
+        "x": 7,
+        "y": 7,
+        "width": 3,
+        "height": 5
+      },
+      "guard": {
+        "x": 10,
+        "y": 8,
+        "width": 2,
+        "height": 2
+      },
+      "barrel": {
+        "x": 24,
+        "y": 5,
+        "width": 6,
+        "height": 1
+      },
+      "magazine": {
+        "x": 12,
+        "y": 8,
+        "width": 4,
+        "height": 4
+      },
+      "stock": {
+        "x": 1,
+        "y": 4,
+        "width": 6,
+        "height": 4
+      },
+      "receiver": {
+        "x": 7,
+        "y": 4,
+        "width": 10,
+        "height": 4
+      },
+      "handguard": {
+        "x": 17,
+        "y": 4,
+        "width": 7,
+        "height": 3
+      },
+      "sight": {
+        "x": 7,
+        "y": 1,
+        "width": 17,
+        "height": 3
+      }
+    },
+    "layers": [
+      {
+        "name": "SILHOUETTE",
+        "applied": true
+      },
+      {
+        "name": "BASE_MATERIAL",
+        "applied": true
+      },
+      {
+        "name": "SECONDARY_MATERIAL",
+        "applied": true
+      },
+      {
+        "name": "SHADOW",
+        "applied": true
+      },
+      {
+        "name": "HIGHLIGHT",
+        "applied": true
+      },
+      {
+        "name": "MICRO_DETAILS",
+        "applied": false
+      },
+      {
+        "name": "GRIP_DETAIL",
+        "applied": true
+      },
+      {
+        "name": "EDGE_CLEANUP",
+        "applied": true
+      }
+    ],
+    "materials": {
+      "RECEIVER": "COATED",
+      "STOCK": "POLYMER_OD",
+      "HANDLE": "POLYMER_OD",
+      "HANDGUARD": "POLYMER_OD",
+      "MAGAZINE": "POLYMER_OD",
+      "BARREL": "DARK_METAL",
+      "SIGHT": "DARK_METAL"
+    },
+    "details": {
+      "finish": "OD_FURNITURE",
+      "sight": "OPTIC",
+      "stockLength": 6,
+      "handguardLength": 7,
+      "barrelLength": 4,
+      "magazine": "POLYMER"
+    },
+    "colors": {
+      "outline": "#12160f",
+      "tones": [
+        "DEEP_SHADOW",
+        "SHADOW",
+        "BASE",
+        "LIGHT",
+        "HIGHLIGHT"
+      ],
+      "STEEL": [
+        "#2b3034",
+        "#4c5258",
+        "#868c91",
+        "#c9cdcf",
+        "#eef0ec"
+      ],
+      "COATED": [
+        "#15181a",
+        "#24282b",
+        "#353a3e",
+        "#565d63",
+        "#9aa1a6"
+      ],
+      "POLYMER": [
+        "#120f0c",
+        "#1b1712",
+        "#2c251d",
+        "#463b2d",
+        "#655440"
+      ],
+      "DARK_METAL": [
+        "#141618",
+        "#23272a",
+        "#41474c",
+        "#656d73",
+        "#a3aaaf"
+      ],
+      "FABRIC": [
+        "#16190f",
+        "#2d3223",
+        "#434a33",
+        "#626644",
+        "#7d7b57"
+      ],
+      "POLYMER_OD": [
+        "#14170e",
+        "#262a1c",
+        "#3a402b",
+        "#555b3d",
+        "#6f7350"
+      ]
+    },
+    "polish": {
+      "added": 0,
+      "removed": 1,
+      "changed": 0
+    },
+    "generator": "pixel-weapon-generator",
+    "phase": 2
+  }
+}
