@@ -79,6 +79,14 @@ public class ResourceLoader implements Disposable {
         return assetManager.get(path, TiledMap.class);
     }
 
+    /**
+     * Drops a loaded map (and its tilesets) so the next load reads it fresh from disk: play changes
+     * the map in place (broken walls), and a new run must start from the original.
+     */
+    public void unloadMap(String path) {
+        if (assetManager.isLoaded(path, TiledMap.class)) assetManager.unload(path);
+    }
+
     @Override
     public void dispose() {
         assetManager.dispose();

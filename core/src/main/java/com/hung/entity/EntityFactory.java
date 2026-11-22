@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.hung.animation.AnimationDefinition;
-import com.hung.animation.AnimationFrames;
 import com.hung.animation.AnimationSet;
 import com.hung.animation.AnimationType;
 import com.hung.animation.FrameDefinition;
@@ -111,10 +110,7 @@ public final class EntityFactory {
     }
 
     private static HealthComponent createHealth(int maxHealth) {
-        HealthComponent health = new HealthComponent();
-        health.maxHealth = maxHealth;
-        health.health = maxHealth;
-        return health;
+        return new HealthComponent(maxHealth);
     }
 
     /** Box height while crouching, from the CROUCH pose's hurtbox; 0 when the character can't crouch. */
@@ -137,18 +133,18 @@ public final class EntityFactory {
             // Each animation goes into its stance's set (the default set when it has none)
             String stance = animationDefinition.stance != null ? animationDefinition.stance : AnimationSet.DEFAULT;
             if (!animation.stances.containsKey(stance)) animation.stances.put(stance, new AnimationSet());
-            AnimationFrames.useStance(animation, stance);
+            animation.useStance(stance);
             Texture sheet = resources.getTexture(sheetPath(animationDefinition.sheet, definitionPath));
             addSheetAnimation(animation, sheet, animationDefinition, definition.frameWidth, definition.frameHeight);
             if (animationDefinition.handSheet != null) {
                 Texture handSheet = resources.getTexture(sheetPath(animationDefinition.handSheet, definitionPath));
-                animation.overlays.put(animationDefinition.type, createOverlay(animation, animationDefinition.type,
+                animation.getOverlays().put(animationDefinition.type, createOverlay(animation, animationDefinition.type,
                     handSheet, definition.frameWidth, definition.frameHeight));
             }
 
             HandAnchor[] handAnchors = createHandAnchors(animationDefinition);
             if (handAnchors != null) {
-                animation.handAnchors.put(animationDefinition.type, handAnchors);
+                animation.getHandAnchors().put(animationDefinition.type, handAnchors);
             }
             if (animationDefinition.walk != null) {
                 animation.strideSpeed = animationDefinition.walk.groundSpeed * definition.drawScale;
@@ -159,8 +155,8 @@ public final class EntityFactory {
         for (AnimationSet set : animation.stances.values()) {
             if (set != base) set.inheritMissing(base);
         }
-        AnimationFrames.useStance(animation, AnimationSet.DEFAULT);
-        if (!animation.animations.containsKey(AnimationType.IDLE)) {
+        animation.useStance(AnimationSet.DEFAULT);
+        if (!animation.getAnimations().containsKey(AnimationType.IDLE)) {
             throw new IllegalArgumentException("Character '" + definition.name + "' needs an IDLE animation");
         }
         return animation;
@@ -170,8 +166,8 @@ public final class EntityFactory {
     private static Animation<TextureRegion> createOverlay(AnimationComponent animation, AnimationType type,
                                                          Texture sheet, int frameWidth, int frameHeight) {
         TextureRegion[] row = TextureRegion.split(sheet, frameWidth, frameHeight)[0];
-        Animation<TextureRegion> body = animation.animations.get(type);
-        int[] sources = animation.keyFrameSources.get(type);
+        Animation<TextureRegion> body = animation.getAnimations().get(type);
+        int[] sources = animation.getKeyFrameSources().get(type);
         int keyFrameCount = body.getKeyFrames().length;
         Array<TextureRegion> frames = new Array<>(true, keyFrameCount, TextureRegion[]::new);
         for (int k = 0; k < keyFrameCount; k++) {
@@ -198,7 +194,7 @@ public final class EntityFactory {
         AnimationType type = definition.type;
         if (definition.frames == null || definition.frames.size == 0) {
             Array<TextureRegion> frames = new Array<>(true, row, 0, definition.frameCount);
-            animation.animations.put(type, new Animation<>(definition.frameDuration, frames, definition.playMode));
+            animation.getAnimations().put(type, new Animation<>(definition.frameDuration, frames, definition.playMode));
             return;
         }
 
@@ -219,9 +215,9 @@ public final class EntityFactory {
                 hasAttackBox = true;
             }
         }
-        animation.animations.put(type, new Animation<>(FRAME_TICK_SECONDS, keyFrames, definition.playMode));
-        animation.keyFrameSources.put(type, sources.toArray());
-        if (hasAttackBox) animation.attackBoxes.put(type, attackBoxes);
+        animation.getAnimations().put(type, new Animation<>(FRAME_TICK_SECONDS, keyFrames, definition.playMode));
+        animation.getKeyFrameSources().put(type, sources.toArray());
+        if (hasAttackBox) animation.getAttackBoxes().put(type, attackBoxes);
     }
 
     /** One anchor for all frames, one per frame, or null when the animation has no hand. */

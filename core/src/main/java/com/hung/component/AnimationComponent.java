@@ -15,36 +15,35 @@ import java.util.EnumMap;
  * AnimationSystem picks the current type; RenderingSystem draws the current frame.
  *
  * A character can have several stances (animation sets): the default one and, for example,
- * PISTOL (both hands on a pistol). The maps below always point at the active set's maps;
- * {@link com.hung.animation.AnimationFrames#useStance} switches them.
+ * PISTOL (both hands on a pistol). The per-stance maps below always belong to the active set;
+ * {@link #useStance} is the only place that switches them, all together.
  */
 public class AnimationComponent {
 
     /** Every stance this entity has, by name; always contains {@link AnimationSet#DEFAULT}. */
     public final ObjectMap<String, AnimationSet> stances = new ObjectMap<>();
 
-    /** Name of the active stance. */
-    public String stance = AnimationSet.DEFAULT;
+    private String stance = AnimationSet.DEFAULT;
 
-    public EnumMap<AnimationType, Animation<TextureRegion>> animations;
+    private EnumMap<AnimationType, Animation<TextureRegion>> animations;
 
     /**
      * Weapon hand position per animation: one anchor for all frames, or one per authored frame.
      * No entry means no weapon is drawn in that animation.
      */
-    public EnumMap<AnimationType, HandAnchor[]> handAnchors;
+    private EnumMap<AnimationType, HandAnchor[]> handAnchors;
 
     /**
      * Per-frame durations are played by repeating frames; this maps a key frame index back to
      * its authored frame (for hand anchors and attack boxes). No entry = one key frame per frame.
      */
-    public EnumMap<AnimationType, int[]> keyFrameSources;
+    private EnumMap<AnimationType, int[]> keyFrameSources;
 
     /** Front-hand strips drawn over the held weapon, same timing as {@link #animations}; optional. */
-    public EnumMap<AnimationType, Animation<TextureRegion>> overlays;
+    private EnumMap<AnimationType, Animation<TextureRegion>> overlays;
 
     /** Attack box per authored frame (sprite pixels, top-left origin); null where the frame doesn't hit. */
-    public EnumMap<AnimationType, Rectangle[]> attackBoxes;
+    private EnumMap<AnimationType, Rectangle[]> attackBoxes;
 
     public AnimationType currentType = AnimationType.IDLE;
 
@@ -63,10 +62,35 @@ public class AnimationComponent {
     public AnimationComponent() {
         AnimationSet set = new AnimationSet();
         stances.put(AnimationSet.DEFAULT, set);
+        activate(set);
+    }
+
+    /**
+     * Makes the named stance's animations active (unknown or null: the default set). Keeps the
+     * current state when the new set has it, else IDLE; the animation restarts so frames of the old
+     * set don't leak.
+     */
+    public void useStance(String name) {
+        AnimationSet set = name != null ? stances.get(name) : null;
+        stance = set != null ? name : AnimationSet.DEFAULT;
+        activate(set != null ? set : stances.get(AnimationSet.DEFAULT));
+        if (!animations.containsKey(currentType)) currentType = AnimationType.IDLE;
+        stateTime = 0f;
+    }
+
+    private void activate(AnimationSet set) {
         animations = set.animations;
         handAnchors = set.handAnchors;
         keyFrameSources = set.keyFrameSources;
         overlays = set.overlays;
         attackBoxes = set.attackBoxes;
     }
+
+    /** Name of the active stance. */
+    public String getStance() { return stance; }
+    public EnumMap<AnimationType, Animation<TextureRegion>> getAnimations() { return animations; }
+    public EnumMap<AnimationType, HandAnchor[]> getHandAnchors() { return handAnchors; }
+    public EnumMap<AnimationType, int[]> getKeyFrameSources() { return keyFrameSources; }
+    public EnumMap<AnimationType, Animation<TextureRegion>> getOverlays() { return overlays; }
+    public EnumMap<AnimationType, Rectangle[]> getAttackBoxes() { return attackBoxes; }
 }

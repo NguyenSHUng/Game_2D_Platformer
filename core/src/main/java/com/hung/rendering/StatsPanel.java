@@ -145,7 +145,7 @@ public class StatsPanel implements Disposable {
         shapes.setColor(BAR_BACK);
         shapes.rect(x, y, HP_BAR_WIDTH, BAR_HEIGHT * 1.5f);
         shapes.setColor(HP_FILL);
-        shapes.rect(x, y, HP_BAR_WIDTH * health.health / Math.max(1f, health.maxHealth), BAR_HEIGHT * 1.5f);
+        shapes.rect(x, y, HP_BAR_WIDTH * health.getHealth() / Math.max(1f, health.getMaxHealth()), BAR_HEIGHT * 1.5f);
     }
 
     private void drawPlayerText(Batch batch, World world, Entity player, float x, float y) {
@@ -157,7 +157,7 @@ public class StatsPanel implements Disposable {
         PhysicsSettings physics = world.getLevel().getPhysics();
         float tile = world.getLevel().getGrid().getTileSize();
 
-        if (health != null) line(batch, x, y, "Health", String.format(Locale.ROOT, "%d / %d", health.health, health.maxHealth));
+        if (health != null) line(batch, x, y, "Health", String.format(Locale.ROOT, "%d / %d", health.getHealth(), health.getMaxHealth()));
         y -= LINE * 1.6f;
         y = section(batch, x, y, "MOVEMENT");
         if (movement != null) {
@@ -184,7 +184,7 @@ public class StatsPanel implements Disposable {
         Vector2 respawn = world.getRespawnPoint();
         y = line(batch, x, y, "Position", String.format(Locale.ROOT, "tile %d, %d", (int) (feet.x / tile), (int) (feet.y / tile)));
         y = line(batch, x, y, "Respawn", String.format(Locale.ROOT, "tile %d, %d", (int) (respawn.x / tile), (int) (respawn.y / tile)));
-        if (animation != null) line(batch, x, y, "Stance", AnimationSet.DEFAULT.equals(animation.stance) ? "default" : animation.stance.toLowerCase(Locale.ROOT));
+        if (animation != null) line(batch, x, y, "Stance", AnimationSet.DEFAULT.equals(animation.getStance()) ? "default" : animation.getStance().toLowerCase(Locale.ROOT));
     }
 
     // ---------------------------------------------------------------- weapons

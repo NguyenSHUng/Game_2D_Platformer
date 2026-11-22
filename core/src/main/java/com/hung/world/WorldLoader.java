@@ -81,14 +81,14 @@ public final class WorldLoader {
             if (enemyDefinitions.containsKey(enemySpawn.definitionPath)) continue;
             EnemyDefinition definition = resources.loadExternalDefinition(EnemyDefinition.class, enemySpawn.definitionPath);
             enemyDefinitions.put(enemySpawn.definitionPath, definition);
-            resources.queueTexture(EnemyFactory.sheetPath(definition, enemySpawn.definitionPath));
+            EnemyFactory.queueTextures(definition, enemySpawn.definitionPath, resources);
         }
         Array<String> trialPaths = TrialEnemies.paths();
         Array<EnemyDefinition> trialDefinitions = new Array<>();
         for (String path : trialPaths) {
             EnemyDefinition definition = resources.loadExternalDefinition(EnemyDefinition.class, path);
             trialDefinitions.add(definition);
-            resources.queueTexture(EnemyFactory.sheetPath(definition, path));
+            EnemyFactory.queueTextures(definition, path, resources);
         }
         PlayerAssets player = queuePlayer(properties, resources);
         resources.finishLoading();

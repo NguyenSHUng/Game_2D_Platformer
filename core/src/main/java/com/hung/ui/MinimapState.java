@@ -35,6 +35,24 @@ public class MinimapState implements EventListener<RoomTransitionEvent> {
         for (int i = 0; i < neighbors.size; i++) isKnown[neighbors.get(i).index] = true;
     }
 
+    /**
+     * Brings back the exploration of a saved game (room indices); indices outside this level are
+     * skipped. The next RoomTransitionEvent marks the current room as usual.
+     */
+    public void restore(int[] visited, int[] known) {
+        if (known != null) {
+            for (int index : known) if (index >= 0 && index < isKnown.length) isKnown[index] = true;
+        }
+        if (visited != null) {
+            for (int index : visited) {
+                if (index < 0 || index >= isVisited.length || isVisited[index]) continue;
+                isVisited[index] = true;
+                isKnown[index] = true;
+                visitedCount++;
+            }
+        }
+    }
+
     public Room getCurrentRoom() { return currentRoom; }
     public boolean isVisited(int roomIndex) { return isVisited[roomIndex]; }
     public boolean isKnown(int roomIndex) { return isKnown[roomIndex]; }

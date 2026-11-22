@@ -40,6 +40,9 @@ public class World {
     public Level getLevel() { return level; }
     public Array<Entity> getEntities() { return entities; }
     public Entity getPlayer() { return player; }
+    /** Read-only view: change it with {@link #setRespawnPoint}. */
     public Vector2 getRespawnPoint() { return respawnPoint; }
+
+    public void setRespawnPoint(float x, float y) { respawnPoint.set(x, y); }
     public RoomTransition getRoomTransition() { return roomTransition; }
 }

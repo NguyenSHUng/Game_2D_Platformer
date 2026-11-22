@@ -37,8 +37,6 @@ public class EnemyBrainSystem {
     private static final float MAX_DIVE_SPEED = 90f;
     /** Inside this share of the attack range the enemy stops closing in. */
     private static final float HOLD_RATIO = 0.6f;
-    /** How far past the leading edge of the box to look for ground, world units. */
-    private static final float LEDGE_PROBE = 1f;
 
     private final World world;
 
@@ -49,14 +47,14 @@ public class EnemyBrainSystem {
     public void update(float delta) {
         Entity player = world.getPlayer();
         HealthComponent playerHealth = player != null ? player.getHealth() : null;
-        boolean isPlayerAlive = player != null && (playerHealth == null || !playerHealth.isDead);
+        boolean isPlayerAlive = player != null && (playerHealth == null || !playerHealth.isDead());
         Array<Entity> entities = world.getEntities();
         for (int i = 0; i < entities.size; i++) {
             Entity enemy = entities.get(i);
             EnemyBrainComponent brain = enemy.getBrain();
             if (brain == null) continue;
             HealthComponent health = enemy.getHealth();
-            if (health != null && health.isDead) {
+            if (health != null && health.isDead()) {
                 if (brain.isFlying) crashWhenDone(enemy, brain, health);
                 continue;
             }
@@ -125,8 +123,7 @@ public class EnemyBrainSystem {
         TileGrid grid = world.getLevel().getGrid();
         TransformComponent transform = enemy.getTransform();
         ColliderComponent collider = enemy.getCollider();
-        float probeX = transform.position.x + direction * (collider.width / 2f + LEDGE_PROBE);
-        return !grid.isSupport(grid.toTile(probeX), grid.toTile(transform.position.y - LEDGE_PROBE));
+        return !grid.hasFloorAhead(transform.position.x, transform.position.y, collider.width / 2f, direction);
     }
 
     private static void holdAltitude(TransformComponent transform, float targetY, boolean isDiving) {

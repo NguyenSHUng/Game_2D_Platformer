@@ -44,7 +44,7 @@ public class AnimationSystem {
             if (animation == null) continue;
 
             AnimationType nextType = resolveType(entity);
-            if (!animation.animations.containsKey(nextType)) {
+            if (!animation.getAnimations().containsKey(nextType)) {
                 nextType = AnimationType.IDLE;
             }
 
@@ -60,7 +60,7 @@ public class AnimationSystem {
 
     private static AnimationType resolveType(Entity entity) {
         HealthComponent health = entity.getHealth();
-        if (health != null && health.isDead) return AnimationType.DEATH;
+        if (health != null && health.isDead()) return AnimationType.DEATH;
         if (health != null && health.hurtTime > 0f) return AnimationType.HIT;
         AttackComponent attack = entity.getAttack();
         if (attack != null && attack.isAttacking) return attack.animation;

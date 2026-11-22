@@ -6,6 +6,7 @@ import com.hung.component.AttackComponent;
 import com.hung.component.ColliderComponent;
 import com.hung.component.DoorComponent;
 import com.hung.component.EnemyBrainComponent;
+import com.hung.component.EnemyEffectsComponent;
 import com.hung.component.EffectComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.MovementComponent;
@@ -37,6 +38,7 @@ public class Entity {
     private ProjectileComponent projectile;
     private DoorComponent door;
     private EnemyBrainComponent brain;
+    private EnemyEffectsComponent enemyEffects;
     private Controller controller;
 
     public TransformComponent getTransform() { return transform; }
@@ -53,6 +55,7 @@ public class Entity {
     public ProjectileComponent getProjectile() { return projectile; }
     public DoorComponent getDoor() { return door; }
     public EnemyBrainComponent getBrain() { return brain; }
+    public EnemyEffectsComponent getEnemyEffects() { return enemyEffects; }
     public Controller getController() { return controller; }
 
     public void setMovement(MovementComponent movement) { this.movement = movement; }
@@ -68,5 +71,6 @@ public class Entity {
     public void setProjectile(ProjectileComponent projectile) { this.projectile = projectile; }
     public void setDoor(DoorComponent door) { this.door = door; }
     public void setBrain(EnemyBrainComponent brain) { this.brain = brain; }
+    public void setEnemyEffects(EnemyEffectsComponent enemyEffects) { this.enemyEffects = enemyEffects; }
     public void setController(Controller controller) { this.controller = controller; }
 }

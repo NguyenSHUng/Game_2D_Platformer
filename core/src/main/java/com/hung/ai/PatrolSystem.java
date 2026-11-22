@@ -18,9 +18,6 @@ import com.hung.world.World;
  */
 public class PatrolSystem {
 
-    /** How far past the leading edge of the box to look for ground, in world units. */
-    private static final float LEDGE_PROBE = 1f;
-
     private final World world;
 
     public PatrolSystem(World world) {
@@ -37,7 +34,7 @@ public class PatrolSystem {
             ColliderComponent collider = entity.getCollider();
             if (patrol == null || movement == null || collider == null) continue;
             HealthComponent health = entity.getHealth();
-            if (health != null && (health.isDead || health.hurtTime > 0f)) continue;
+            if (health != null && (health.isDead() || health.hurtTime > 0f)) continue;
 
             TransformComponent transform = entity.getTransform();
             boolean canMove = movement.isGrounded || movement.isFlying;
@@ -57,8 +54,6 @@ public class PatrolSystem {
         if (movement.isBlocked) return true;
         if (movement.isFlying) return false;
 
-        float probeX = x + patrol.direction * (collider.width / 2f + LEDGE_PROBE);
-        int groundRow = grid.toTile(transform.position.y - LEDGE_PROBE);
-        return !grid.isSupport(grid.toTile(probeX), groundRow);
+        return !grid.hasFloorAhead(x, transform.position.y, collider.width / 2f, patrol.direction);
     }
 }

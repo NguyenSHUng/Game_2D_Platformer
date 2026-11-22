@@ -68,7 +68,7 @@ public class DoorSystem {
         Entity player = world.getPlayer();
         if (player == null || player.getCollider() == null) return;
         HealthComponent health = player.getHealth();
-        if (health != null && health.isDead) return;
+        if (health != null && health.isDead()) return;
 
         Hitboxes.body(player, body);
         DoorComponent door = touchedDoor(transition.currentRoom);

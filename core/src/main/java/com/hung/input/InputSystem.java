@@ -69,7 +69,7 @@ public class InputSystem {
 
             HealthComponent health = entity.getHealth();
             AttackComponent attack = entity.getAttack();
-            boolean isIncapacitated = health != null && (health.isDead || health.hurtTime > 0f);
+            boolean isIncapacitated = health != null && (health.isDead() || health.hurtTime > 0f);
             if (isIncapacitated || !isEnabled) {
                 stand(entity, isIncapacitated);
                 continue;

@@ -48,7 +48,7 @@ public class AttackSystem {
 
             if (attack.isRequested) {
                 attack.isRequested = false;
-                if (!attack.isAttacking && animation.animations.containsKey(attack.animation) && canAct(entity)) {
+                if (!attack.isAttacking && animation.getAnimations().containsKey(attack.animation) && canAct(entity)) {
                     attack.isAttacking = true;
                     attack.hasHit = false;
                 }
@@ -70,7 +70,7 @@ public class AttackSystem {
 
     private static boolean canAct(Entity entity) {
         HealthComponent health = entity.getHealth();
-        return health == null || (!health.isDead && health.hurtTime <= 0f);
+        return health == null || (!health.isDead() && health.hurtTime <= 0f);
     }
 
     /** Damages every living entity on the other side whose body touches the attack box. */

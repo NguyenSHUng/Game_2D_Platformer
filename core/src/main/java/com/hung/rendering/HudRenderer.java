@@ -28,7 +28,7 @@ public class HudRenderer implements Disposable {
     private static final Color BAR_FILL_COLOR = new Color(0.75f, 0.16f, 0.12f, 1f);
     private static final Color TEXT_COLOR = new Color(0.85f, 0.85f, 0.8f, 1f);
     private static final String PLAYER_HINT =
-        "A/D walk  Space jump  W/S ladder  S crouch  J/mouse attack-shoot (hold: auto)  R reload  1/2/3/Q weapon  I stats  M map  -/= zoom  L lights  F2 free camera  F3 debug";
+        "A/D walk  Space jump  W/S ladder  S crouch  J/mouse attack-shoot (hold: auto)  R reload  1/2/3/Q weapon  I stats  M map  -/= zoom  L lights  Esc menu  F2 free camera  F3 debug";
     private static final String RELOADING = "  RELOADING";
     private static final String FREE_CAMERA_HINT =
         "FREE CAMERA  WASD pan  Shift fast  Q/E zoom  Tab next enemy  Home spawn  F2 back to player";
@@ -52,7 +52,7 @@ public class HudRenderer implements Disposable {
         float top = camera.viewportHeight - MARGIN;
 
         if (health != null) {
-            float fill = health.maxHealth > 0 ? (float) health.health / health.maxHealth : 0f;
+            float fill = health.getMaxHealth() > 0 ? (float) health.getHealth() / health.getMaxHealth() : 0f;
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapes.setProjectionMatrix(camera.combined);
@@ -71,7 +71,7 @@ public class HudRenderer implements Disposable {
         font.setColor(TEXT_COLOR);
         if (health != null) {
             healthText.setLength(0);
-            healthText.append("HP ").append(health.health).append(" / ").append(health.maxHealth);
+            healthText.append("HP ").append(health.getHealth()).append(" / ").append(health.getMaxHealth());
             font.draw(batch, healthText, MARGIN + BAR_WIDTH + TEXT_GAP, top);
         }
         WeaponComponent weapon = player != null ? player.getWeapon() : null;

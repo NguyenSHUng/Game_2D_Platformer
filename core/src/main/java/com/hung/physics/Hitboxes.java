@@ -39,10 +39,10 @@ public final class Hitboxes {
         if (animation == null) return false;
         AnimationType type = animation.currentType;
         if (type != AnimationType.ATTACK && type != AnimationType.ATTACK_2) return false;
-        Rectangle[] boxes = animation.attackBoxes.get(type);
+        Rectangle[] boxes = animation.getAttackBoxes().get(type);
         Rectangle spriteBox = boxes != null ? boxes[AnimationFrames.authoredFrame(animation)] : null;
         if (spriteBox == null) return false;
-        TextureRegion frame = animation.animations.get(type).getKeyFrame(animation.stateTime);
+        TextureRegion frame = animation.getAnimations().get(type).getKeyFrame(animation.stateTime);
         fromSprite(entity, spriteBox, frame.getRegionWidth(), frame.getRegionHeight(), out);
         if (weaponTip(entity, TIP)) {
             out.merge(TIP.x - TIP_MARGIN, TIP.y - TIP_MARGIN);
@@ -84,7 +84,7 @@ public final class Hitboxes {
         if (hand == null) return false;
 
         TransformComponent transform = entity.getTransform();
-        TextureRegion frame = animation.animations.get(animation.currentType).getKeyFrame(animation.stateTime);
+        TextureRegion frame = animation.getAnimations().get(animation.currentType).getKeyFrame(animation.stateTime);
         float direction = transform.isFacingRight ? 1f : -1f;
         float handX = transform.position.x + (hand.x - frame.getRegionWidth() / 2f) * animation.drawScale * direction;
         float handY = transform.position.y + (frame.getRegionHeight() - hand.y - animation.footOffset) * animation.drawScale;

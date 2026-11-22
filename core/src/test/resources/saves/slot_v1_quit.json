@@ -1,0 +1,29 @@
+{
+"version": 1,
+"mode": "HARD",
+"mapPath": "maps/bunker_482931/map.tmx",
+"mapSignature": "1000x100/42r/7c",
+"savedAt": 1795270546676,
+"playTime": 139.1621,
+"reason": "QUIT",
+"isComplete": false,
+"x": 121.63326,
+"y": 864,
+"respawnX": 104,
+"respawnY": 864,
+"checkpointIndex": -1,
+"checkpointCount": 7,
+"health": 100,
+"maxHealth": 100,
+"weaponSlot": 2,
+"weaponIds": [
+	"combat_knife",
+	"service_pistol",
+	"assault_rifle"
+],
+"ammo": [ 0, 12, 29 ],
+"visitedRooms": [ 0, 1, 2, 3, 4, 5 ],
+"knownRooms": [ 0, 1, 2, 3, 4, 5, 6, 39, 40 ],
+"roomCount": 42,
+"roomId": "room_1"
+}

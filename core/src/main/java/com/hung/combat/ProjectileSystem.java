@@ -81,7 +81,7 @@ public class ProjectileSystem {
             Entity target = entities.get(i);
             if (target == projectile.owner || target.getCollider() == null) continue;
             HealthComponent health = target.getHealth();
-            if (health == null || health.isDead) continue;
+            if (health == null || health.isDead()) continue;
             if ((target == player) == isPlayerShot) continue;
             if (Hitboxes.body(target, body).contains(point)) return target;
         }

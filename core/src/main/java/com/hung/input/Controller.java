@@ -3,8 +3,9 @@ package com.hung.input;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Source of intent for an entity: keyboard for the player, AI for enemies (later).
- * Controllers only report what is wanted; systems decide what actually happens.
+ * Source of the player's intent (KeyboardController). Controllers only report what is wanted;
+ * InputSystem decides what actually happens. Enemies have no controller: PatrolSystem and
+ * EnemyBrainSystem drive them through their components.
  */
 public interface Controller {
 

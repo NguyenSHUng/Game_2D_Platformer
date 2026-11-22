@@ -8,7 +8,7 @@ import com.hung.physics.Hitboxes;
 import com.hung.world.World;
 
 /**
- * Enemies hurt the player by touching them (until enemies get attack AI).
+ * Enemies hurt the player by touching their body, on top of their own attacks (AttackSystem).
  * Reads: ColliderComponent, HealthComponent. Writes: the player's HealthComponent (through Damage).
  */
 public class ContactDamageSystem {
@@ -29,7 +29,7 @@ public class ContactDamageSystem {
         Entity player = world.getPlayer();
         if (player == null || player.getCollider() == null) return;
         HealthComponent playerHealth = player.getHealth();
-        if (playerHealth == null || playerHealth.isDead || playerHealth.invulnerableTime > 0f) return;
+        if (playerHealth == null || playerHealth.isDead() || playerHealth.invulnerableTime > 0f) return;
 
         Hitboxes.body(player, playerBox);
         Array<Entity> entities = world.getEntities();
@@ -37,7 +37,7 @@ public class ContactDamageSystem {
             Entity enemy = entities.get(i);
             if (enemy == player || enemy.getCollider() == null || enemy.getPatrol() == null) continue;
             HealthComponent enemyHealth = enemy.getHealth();
-            if (enemyHealth != null && enemyHealth.isDead) continue;
+            if (enemyHealth != null && enemyHealth.isDead()) continue;
             if (!Hitboxes.body(enemy, enemyBox).overlaps(playerBox)) continue;
             Damage.apply(player, ENEMY_CONTACT_DAMAGE, enemy.getTransform().position.x);
             return;

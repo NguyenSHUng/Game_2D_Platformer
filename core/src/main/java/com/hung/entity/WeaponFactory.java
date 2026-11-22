@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.hung.animation.AnimationFrames;
 import com.hung.animation.AnimationType;
 import com.hung.animation.HandAnchor;
 import com.hung.combat.AttachmentProfile;
@@ -48,7 +47,7 @@ public final class WeaponFactory {
         arsenal.slots.addAll(slots);
         entity.setArsenal(arsenal);
         entity.setWeapon(slots.first());
-        if (entity.getAnimation() != null) AnimationFrames.useStance(entity.getAnimation(), slots.first().equipped.getStance());
+        if (entity.getAnimation() != null) entity.getAnimation().useStance(slots.first().equipped.getStance());
     }
 
     /** A loaded weapon: its texture region plus, for firearms, the effect animations (textures already loaded). */
@@ -133,16 +132,16 @@ public final class WeaponFactory {
      */
     private static HandAnchor[] resolveHandAnchors(AnimationType type, AttachmentProfile.AnimationAttachment attachment,
                                                    AnimationComponent animation) {
-        Animation<TextureRegion> frames = animation.animations.get(type);
+        Animation<TextureRegion> frames = animation.getAnimations().get(type);
         if (frames == null) {
             throw new IllegalArgumentException("Attachment profile has " + type + " but the character has no such animation");
         }
-        int[] sources = animation.keyFrameSources.get(type);
+        int[] sources = animation.getKeyFrameSources().get(type);
         int frameCount = sources != null ? sources[sources.length - 1] + 1 : frames.getKeyFrames().length;
 
         HandAnchor[] base = attachment.auto != null
             ? attachment.auto.toArray(HandAnchor[]::new)
-            : animation.handAnchors.get(type);
+            : animation.getHandAnchors().get(type);
         if (base == null || base.length == 0) {
             throw new IllegalArgumentException(type + ": profile has no auto anchors and the character has no default hand");
         }

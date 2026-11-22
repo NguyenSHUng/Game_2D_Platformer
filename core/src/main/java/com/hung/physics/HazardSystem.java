@@ -5,7 +5,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.hung.component.HealthComponent;
+import com.hung.core.EventBus;
 import com.hung.entity.Entity;
+import com.hung.world.CheckpointEvent;
+import com.hung.world.ExitReachedEvent;
 import com.hung.world.Level;
 import com.hung.world.PlayerRespawn;
 import com.hung.world.TileGrid;
@@ -13,11 +16,11 @@ import com.hung.world.World;
 
 /**
  * What the level does to the player:
- *  - touching a checkpoint makes it the respawn point;
+ *  - touching a checkpoint makes it the respawn point (CheckpointEvent: the game saves);
  *  - touching a SPIKE / TOXIC tile or falling out of the map sends the player back to the
  *    respawn point (no damage yet: trap damage tiers are planned, build_asset/build_map/PROGRESS.md §6);
- *  - reaching the exit is reported once.
- * Reads: ColliderComponent, TileGrid, Level. Writes: World respawn point, player position.
+ *  - reaching the exit is reported once (ExitReachedEvent: the run is complete).
+ * Reads: ColliderComponent, TileGrid, Level. Writes: World respawn point, player position. Publishes on the EventBus.
  */
 public class HazardSystem {
 
@@ -30,20 +33,24 @@ public class HazardSystem {
     private static final float FALL_OUT_MARGIN = 64f;
 
     private final World world;
+    private final EventBus events;
+    private final CheckpointEvent checkpointEvent = new CheckpointEvent();
+    private final ExitReachedEvent exitEvent = new ExitReachedEvent();
     private boolean hasReachedExit;
     // Reused every frame to avoid allocating in the game loop
     private final Rectangle body = new Rectangle();
     private final Rectangle area = new Rectangle();
 
-    public HazardSystem(World world) {
+    public HazardSystem(World world, EventBus events) {
         this.world = world;
+        this.events = events;
     }
 
     public void update() {
         Entity player = world.getPlayer();
         if (player == null || player.getCollider() == null) return;
         HealthComponent health = player.getHealth();
-        if (health != null && health.isDead) return;
+        if (health != null && health.isDead()) return;
 
         Level level = world.getLevel();
         Hitboxes.body(player, body);
@@ -63,8 +70,9 @@ public class HazardSystem {
             if (!checkpoint.overlaps(body)) continue;
             float x = checkpoint.x + checkpoint.width / 2f;
             if (respawn.x != x || respawn.y != checkpoint.y) {
-                respawn.set(x, checkpoint.y);
+                world.setRespawnPoint(x, checkpoint.y);
                 Gdx.app.log(TAG, "Checkpoint " + (i + 1) + "/" + checkpoints.size + " at " + respawn);
+                events.publish(checkpointEvent.set(i, checkpoints.size, respawn));
             }
             return;
         }
@@ -78,6 +86,7 @@ public class HazardSystem {
         if (area.overlaps(body)) {
             hasReachedExit = true;
             Gdx.app.log(TAG, "Reached the exit of " + level.getName());
+            events.publish(exitEvent.set(level.getName()));
         }
     }
 

@@ -44,7 +44,7 @@ public class HealthSystem {
             if (health == null) continue;
 
             health.invulnerableTime = Math.max(0f, health.invulnerableTime - delta);
-            if (health.isDead) {
+            if (health.isDead()) {
                 updateDead(entity, health, delta);
             } else if (health.hurtTime > 0f) {
                 health.hurtTime = Math.max(0f, health.hurtTime - delta);
@@ -62,8 +62,7 @@ public class HealthSystem {
         float deathDuration = animation != null ? AnimationFrames.duration(animation, AnimationType.DEATH) : 0f;
         if (entity == world.getPlayer()) {
             if (health.deadTime >= deathDuration + PLAYER_RESPAWN_DELAY) {
-                health.health = health.maxHealth;
-                health.isDead = false;
+                health.restoreFull();
                 health.deadTime = 0f;
                 health.hurtTime = 0f;
                 PlayerRespawn.respawn(world, entity);

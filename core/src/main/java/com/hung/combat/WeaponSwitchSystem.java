@@ -1,7 +1,6 @@
 package com.hung.combat;
 
 import com.badlogic.gdx.utils.Array;
-import com.hung.animation.AnimationFrames;
 import com.hung.component.ArsenalComponent;
 import com.hung.component.AttackComponent;
 import com.hung.component.HealthComponent;
@@ -48,13 +47,13 @@ public class WeaponSwitchSystem {
             arsenal.current = target;
             WeaponComponent next = arsenal.slots.get(target);
             entity.setWeapon(next);
-            if (entity.getAnimation() != null) AnimationFrames.useStance(entity.getAnimation(), next.equipped.getStance());
+            if (entity.getAnimation() != null) entity.getAnimation().useStance(next.equipped.getStance());
         }
     }
 
     private static boolean isBusy(Entity entity) {
         AttackComponent attack = entity.getAttack();
         HealthComponent health = entity.getHealth();
-        return (attack != null && attack.isAttacking) || (health != null && (health.isDead || health.hurtTime > 0f));
+        return (attack != null && attack.isAttacking) || (health != null && (health.isDead() || health.hurtTime > 0f));
     }
 }

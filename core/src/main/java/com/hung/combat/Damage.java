@@ -31,13 +31,12 @@ public final class Damage {
      */
     public static boolean apply(Entity target, int amount, float sourceX) {
         HealthComponent health = target.getHealth();
-        if (health == null || health.isDead || health.invulnerableTime > 0f) return false;
+        if (health == null || health.isDead() || health.invulnerableTime > 0f) return false;
 
-        health.health = Math.max(0, health.health - amount);
+        boolean isKilled = health.applyDamage(amount);
         health.invulnerableTime = health.invulnerability;
         AnimationComponent animation = target.getAnimation();
-        if (health.health == 0) {
-            health.isDead = true;
+        if (isKilled) {
             health.deadTime = 0f;
             health.hurtTime = 0f;
         } else {

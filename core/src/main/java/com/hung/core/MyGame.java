@@ -1,32 +1,104 @@
 package com.hung.core;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.hung.util.Constants;
+import com.hung.save.GameSession;
+import com.hung.save.SaveData;
+import com.hung.save.SaveManager;
+import com.hung.save.Settings;
+import com.hung.ui.MenuScreen;
+import com.hung.ui.UiTheme;
 import com.hung.util.ResourceLoader;
 import com.hung.world.World;
 import com.hung.world.WorldLoader;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class MyGame extends Game {
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. Starts on the
+ * main menu (MenuScreen) and moves between it and a run (GameScreen) as the {@link Navigator}:
+ * a new game or a continued save loads the mode's level; leaving a run drops its screen and map so
+ * the next run starts from the original level (play breaks walls in place).
+ */
+public class MyGame extends Game implements Navigator {
+
+    private static final String TAG = "MyGame";
 
     private SpriteBatch batch;
     private ResourceLoader resources;
+    private SaveManager saves;
+    private Settings settings;
+    /** Menu fonts and textures, shared by the title screen and the runs' pause menus. */
+    private UiTheme theme;
+    private MenuScreen menu;
+    private GameScreen run;
+    private String runMapPath;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         resources = new ResourceLoader();
+        saves = new SaveManager();
+        settings = Settings.load();
+        settings.apply();
+        theme = new UiTheme();
+        menu = new MenuScreen(batch, this, saves, settings, theme);
+        setScreen(menu);
+    }
 
-        World world = WorldLoader.load(Constants.START_MAP_PATH, resources);
-        setScreen(new GameScreen(batch, world));
+    // Switches run after the current frame, never in the middle of a screen's render
+
+    @Override
+    public void startNewGame(int slot, GameMode mode) {
+        Gdx.app.postRunnable(() -> startRun(new GameSession(slot, mode, null)));
+    }
+
+    @Override
+    public void continueGame(int slot, SaveData save) {
+        GameMode mode = GameMode.fromName(save.mode);
+        Gdx.app.postRunnable(() -> startRun(new GameSession(slot, mode, save)));
+    }
+
+    @Override
+    public void returnToMainMenu() {
+        Gdx.app.postRunnable(() -> {
+            endRun();
+            setScreen(menu);
+        });
+    }
+
+    @Override
+    public void quit() {
+        Gdx.app.exit();
+    }
+
+    private void startRun(GameSession session) {
+        endRun();
+        Gdx.app.log(TAG, (session.loaded != null ? "Continuing" : "New") + " " + session.mode.label
+            + " run in slot " + (session.slot + 1));
+        World world = WorldLoader.load(session.mode.mapPath, resources);
+        runMapPath = session.mode.mapPath;
+        run = new GameScreen(batch, world, session, saves, settings, theme, this);
+        setScreen(run);
+    }
+
+    /** Drops the current run (its screen, then its map). */
+    private void endRun() {
+        if (run == null) return;
+        if (getScreen() == run) setScreen(menu);
+        run.dispose();
+        run = null;
+        resources.unloadMap(runMapPath);
+        runMapPath = null;
     }
 
     @Override
     public void dispose() {
         Screen screen = getScreen();
-        if (screen != null) screen.dispose();
+        if (screen != null) screen.hide();
+        if (run != null) run.dispose();
+        menu.dispose();
+        theme.dispose();
         batch.dispose();
         resources.dispose();
     }

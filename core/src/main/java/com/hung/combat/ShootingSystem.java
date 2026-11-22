@@ -86,7 +86,7 @@ public class ShootingSystem {
     private static boolean canAct(Entity entity) {
         HealthComponent health = entity.getHealth();
         MovementComponent movement = entity.getMovement();
-        boolean isAlive = health == null || (!health.isDead && health.hurtTime <= 0f);
+        boolean isAlive = health == null || (!health.isDead() && health.hurtTime <= 0f);
         return isAlive && (movement == null || !movement.isClimbing);
     }
 

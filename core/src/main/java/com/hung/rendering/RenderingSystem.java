@@ -105,7 +105,7 @@ public class RenderingSystem implements Disposable {
 
     private static boolean isBlinkedOut(Entity entity) {
         HealthComponent health = entity.getHealth();
-        if (health == null || health.isDead || health.invulnerableTime <= 0f) return false;
+        if (health == null || health.isDead() || health.invulnerableTime <= 0f) return false;
         return (int) (health.invulnerableTime / BLINK_INTERVAL) % 2 == 1;
     }
 
@@ -113,7 +113,7 @@ public class RenderingSystem implements Disposable {
     private static void drawEntity(Batch batch, Entity entity) {
         TransformComponent transform = entity.getTransform();
         AnimationComponent animation = entity.getAnimation();
-        Animation<TextureRegion> current = animation.animations.get(animation.currentType);
+        Animation<TextureRegion> current = animation.getAnimations().get(animation.currentType);
         TextureRegion frame = current.getKeyFrames()[AnimationFrames.keyFrameIndex(animation)];
 
         // Snap the feet to whole world units so the body and weapon stay aligned and don't shimmer
@@ -128,7 +128,7 @@ public class RenderingSystem implements Disposable {
             HandAnchor hand = AnimationFrames.handAnchor(weapon, animation);
             if (hand != null) {
                 drawWeapon(batch, weapon, hand, frame, animation, footX, footY, direction);
-                Animation<TextureRegion> overlay = animation.overlays.get(animation.currentType);
+                Animation<TextureRegion> overlay = animation.getOverlays().get(animation.currentType);
                 if (overlay != null) {
                     drawCharacter(batch, overlay.getKeyFrames()[AnimationFrames.keyFrameIndex(animation)], animation, footX, footY, direction);
                 }

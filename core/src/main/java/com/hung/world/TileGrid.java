@@ -10,6 +10,9 @@ import java.util.Arrays;
  */
 public class TileGrid {
 
+    /** How far past a walker's edge and below its feet the ledge probe looks, world units. */
+    private static final float LEDGE_PROBE = 1f;
+
     private final int width;
     private final int height;
     private final float tileSize;
@@ -40,6 +43,15 @@ public class TileGrid {
         TileType type = get(tileX, tileY);
         if (type.isSolid() || type == TileType.PLATFORM) return true;
         return type == TileType.LADDER && get(tileX, tileY + 1) != TileType.LADDER;
+    }
+
+    /**
+     * Whether a walker with its feet at (x, y) still has ground one step ahead: probed just past its
+     * edge (halfWidth + LEDGE_PROBE) in `direction`, just below its feet. Patrol and chase AI turn or stop on false.
+     */
+    public boolean hasFloorAhead(float x, float y, float halfWidth, float direction) {
+        float probeX = x + direction * (halfWidth + LEDGE_PROBE);
+        return isSupport(toTile(probeX), toTile(y - LEDGE_PROBE));
     }
 
     /** Tile index containing a world coordinate. */

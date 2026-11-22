@@ -28,6 +28,8 @@ public class EnemyDefinition {
     public ObjectMap<String, Animation> animations;
     /** Phase 2 only: role and qualitative classes, plus values measured from the animations. */
     public Gameplay gameplay;
+    /** Effects the animations spawn (EFFECT events), by name; MINI_BOSS only so far. */
+    public ObjectMap<String, Effect> effects;
 
     public static class Size {
         public int width;
@@ -62,6 +64,35 @@ public class EnemyDefinition {
         public Array<Frame> frames;
         /** Only on MOVE: speed that keeps the planted feet from sliding (or a flyer's air speed). */
         public Move move;
+        /** Frame events (FOOTSTEP, ATTACK_START, EFFECT…); the game uses the EFFECT ones. */
+        public Array<Event> events;
+    }
+
+    public static class Event {
+        /** Authored frame the event fires on. */
+        public int frame;
+        /** EFFECT, FOOTSTEP, ATTACK_START, ATTACK_END. */
+        public String type;
+        /** EFFECT: name of the effect in {@link EnemyDefinition#effects}. */
+        public String name;
+        /** EFFECT: spawn point in frame pixels (top-left origin, sprite facing right). */
+        public int x;
+        public int y;
+    }
+
+    /** One effect strip next to character.json: a single row of equal frames, art facing right. */
+    public static class Effect {
+        /** Image file, relative to character.json (effects/&lt;name&gt;.png). */
+        public String image;
+        public int frameWidth;
+        public int frameHeight;
+        public int frameCount = 1;
+        /** Milliseconds per frame. */
+        public int frameDuration;
+        /** The point of the frame placed on the spawn point (frame pixels, top-left origin). */
+        public Point origin;
+        /** SYMMETRIC (never mirrored) or FLIP_WITH_FACING (mirrored around the origin when facing left). */
+        public String mirror;
     }
 
     public static class Frame {

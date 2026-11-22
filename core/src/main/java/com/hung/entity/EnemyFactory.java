@@ -8,9 +8,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.hung.animation.AnimationType;
+import com.hung.combat.WeaponEffect;
 import com.hung.component.AnimationComponent;
 import com.hung.component.AttackComponent;
 import com.hung.component.ColliderComponent;
+import com.hung.component.EnemyEffectsComponent;
 import com.hung.component.EnemyBrainComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.MovementComponent;
@@ -71,9 +73,23 @@ public final class EnemyFactory {
 
     /** Image of an enemy's sprite sheet, next to its character.json. */
     public static String sheetPath(EnemyDefinition definition, String definitionPath) {
+        return besideDefinition(definition.spriteSheet.image, definitionPath);
+    }
+
+    /** A file named relative to character.json (sprite sheet, effects/<name>.png). */
+    private static String besideDefinition(String file, String definitionPath) {
         int slash = definitionPath.lastIndexOf('/');
         String folder = slash >= 0 ? definitionPath.substring(0, slash + 1) : "";
-        return folder + definition.spriteSheet.image;
+        return folder + file;
+    }
+
+    /** Queues every image an enemy needs: its sprite sheet and the strips of its effects. */
+    public static void queueTextures(EnemyDefinition definition, String definitionPath, ResourceLoader resources) {
+        resources.queueTexture(sheetPath(definition, definitionPath));
+        if (definition.effects == null) return;
+        for (EnemyDefinition.Effect effect : definition.effects.values()) {
+            resources.queueTexture(besideDefinition(effect.image, definitionPath));
+        }
     }
 
     public static boolean isFlyer(EnemyDefinition definition) {
@@ -121,7 +137,55 @@ public final class EnemyFactory {
             entity.setAttack(createAttack(definition));
             entity.setBrain(createBrain(definition, animation, spawn));
         }
+        if (definition.effects != null) entity.setEnemyEffects(createEffects(definition, definitionPath, resources));
         return entity;
+    }
+
+    /** The EFFECT events of every animation, as cues per authored frame with their loaded strips. */
+    private static EnemyEffectsComponent createEffects(EnemyDefinition definition, String definitionPath, ResourceLoader resources) {
+        EnemyEffectsComponent component = new EnemyEffectsComponent();
+        ObjectMap<String, WeaponEffect> strips = new ObjectMap<>();
+        for (ObjectMap.Entry<String, EnemyDefinition.Effect> entry : definition.effects) {
+            strips.put(entry.key, loadEffect(entry.value, besideDefinition(entry.value.image, definitionPath), resources));
+        }
+        for (EnemyDefinition.Animation anim : definition.animations.values()) {
+            AnimationType type = toAnimationType(anim.state);
+            if (type == null || anim.events == null) continue;
+            for (EnemyDefinition.Event event : anim.events) {
+                WeaponEffect strip = "EFFECT".equals(event.type) ? strips.get(event.name) : null;
+                if (strip == null || event.frame < 0 || event.frame >= anim.frames.size) continue;
+                EnemyEffectsComponent.Cue[][] cues = component.cues.get(type);
+                if (cues == null) {
+                    cues = new EnemyEffectsComponent.Cue[anim.frames.size][];
+                    component.cues.put(type, cues);
+                }
+                boolean isMirrored = !"SYMMETRIC".equals(definition.effects.get(event.name).mirror);
+                EnemyEffectsComponent.Cue cue = new EnemyEffectsComponent.Cue(strip, event.x, event.y, isMirrored);
+                EnemyEffectsComponent.Cue[] onFrame = cues[event.frame];
+                if (onFrame == null) {
+                    cues[event.frame] = new EnemyEffectsComponent.Cue[] {cue};
+                } else {
+                    EnemyEffectsComponent.Cue[] grown = new EnemyEffectsComponent.Cue[onFrame.length + 1];
+                    System.arraycopy(onFrame, 0, grown, 0, onFrame.length);
+                    grown[onFrame.length] = cue;
+                    cues[event.frame] = grown;
+                }
+            }
+        }
+        return component;
+    }
+
+    /** An effect strip (one row of equal frames) as a playable effect, origin from the file. */
+    private static WeaponEffect loadEffect(EnemyDefinition.Effect effect, String path, ResourceLoader resources) {
+        Texture strip = resources.getTexture(path);
+        Array<TextureRegion> frames = new Array<>(true, effect.frameCount, TextureRegion[]::new);
+        for (int f = 0; f < effect.frameCount; f++) {
+            frames.add(new TextureRegion(strip, f * effect.frameWidth, 0, effect.frameWidth, effect.frameHeight));
+        }
+        Animation<TextureRegion> animation = new Animation<>(effect.frameDuration / MILLIS_PER_SECOND, frames, Animation.PlayMode.NORMAL);
+        float originX = effect.origin != null ? effect.origin.x : effect.frameWidth / 2f;
+        float originY = effect.origin != null ? effect.origin.y : effect.frameHeight / 2f;
+        return new WeaponEffect(animation, originX, originY);
     }
 
     private static AnimationComponent createAnimation(EnemyDefinition definition, Texture sheet, float scale,
@@ -155,11 +219,11 @@ public final class EnemyFactory {
                 }
             }
             Animation.PlayMode mode = entry.value.loop ? Animation.PlayMode.LOOP : Animation.PlayMode.NORMAL;
-            animation.animations.put(type, new Animation<>(FRAME_TICK_SECONDS, keyFrames, mode));
-            animation.keyFrameSources.put(type, sources.toArray());
-            if (hasHitbox) animation.attackBoxes.put(type, hitboxes);
+            animation.getAnimations().put(type, new Animation<>(FRAME_TICK_SECONDS, keyFrames, mode));
+            animation.getKeyFrameSources().put(type, sources.toArray());
+            if (hasHitbox) animation.getAttackBoxes().put(type, hitboxes);
         }
-        if (!animation.animations.containsKey(AnimationType.IDLE)) {
+        if (!animation.getAnimations().containsKey(AnimationType.IDLE)) {
             throw new IllegalArgumentException("Enemy '" + definition.id + "' needs an IDLE animation");
         }
         return animation;
@@ -177,11 +241,9 @@ public final class EnemyFactory {
     }
 
     private static HealthComponent createHealth(EnemyDefinition definition) {
-        HealthComponent health = new HealthComponent();
         String durability = definition.gameplay != null ? definition.gameplay.durabilityClass : null;
-        health.maxHealth = "HIGH".equals(durability) ? HEALTH_HIGH : "MEDIUM".equals(durability) ? HEALTH_MEDIUM
-            : "LOW".equals(durability) ? HEALTH_LOW : DEFAULT_ENEMY_HEALTH;
-        health.health = health.maxHealth;
+        HealthComponent health = new HealthComponent("HIGH".equals(durability) ? HEALTH_HIGH : "MEDIUM".equals(durability) ? HEALTH_MEDIUM
+            : "LOW".equals(durability) ? HEALTH_LOW : DEFAULT_ENEMY_HEALTH);
         if (isBoss(definition)) health.knockbackResistance = BOSS_KNOCKBACK_RESISTANCE;
         return health;
     }
@@ -201,7 +263,7 @@ public final class EnemyFactory {
         brain.aggroHeight = brain.isFlying ? AIR_AGGRO_HEIGHT : GROUND_AGGRO_HEIGHT;
         brain.attackCooldown = isBoss ? BOSS_COOLDOWN : brain.isFlying ? FLYER_COOLDOWN : CRAWLER_COOLDOWN;
         brain.chaseSpeedScale = isBoss ? BOSS_CHASE : brain.isFlying ? FLYER_CHASE : CRAWLER_CHASE;
-        brain.attacks = animation.animations.containsKey(AnimationType.ATTACK_2)
+        brain.attacks = animation.getAnimations().containsKey(AnimationType.ATTACK_2)
             ? new AnimationType[] {AnimationType.ATTACK, AnimationType.ATTACK_2}
             : new AnimationType[] {AnimationType.ATTACK};
         brain.attackRange = DEFAULT_ATTACK_RANGE;
