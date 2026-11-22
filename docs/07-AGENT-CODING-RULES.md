@@ -8,7 +8,7 @@
 
 ### 1. Package Structure - MANDATORY
 - All code must be in `com.hung.{system}`
-- Valid systems: `core`, `world`, `entity`, `component`, `ai`, `combat`, `physics`, `input`, `animation`, `rendering`, `item`, `audio`, `ui`, `util`
+- Valid systems (the packages that exist): `core`, `world`, `entity`, `component`, `ai`, `combat`, `physics`, `input`, `animation`, `rendering`, `ui`, `save`, `util`
 - **Never create packages like**: `models/`, `services/`, `helpers/`, `managers/`, `factories/` at root level
 - Sub-packages only when system becomes large (e.g., `com.hung.ai.states`)
 
@@ -34,6 +34,8 @@
 ### 5. Components Are Data, Not Behavior
 - Components store data only
 - Systems contain behavior logic
+- Exception: a component may have small methods that keep its own data valid (`HealthComponent.applyDamage`,
+  `AnimationComponent.useStance`); game rules that involve other components stay in systems
 
 ```java
 ❌ WRONG
@@ -100,6 +102,12 @@ public class Example {
 }
 ```
 
+### 11. Comment Only Where Needed
+- Comment the why, a contract or invariant, or a non-obvious formula; never restate the code
+- Short Javadoc on public classes and on public methods whose name doesn't say everything
+- No history, no commented-out code, no notes about the change itself
+- Full rule: [03-CODE-STANDARDS.md → Comments](03-CODE-STANDARDS.md#comments)
+
 ## WHEN GENERATING CODE - CHECKLIST
 
 Before outputting code, agent must verify:
@@ -115,6 +123,7 @@ Before outputting code, agent must verify:
 - [ ] Is naming consistent with conventions?
 - [ ] Can class be split into smaller pieces?
 - [ ] Are imports clean (nothing unused)?
+- [ ] Are comments only where needed, short, and still true?
 - [ ] Does code compile as written?
 
 ## FORBIDDEN PATTERNS

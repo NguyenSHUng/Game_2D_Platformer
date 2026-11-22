@@ -22,9 +22,17 @@ with its enemies (made by the enemy generator) and the player soldier (made by t
 | Knife attack | `J` or left click |
 | Free camera on / off (then `WASD` pan, `Q`/`E` zoom, `Tab` next enemy, `Home` spawn) | `F2` |
 | Debug overlay (collision, boxes, attack boxes, patrols, checkpoints) | `F3` |
+| Pause menu (resume, settings, save and return to the main menu, save and quit) | `Esc` |
+
+The game opens on the **main menu**: Continue (latest unfinished run), New Game (mode, then one of 3
+save slots), Load Game, Manage Saves, Settings, Quit. Only the **Hard** mode exists for now (the bunker
+map in `assets/maps/`). Runs save at every checkpoint and whenever you leave (menu, quit, closing the
+window) to `~/.mygame/saves/slot_N.json`; settings go to `~/.mygame/settings.json` — both outside the repo.
 
 Asset tools (run outside the game): `build_asset/build_map`, `build_asset/build_enemy`,
-`build_asset/build_character` and `build_asset/build_weapon` — each has a `PROGRESS.md`.
+`build_asset/build_character` and `build_asset/build_weapon` — each has a `PROGRESS.md`. The menus are
+designed as HTML in `build_asset/build_ui` (`menu-preview.html`) and exported to `assets/ui/` by its
+`py export-game.py` (fonts, hazard strip, title backdrop).
 Re-export a map into the game: `node tools/export-game.mjs --seed <n> --name <name>` in
 `build_asset/build_map/platformer-map-generator`; the player: `node tools/export-game.mjs --id <id>` in
 `build_asset/build_character/player-character-generator`; the knife: `node tools/generate.mjs` then
@@ -42,6 +50,7 @@ All documentation is organized in `/docs/` folder:
 docs/
 ├── README.md               ← This index
 ├── 00-OVERVIEW.md          ← Quick project summary (5 min)
+├── 01-SOURCE-MAP.md        ← Every package and file of the source, loop order, data flows (Vietnamese)
 ├── 02-ARCHITECTURE.md      ← System architecture & design
 ├── 03-CODE-STANDARDS.md    ← Java style & naming conventions
 ├── 04-GAME-DESIGN.md       ← Gameplay, mechanics, features
@@ -55,6 +64,7 @@ docs/
 | File | Content |
 |------|---------|
 | [00-OVERVIEW.md](00-OVERVIEW.md) | Quick project summary (5 min) |
+| [01-SOURCE-MAP.md](01-SOURCE-MAP.md) | Source map: every package and file, frame order, data flows, review notes (source of truth for the code layout) |
 | [02-ARCHITECTURE.md](02-ARCHITECTURE.md) | System architecture & design |
 | [03-CODE-STANDARDS.md](03-CODE-STANDARDS.md) | Java style & naming conventions |
 | [04-GAME-DESIGN.md](04-GAME-DESIGN.md) | Gameplay, mechanics, features |
@@ -107,49 +117,29 @@ Then reference:
 ### 🛠️ Core Packages
 
 ```java
-com.hung.core       // Game loop, entry point
-com.hung.world      // World, level (Tiled map + collision grid), loader
-com.hung.entity     // Player, Enemy, Projectile
-com.hung.component  // TransformComponent, HealthComponent, etc
-com.hung.physics    // Collision, hitbox
-com.hung.combat     // Weapons, damage, projectiles
-com.hung.ai         // Enemy AI, state machines
-com.hung.input      // Controllers (keyboard, AI, gamepad)
-com.hung.animation  // Sprites, animations
-com.hung.rendering  // Camera, sprite rendering
-com.hung.audio      // Sounds, music
-com.hung.item       // Pickups, upgrades
-com.hung.ui         // HUD, menus
-com.hung.util       // Helpers, constants
+com.hung.core       // MyGame (screens, runs), GameScreen (frame loop), GameMode, Navigator, EventBus
+com.hung.world      // World, Level (Tiled map + collision grid), loaders, rooms, doors, events
+com.hung.entity     // Entity (component container) and the factories that assemble entities
+com.hung.component  // Component data (Transform, Movement, Health, Animation, Weapon, ...)
+com.hung.input      // Controller, KeyboardController, InputSystem, CameraInput
+com.hung.ai         // PatrolSystem, EnemyBrainSystem
+com.hung.physics    // PhysicsSystem, CollisionSystem, HazardSystem, Hitboxes
+com.hung.combat     // Attack / shooting / projectile / health / weapon-switch systems, Damage, weapons
+com.hung.animation  // AnimationSystem, animation data, effect systems
+com.hung.rendering  // Map + entity drawing, camera, lights, HUD, character sheet, debug overlay
+com.hung.ui         // Title screen and menus, pause menu, toast, minimap
+com.hung.save       // SaveData, SaveSnapshot, SaveManager, Settings, GameSession
+com.hung.util       // Constants, ResourceLoader, SmoothDamp
 ```
+
+Every file: [01-SOURCE-MAP.md](01-SOURCE-MAP.md).
 
 ### Game Loop Execution Order
 
-Every frame (~60 FPS):
-
-```
-1. INPUT PHASE
-   └─ KeyboardController reads input
-   └─ Sets controller states
-   
-2. UPDATE PHASE (Systems in order)
-   ├─ AISystem: Enemy decisions
-   ├─ PhysicsSystem: Position updates
-   ├─ AnimationSystem: Frame updates
-   ├─ CombatSystem: Weapon cooldowns
-   └─ World: Entity-specific updates
-   
-3. COLLISION PHASE
-   └─ CollisionSystem: Detect & handle collisions
-   
-4. AUDIO PHASE
-   └─ SoundManager: Play queued sounds
-   
-5. RENDER PHASE
-   └─ RenderingSystem: Draw to screen
-   
-6. NEXT FRAME
-```
+`GameScreen` runs the systems in a fixed order every frame: input → weapon switch → patrol → enemy brain →
+physics (with collision) → hazards → contact damage → melee → shooting → projectiles → health → animation →
+enemy effects → effects, then doors, then drawing. The full list and why the order matters:
+[02-ARCHITECTURE.md → Frame order](02-ARCHITECTURE.md#frame-order).
 
 **Never call systems out of order!**
 

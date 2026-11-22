@@ -9,23 +9,22 @@ All code goes under:
 com.hung.{system}
 ```
 
-**System packages** (create only these):
+**System packages** (the packages that exist; create a new one only for a new domain):
 
 ```
-com.hung.core          # Game loop, screens, main classes
-com.hung.world         # World, levels, tilemap, maze
-com.hung.entity        # Base entity classes, game objects
-com.hung.component     # Data components (Transform, Health, etc)
-com.hung.ai            # AI systems (StateMachine, controllers)
-com.hung.combat        # Weapons, damage, projectiles
-com.hung.physics       # Collision, hitbox, raycast
-com.hung.input         # Input controllers, keyboard
-com.hung.animation     # Sprites, animations, frames
-com.hung.rendering     # Render system, camera
-com.hung.item          # Pickups, upgrades
-com.hung.audio         # Sounds, music
-com.hung.ui            # HUD, menus, buttons
-com.hung.util          # Helpers, constants, loaders
+com.hung.core          # MyGame, GameScreen (frame loop), GameMode, Navigator, EventBus
+com.hung.world         # World, Level, tile grid, loaders, rooms, doors, world events
+com.hung.entity        # Entity (component container) and the factories that build entities
+com.hung.component     # Data components (Transform, Movement, Health, Animation, Weapon, ...)
+com.hung.ai            # Enemy AI systems (PatrolSystem, EnemyBrainSystem)
+com.hung.combat        # Weapons, damage, attacks, projectiles, health
+com.hung.physics       # Physics, tile collision, hazards, hitboxes
+com.hung.input         # Controller, KeyboardController, InputSystem, free camera input
+com.hung.animation     # Animation data and systems, effect systems
+com.hung.rendering     # Map / entity drawing, camera, lights, HUD, debug overlay
+com.hung.ui            # Title screen, menus, pause menu, toast, minimap
+com.hung.save          # Save data, save snapshot, save slots, settings, game session
+com.hung.util          # Constants, resource loader, helpers
 ```
 
 **Do NOT create**:
@@ -36,17 +35,14 @@ com.hung.util          # Helpers, constants, loaders
 
 ### Classes
 ```java
-// Concrete classes - PascalCase
-public class Player { }
-public class Enemy { }
+// Concrete classes - PascalCase; components end in Component, systems in System
+public class HealthComponent { }
 public class CollisionSystem { }
+public class EnemyFactory { }
 
-// Interfaces - start with I or end with -able (both acceptable)
-public interface IController { }
-public interface Damageable { }  // Preferred if short
-
-// Abstract classes - prefix with Abstract
-public abstract class AbstractComponent { }
+// Interfaces - a plain noun for the role, no I- prefix
+public interface Controller { }
+public interface EventListener<T> { }
 ```
 
 ### Methods & Variables
@@ -80,55 +76,40 @@ private boolean shouldDespawn;
 
 ## Class Structure Template
 
-```java
-package com.hung.entity;
+Order members as constants, fields, constructor, public methods, private helpers. A system, for example:
 
-import com.badlogic.gdx.math.Vector2;
+```java
+package com.hung.ai;
 
 /**
- * Brief description of what this class does.
- * 
- * Responsibilities:
- * - Handles X
- * - Manages Y
+ * Simple enemy AI: walk back and forth inside the patrol range, turning at its ends,
+ * at walls and before stepping off a ledge.
+ * Reads: PatrolComponent, MovementComponent, ColliderComponent. Writes: TransformComponent, PatrolComponent.
  */
-public class Player {
-    
-    // ==================== CONSTANTS ====================
-    private static final float MOVE_SPEED = 200f;
-    private static final float ROTATION_SPEED = 10f;
-    
-    // ==================== FIELDS ====================
-    private Vector2 position;
-    private Vector2 velocity;
-    private float health;
-    private boolean isAlive;
-    
-    // ==================== CONSTRUCTOR ====================
-    public Player(float x, float y) {
-        this.position = new Vector2(x, y);
-        this.velocity = new Vector2();
-        this.health = 100f;
-        this.isAlive = true;
+public class PatrolSystem {
+
+    private final World world;
+
+    public PatrolSystem(World world) {
+        this.world = world;
     }
-    
-    // ==================== PUBLIC METHODS ====================
-    public void update(float delta) {
-        // Implementation
+
+    public void update() {
+        TileGrid grid = world.getLevel().getGrid();
+        Array<Entity> entities = world.getEntities();
+        for (int i = 0; i < entities.size; i++) {
+            Entity entity = entities.get(i);
+            PatrolComponent patrol = entity.getPatrol();
+            MovementComponent movement = entity.getMovement();
+            ColliderComponent collider = entity.getCollider();
+            if (patrol == null || movement == null || collider == null) continue;
+            // ... turn at the range ends, walls and ledges, then set the walking velocity
+        }
     }
-    
-    public void takeDamage(float amount) {
-        // Implementation
-    }
-    
-    // ==================== GETTERS ====================
-    public Vector2 getPosition() { return position; }
-    public float getHealth() { return health; }
-    public boolean isAlive() { return isAlive; }
-    
-    // ==================== SETTERS ====================
-    public void setPosition(float x, float y) { 
-        this.position.set(x, y); 
+
+    private static boolean shouldTurn(TileGrid grid, TransformComponent transform, ColliderComponent collider,
+                                      MovementComponent movement, PatrolComponent patrol) {
+        // ...
     }
 }
 ```
@@ -163,69 +144,71 @@ public class TransformComponent {
 - ✅ `TransformComponent`, `HealthComponent`, `WeaponComponent`
 - ❌ `updateTransform()` - put in a system instead
 
-## Entity Base Class Pattern
+## Entities Are Containers
+
+`Entity` (`com.hung.entity`) holds a transform plus optional components and has no behaviour; factories
+assemble entities, systems act on them (see [02-ARCHITECTURE.md](02-ARCHITECTURE.md)).
 
 ```java
-public class Entity {
-    protected TransformComponent transform;
-    protected HealthComponent health;
-    // ... other components
-    
-    public Entity(float x, float y) {
-        this.transform = new TransformComponent();
-        this.transform.position.set(x, y);
-    }
-    
-    public void update(float delta) {
-        // Override in subclasses
-    }
-    
-    public void render(Batch batch) {
-        // Override in subclasses
-    }
-}
+Entity enemy = new Entity();
+enemy.setMovement(movement);
+enemy.setHealth(new HealthComponent(40));
 ```
 
-**Never create large inheritance chains:**
+**Never create entity subclasses or inheritance chains:**
 - ❌ `Entity → Character → Enemy → ChaserEnemy → FastChaser`
 - ✅ `Entity` with mix of reusable components
 
 ## System Classes (Behavior)
 
-Systems handle logic, entities hold data.
+Systems handle logic, entities hold data. A system walks the world's entities each frame and skips the
+ones without the components it needs; `GameScreen` calls the systems in a fixed order
+([02-ARCHITECTURE.md → Frame order](02-ARCHITECTURE.md#frame-order)).
 
 ```java
 package com.hung.physics;
 
-public class CollisionSystem {
-    
-    private List<Entity> entities;
-    
-    public CollisionSystem(List<Entity> entities) {
-        this.entities = entities;
+public class PhysicsSystem {
+
+    private final World world;
+    private final CollisionSystem collisionSystem;
+
+    public PhysicsSystem(World world, CollisionSystem collisionSystem) {
+        this.world = world;
+        this.collisionSystem = collisionSystem;
     }
-    
-    /**
-     * Check all collisions this frame.
-     * Call once per update().
-     */
+
     public void update(float delta) {
-        for (int i = 0; i < entities.size(); i++) {
-            for (int j = i + 1; j < entities.size(); j++) {
-                checkCollision(entities.get(i), entities.get(j));
+        PhysicsSettings physics = world.getLevel().getPhysics();
+        Array<Entity> entities = world.getEntities();
+        for (int i = 0; i < entities.size; i++) {
+            Entity entity = entities.get(i);
+            if (entity.getProjectile() != null) continue; // ProjectileSystem moves bullets in collision-checked steps
+            TransformComponent transform = entity.getTransform();
+            MovementComponent movement = entity.getMovement();
+            if (movement != null && !movement.isClimbing && !movement.isFlying) {
+                transform.velocity.y = Math.max(transform.velocity.y - physics.gravity * delta, -physics.maxFallSpeed);
+            }
+
+            if (entity.getCollider() != null) {
+                collisionSystem.move(entity, transform.velocity.x * delta, transform.velocity.y * delta);
+            } else {
+                transform.position.mulAdd(transform.velocity, delta);
             }
         }
-    }
-    
-    private void checkCollision(Entity a, Entity b) {
-        // Implementation
     }
 }
 ```
 
+`CollisionSystem` is not called by `GameScreen`: `PhysicsSystem` owns it and calls
+`move(entity, dx, dy)`, which moves one collider box through the **tile grid**, one axis at a time (walls
+stop it, it lands on solid tiles, platforms and ladder tops). Bodies against bodies (attacks, bullets,
+touching enemies) are checked by the combat systems through `Hitboxes`, not by `CollisionSystem`.
+
 ## Interface Design
 
-Make behavior contracts clear:
+Make behavior contracts clear. The player's intent is the `Controller` interface; `InputSystem` only
+talks to it, and `KeyboardController` is the implementation:
 
 ```java
 package com.hung.input;
@@ -233,49 +216,47 @@ package com.hung.input;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Any object that can receive input should implement this.
- * Allows swapping: KeyboardController, AIController, GamepadController
+ * Source of the player's intent (KeyboardController). Controllers only report what is wanted;
+ * InputSystem decides what actually happens. Enemies have no controller: PatrolSystem and
+ * EnemyBrainSystem drive them through their components.
  */
 public interface Controller {
-    Vector2 getMovementDirection();  // -1 to 1 on X/Y
-    Vector2 getAimDirection();       // -1 to 1 normalized
-    boolean isFirePressed();
-    boolean isAbilityPressed();
+    Vector2 getMovementDirection();   // each axis -1..1: walk (x), climb / crouch (y)
+    boolean isJumpPressed();
+    boolean isAttackPressed();
+    boolean isAttackHeld();           // full-auto firearms keep firing
+    boolean isReloadPressed();
+    int getWeaponSlotPressed();       // 0-based slot, or -1
+    boolean isNextWeaponPressed();
 }
 ```
+
+`KeyboardController` polls the keyboard and mouse when asked and keeps no state between frames. There is
+no AI controller: enemy movement and behaviour live in their components (`PatrolComponent`,
+`EnemyBrainComponent`) and systems (`PatrolSystem`, `EnemyBrainSystem`).
 
 ## Design Patterns (Use When Needed)
 
 ### Factory Pattern
 ```java
-// Create entities/weapons without exposing constructors
-public class EnemyFactory {
-    public static Enemy createChaser(float x, float y) { }
-    public static Enemy createTurret(float x, float y) { }
-}
+// Build entities by composition from data files; callers never assemble components themselves
+Entity player = EntityFactory.createCharacter(definition, definitionPath, resources, x, y,
+    new KeyboardController(), physics);
+Entity enemy = EnemyFactory.createEnemy(enemyDefinition, enemyPath, resources, spawn);
 ```
 
 ### Strategy Pattern
-```java
-// Swap behaviors at runtime
-public class Enemy {
-    private AIStrategy strategy;  // Can be Chase, Patrol, Flee, etc
-    
-    public void setStrategy(AIStrategy newStrategy) {
-        this.strategy = newStrategy;
-    }
-}
-```
+Swap behaviour behind a small interface instead of subclassing: `InputSystem` works with any `Controller`,
+and `PauseMenu` reports choices through `PauseMenu.Actions`, which `GameScreen` implements. Add an interface
+only when there is a real second implementation or a boundary to protect.
 
-### State Machine Pattern
-```java
-// For complex behaviors
-public class StateMachine {
-    private State currentState;
-    public void update(float delta) { currentState.update(delta); }
-    public void changeState(State newState) { /* ... */ }
-}
-```
+### State Machines
+There is no generic state-machine class. State is data in components and each system decides transitions:
+`AnimationSystem` picks the animation by priority (DEATH > HIT > ATTACK > SHOOT > climbing > CROUCH > JUMP >
+WALK > IDLE), `EnemyBrainSystem` leaves an enemy to `PatrolSystem` until it notices the player, then
+chases and attacks (`EnemyBrainComponent.isEngaged`, `cooldown`), and
+`DoorSystem` steps `RoomTransition` through NONE → FADING_OUT → FADING_IN. Don't add a state-machine API
+without a behaviour that needs it.
 
 ## Code Quality Rules for Agents
 
@@ -288,8 +269,30 @@ public class StateMachine {
 | Clear responsibilities | One system = one job |
 | Testable code | No hardcoded values in logic |
 | Constants at top | All magic numbers → `static final` |
-| Comment non-obvious | Not: `position += velocity;` YES: Complex AI logic |
+| Comment only where needed | See [Comments](#comments) |
 | Package by feature | `com.hung.combat.*` not `com.hung.utils` |
+
+## Comments
+
+Comments are for what the code cannot say. Write few, and keep each one short.
+
+**Write a comment for:**
+- **Why**, when the reason isn't visible: a workaround, an ordering constraint, a deliberate trade-off.
+  `// Backwards, so removing an entity doesn't skip the next one`
+- **A rule or contract** a reader must respect: units and coordinate spaces, invariants, "call after X".
+  `/** Read-only view: change it with setRespawnPoint. */`
+- **A non-obvious formula or magic value** whose meaning isn't in its name (the source or the derivation).
+- **The class's job**, in a short Javadoc on public classes and on public methods whose name doesn't say
+  everything (what it returns in edge cases, what it changes).
+
+**Don't write a comment that:**
+- restates the code (`// set the health`, `// loop over entities`, `/** Returns the width. */` on `getWidth()`);
+- labels obvious blocks or narrates steps the method names already tell;
+- records history or who changed what (that is git's job), or keeps commented-out code;
+- explains how the code was before a refactor, or what a reviewer asked for.
+
+**Keep them true.** A comment that no longer matches the code is worse than none: update or delete it in
+the same change. Prefer a clearer name or a small extracted method over a comment that explains a tangle.
 
 ## Forbidden Patterns
 
