@@ -2,7 +2,7 @@
   "version": 1,
   "format": "enemy-character/1",
   "id": "mini_boss_01",
-  "name": "Juggernaut",
+  "name": "Ravager",
   "archetype": "MINI_BOSS",
   "type": "MINI_BOSS",
   "role": "MAJOR_ENCOUNTER",
@@ -21,74 +21,100 @@
     "mirrorX": "width - 1 - x",
     "libgdxY": "height - 1 - y"
   },
-  "pivot": { "x": 86, "y": 175 },
+  "pivot": { "x": 88, "y": 175 },
   "anchors": {
     "origin": { "x": 0, "y": 0 },
-    "pivot": { "x": 86, "y": 175 },
-    "footAnchor": { "x": 86, "y": 175 },
-    "bodyAnchor": { "x": 94, "y": 99 },
-    "attackAnchor": { "x": 123, "y": 152 },
-    "hurtAnchor": { "x": 96, "y": 90 },
-    "weaponAnchor": { "x": 123, "y": 152 },
-    "weakPointAnchor": { "x": 73, "y": 84 }
+    "pivot": { "x": 88, "y": 175 },
+    "footAnchor": { "x": 88, "y": 175 },
+    "bodyAnchor": { "x": 78, "y": 104 },
+    "attackAnchor": { "x": 146, "y": 165 },
+    "hurtAnchor": { "x": 82, "y": 104 },
+    "weaponAnchor": { "x": 146, "y": 165 },
+    "weakPointAnchor": { "x": 79, "y": 91 },
+    "impactAnchor": { "x": 139, "y": 175 },
+    "mouthAnchor": { "x": 143, "y": 101 }
   },
   "palette": {
-    "ARMOR_0": "#0a0d08",
-    "ARMOR_1": "#2b3721",
-    "ARMOR_2": "#53603f",
-    "ARMOR_3": "#747f58",
-    "ARMOR_4": "#92977e",
-    "FLESH_0": "#5f3f38",
-    "FLESH_1": "#866353",
-    "FLESH_2": "#a68e7b",
-    "FLESH_3": "#baae9f",
-    "FLESH_4": "#d0ccc6",
-    "WOUND_0": "#391018",
-    "WOUND_1": "#6b2022",
-    "WOUND_2": "#9e4435",
-    "WOUND_3": "#be6c4d",
-    "WOUND_4": "#c89b80",
-    "METAL_0": "#2e343c",
-    "METAL_1": "#4d565f",
-    "METAL_2": "#727b82",
-    "METAL_3": "#92979a",
-    "METAL_4": "#b5b5b5",
-    "DARK_0": "#0b0a09",
-    "DARK_1": "#0b0a09",
-    "DARK_2": "#2f2c2a",
-    "DARK_3": "#4a4847",
-    "DARK_4": "#676767",
-    "HAZARD_0": "#5f2d12",
-    "HAZARD_1": "#965c1e",
-    "HAZARD_2": "#cc9b2f",
-    "HAZARD_3": "#d6c05d",
-    "HAZARD_4": "#ddd393",
-    "BONE_0": "#b0734e",
-    "BONE_1": "#c3a37d",
-    "BONE_2": "#d7ccb0",
-    "BONE_3": "#e9e6d6",
-    "BONE_4": "#f9f9f6",
-    "GLOW_0": "#902400",
-    "GLOW_1": "#dd4d00",
-    "GLOW_2": "#ff8a2a",
-    "GLOW_3": "#f4be7c",
-    "GLOW_4": "#f3e5cf",
-    "outline": "#12180f"
+    "outline": "#12160f",
+    "FLESH_0": "#1a1416",
+    "FLESH_1": "#2b2024",
+    "FLESH_2": "#433236",
+    "FLESH_3": "#5f4a49",
+    "FLESH_4": "#7c665e",
+    "WOUND_0": "#200c10",
+    "WOUND_1": "#381318",
+    "WOUND_2": "#561c1e",
+    "WOUND_3": "#7a2a24",
+    "WOUND_4": "#9c4030",
+    "BONE_0": "#26221c",
+    "BONE_1": "#3e382d",
+    "BONE_2": "#5c5442",
+    "BONE_3": "#7c725a",
+    "BONE_4": "#9c9174",
+    "PLATE_0": "#16120e",
+    "PLATE_1": "#241e18",
+    "PLATE_2": "#372e24",
+    "PLATE_3": "#4f4333",
+    "PLATE_4": "#6a5a44",
+    "MEMBRANE_0": "#131115",
+    "MEMBRANE_1": "#1d1a1f",
+    "MEMBRANE_2": "#2b262b",
+    "MEMBRANE_3": "#3a3438",
+    "MEMBRANE_4": "#4e4748",
+    "ARMOR_0": "#13160f",
+    "ARMOR_1": "#1f2418",
+    "ARMOR_2": "#313823",
+    "ARMOR_3": "#475033",
+    "ARMOR_4": "#626a47",
+    "METAL_0": "#141618",
+    "METAL_1": "#22272a",
+    "METAL_2": "#373e42",
+    "METAL_3": "#545d61",
+    "METAL_4": "#7f888b",
+    "DARK_0": "#131313",
+    "DARK_1": "#19191a",
+    "DARK_2": "#232325",
+    "DARK_3": "#313134",
+    "DARK_4": "#434347",
+    "HAZARD_0": "#251d0c",
+    "HAZARD_1": "#3b2e12",
+    "HAZARD_2": "#5a461c",
+    "HAZARD_3": "#776027",
+    "HAZARD_4": "#927734",
+    "GLOW_0": "#3d1608",
+    "GLOW_1": "#7a2c0c",
+    "GLOW_2": "#d0581a",
+    "GLOW_3": "#ff8c33",
+    "GLOW_4": "#ffd08a"
   },
   "parts": [
     { "name": "far", "layer": "FAR", "kind": "LAYER" },
     { "name": "body", "layer": "BODY", "kind": "LAYER" },
-    { "name": "leg_near", "layer": "LEG_NEAR", "kind": "LAYER" },
+    { "name": "near", "layer": "NEAR", "kind": "LAYER" },
     { "name": "head", "layer": "HEAD", "kind": "LAYER" },
-    { "name": "near", "layer": "NEAR", "kind": "LAYER" }
+    { "name": "arm", "layer": "ARM", "kind": "LAYER" }
   ],
   "variation": {
-    "palette": "JUGGERNAUT",
-    "helmet": "VISOR",
-    "weapon": "HAMMER",
-    "spikes": 4,
-    "cuff": false,
+    "palette": "CONTAINMENT",
+    "motifs": "OVERSIZED_LIMB+EXPOSED_BONE+CONTAINMENT_GEAR+EXPOSED_CORE",
+    "crest": 3,
+    "eyes": 2,
+    "horns": 2,
+    "teeth": 6,
+    "tailSpike": true,
     "timing": { "idleFps": 6, "moveFps": 8, "attackFps": 9, "windupHold": 2.15, "strikeSnap": 0.55 }
+  },
+  "style": {
+    "standard": "CONTAINMENT_PROGRAM/1",
+    "strain": "CONTAINMENT",
+    "motifs": [ "OVERSIZED_LIMB", "EXPOSED_BONE", "CONTAINMENT_GEAR", "EXPOSED_CORE" ],
+    "signature": "oversized claw arms",
+    "light": {
+      "key": "TOP_FRONT",
+      "vector": [ 0.432, -0.669, 0.605 ],
+      "rim": "CEILING"
+    },
+    "offStandard": []
   },
   "gameplay": {
     "role": "MAJOR_ENCOUNTER",
@@ -98,37 +124,37 @@
     "speedClass": "SLOW",
     "durabilityClass": "HIGH",
     "damageClass": "HIGH",
-    "attackStyle": "OVERHEAD_SMASH + CLAW_SWEEP",
+    "attackStyle": "ROAR_SLAM + LUNGE_RAKE",
     "space": "ARENA",
     "moveSpeed": { "px": 28, "world": 14, "tilesPerSecond": 0.88 },
     "hurtbox": {
-      "x": 59,
-      "y": 59,
-      "width": 81,
-      "height": 117,
-      "world": { "width": 40.5, "height": 58.5 }
+      "x": 7,
+      "y": 69,
+      "width": 141,
+      "height": 107,
+      "world": { "width": 70.5, "height": 53.5 }
     },
     "clearance": { "heightPx": 160, "heightTiles": 5 },
     "attacks": {
       "ATTACK_1": {
-        "label": "SMASH",
-        "startupMs": 483,
-        "activeMs": 172,
-        "recoveryMs": 378,
-        "reach": { "px": 87, "world": 43.5 }
+        "label": "ROAR_SLAM",
+        "startupMs": 837,
+        "activeMs": 133,
+        "recoveryMs": 717,
+        "reach": { "px": 80, "world": 40 }
       },
       "ATTACK_2": {
-        "label": "CLAW SWEEP",
-        "startupMs": 377,
+        "label": "LUNGE_RAKE",
+        "startupMs": 427,
         "activeMs": 141,
-        "recoveryMs": 300,
-        "reach": { "px": 99, "world": 49.5 }
+        "recoveryMs": 400,
+        "reach": { "px": 87, "world": 43.5 }
       }
     }
   },
   "spriteSheet": {
     "image": "sprite-sheet.png",
-    "width": 1408,
+    "width": 3168,
     "height": 1056,
     "frameWidth": 176,
     "frameHeight": 176,
@@ -159,18 +185,20 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 101 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
@@ -180,18 +208,20 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 95, "y": 99 },
-            "attackAnchor": { "x": 121, "y": 153 },
-            "hurtAnchor": { "x": 97, "y": 91 },
-            "weaponAnchor": { "x": 121, "y": 153 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 164 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 164 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 102 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
@@ -201,18 +231,20 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 60, "width": 81, "height": 116 },
+          "bounds": { "x": 6, "y": 69, "width": 142, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 95, "y": 100 },
-            "attackAnchor": { "x": 122, "y": 153 },
-            "hurtAnchor": { "x": 97, "y": 91 },
-            "weaponAnchor": { "x": 122, "y": 153 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 164 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 164 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 103 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
@@ -222,18 +254,20 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 60, "width": 81, "height": 116 },
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 100 },
-            "attackAnchor": { "x": 124, "y": 152 },
-            "hurtAnchor": { "x": 97, "y": 91 },
-            "weaponAnchor": { "x": 124, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 146, "y": 163 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 146, "y": 163 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 103 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 4,
@@ -243,18 +277,20 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 58, "y": 60, "width": 81, "height": 116 },
+          "bounds": { "x": 7, "y": 69, "width": 140, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 100 },
-            "attackAnchor": { "x": 125, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 125, "y": 152 },
-            "weakPointAnchor": { "x": 72, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 164 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 164 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 142, "y": 102 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 5,
@@ -264,25 +300,27 @@
           "y": 0,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 58, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 140, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 125, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 125, "y": 152 },
-            "weakPointAnchor": { "x": 72, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 164 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 164 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 142, "y": 101 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         }
       ],
       "events": []
     },
     "move": {
       "state": "MOVE",
-      "label": "WALK",
+      "label": "STALK",
       "row": 1,
       "strip": "move.png",
       "fps": 8,
@@ -301,18 +339,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 56, "y": 62, "width": 89, "height": 114 },
+          "bounds": { "x": 7, "y": 71, "width": 141, "height": 105 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 103 },
-            "attackAnchor": { "x": 134, "y": 156 },
-            "hurtAnchor": { "x": 99, "y": 94 },
-            "weaponAnchor": { "x": 134, "y": 156 },
-            "weakPointAnchor": { "x": 76, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 106 },
+            "attackAnchor": { "x": 146, "y": 161 },
+            "hurtAnchor": { "x": 82, "y": 106 },
+            "weaponAnchor": { "x": 146, "y": 161 },
+            "weakPointAnchor": { "x": 79, "y": 93 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 106 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
@@ -322,18 +362,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 58, "y": 61, "width": 85, "height": 115 },
+          "bounds": { "x": 6, "y": 70, "width": 142, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 101 },
-            "attackAnchor": { "x": 132, "y": 155 },
-            "hurtAnchor": { "x": 99, "y": 93 },
-            "weaponAnchor": { "x": 132, "y": 155 },
-            "weakPointAnchor": { "x": 76, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 142, "y": 162 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 142, "y": 162 },
+            "weakPointAnchor": { "x": 79, "y": 92 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 105 }
           },
-          "contacts": { "N": true, "F": false }
+          "contacts": { "N": true, "F": false, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
@@ -343,18 +385,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 59, "width": 82, "height": 117 },
+          "bounds": { "x": 6, "y": 69, "width": 142, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 99 },
-            "attackAnchor": { "x": 125, "y": 154 },
-            "hurtAnchor": { "x": 98, "y": 91 },
-            "weaponAnchor": { "x": 125, "y": 154 },
-            "weakPointAnchor": { "x": 75, "y": 83 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 141, "y": 163 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 141, "y": 163 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 102 }
           },
-          "contacts": { "N": true, "F": false }
+          "contacts": { "N": true, "F": false, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
@@ -364,18 +408,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 61, "width": 81, "height": 115 },
+          "bounds": { "x": 6, "y": 70, "width": 142, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 95, "y": 101 },
-            "attackAnchor": { "x": 119, "y": 155 },
-            "hurtAnchor": { "x": 98, "y": 92 },
-            "weaponAnchor": { "x": 119, "y": 155 },
-            "weakPointAnchor": { "x": 74, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 142, "y": 162 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 142, "y": 162 },
+            "weakPointAnchor": { "x": 79, "y": 92 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 103 }
           },
-          "contacts": { "N": true, "F": false }
+          "contacts": { "N": true, "F": false, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 4,
@@ -385,18 +431,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 62, "width": 82, "height": 114 },
+          "bounds": { "x": 7, "y": 71, "width": 141, "height": 105 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 95, "y": 102 },
-            "attackAnchor": { "x": 123, "y": 144 },
-            "hurtAnchor": { "x": 97, "y": 93 },
-            "weaponAnchor": { "x": 116, "y": 156 },
-            "weakPointAnchor": { "x": 74, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 106 },
+            "attackAnchor": { "x": 146, "y": 161 },
+            "hurtAnchor": { "x": 82, "y": 106 },
+            "weaponAnchor": { "x": 146, "y": 161 },
+            "weakPointAnchor": { "x": 79, "y": 93 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 106 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 5,
@@ -406,18 +454,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 61, "width": 81, "height": 115 },
+          "bounds": { "x": 7, "y": 70, "width": 145, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 95, "y": 101 },
-            "attackAnchor": { "x": 119, "y": 155 },
-            "hurtAnchor": { "x": 98, "y": 92 },
-            "weaponAnchor": { "x": 119, "y": 155 },
-            "weakPointAnchor": { "x": 74, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 149, "y": 162 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 149, "y": 162 },
+            "weakPointAnchor": { "x": 79, "y": 92 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 105 }
           },
-          "contacts": { "N": false, "F": true }
+          "contacts": { "N": false, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 6,
@@ -427,18 +477,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 59, "width": 82, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 147, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 99 },
-            "attackAnchor": { "x": 125, "y": 154 },
-            "hurtAnchor": { "x": 98, "y": 91 },
-            "weaponAnchor": { "x": 125, "y": 154 },
-            "weakPointAnchor": { "x": 75, "y": 83 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 151, "y": 163 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 151, "y": 163 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 102 }
           },
-          "contacts": { "N": false, "F": true }
+          "contacts": { "N": false, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 7,
@@ -448,18 +500,20 @@
           "y": 176,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 61, "width": 83, "height": 115 },
+          "bounds": { "x": 7, "y": 70, "width": 145, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 101 },
-            "attackAnchor": { "x": 132, "y": 155 },
-            "hurtAnchor": { "x": 99, "y": 93 },
-            "weaponAnchor": { "x": 132, "y": 155 },
-            "weakPointAnchor": { "x": 76, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 149, "y": 162 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 149, "y": 162 },
+            "weakPointAnchor": { "x": 79, "y": 92 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 103 }
           },
-          "contacts": { "N": false, "F": true }
+          "contacts": { "N": false, "F": true, "HAND_N": false, "HAND_F": false }
         }
       ],
       "events": [
@@ -470,215 +524,469 @@
     },
     "attack_1": {
       "state": "ATTACK_1",
-      "label": "SMASH",
+      "label": "ROAR_SLAM",
       "row": 2,
       "strip": "attack_1.png",
-      "fps": 9,
+      "fps": 12,
       "loop": false,
       "playMode": "NORMAL",
-      "frameCount": 8,
-      "totalDuration": 1033,
+      "frameCount": 18,
+      "totalDuration": 1687,
       "source": "PROCEDURAL",
       "mirror": "FLIP_X",
       "frames": [
         {
           "index": 0,
-          "label": "neutral",
-          "duration": 111,
+          "label": "snarl",
+          "duration": 83,
           "x": 0,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 5, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 76, "y": 104 },
+            "attackAnchor": { "x": 142, "y": 161 },
+            "hurtAnchor": { "x": 80, "y": 104 },
+            "weaponAnchor": { "x": 142, "y": 161 },
+            "weakPointAnchor": { "x": 77, "y": 91 },
+            "impactAnchor": { "x": 137, "y": 175 },
+            "mouthAnchor": { "x": 141, "y": 97 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
-          "label": "raise",
-          "duration": 133,
+          "label": "crouch",
+          "duration": 83,
           "x": 176,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 56, "y": 27, "width": 105, "height": 149 },
+          "bounds": { "x": 3, "y": 71, "width": 139, "height": 105 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 92, "y": 98 },
-            "attackAnchor": { "x": 152, "y": 34 },
-            "hurtAnchor": { "x": 93, "y": 89 },
-            "weaponAnchor": { "x": 152, "y": 34 },
-            "weakPointAnchor": { "x": 69, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 74, "y": 107 },
+            "attackAnchor": { "x": 136, "y": 156 },
+            "hurtAnchor": { "x": 78, "y": 106 },
+            "weaponAnchor": { "x": 136, "y": 156 },
+            "weakPointAnchor": { "x": 74, "y": 94 },
+            "impactAnchor": { "x": 131, "y": 175 },
+            "mouthAnchor": { "x": 138, "y": 98 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
-          "label": "wind-up",
-          "duration": 239,
+          "label": "roar",
+          "duration": 133,
           "x": 352,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 53, "y": 16, "width": 79, "height": 160 },
+          "bounds": { "x": 5, "y": 67, "width": 132, "height": 109 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 89, "y": 98 },
-            "attackAnchor": { "x": 116, "y": 19 },
-            "hurtAnchor": { "x": 90, "y": 88 },
-            "weaponAnchor": { "x": 116, "y": 19 },
-            "weakPointAnchor": { "x": 65, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 71, "y": 103 },
+            "attackAnchor": { "x": 130, "y": 135 },
+            "hurtAnchor": { "x": 75, "y": 102 },
+            "weaponAnchor": { "x": 130, "y": 135 },
+            "weakPointAnchor": { "x": 69, "y": 90 },
+            "impactAnchor": { "x": 125, "y": 175 },
+            "mouthAnchor": { "x": 133, "y": 78 }
           },
-          "contacts": { "N": false, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
-          "label": "slam",
-          "duration": 61,
+          "label": "roar hold",
+          "duration": 117,
           "x": 528,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 67, "width": 95, "height": 109 },
+          "bounds": { "x": 5, "y": 67, "width": 131, "height": 109 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 104, "y": 109 },
-            "attackAnchor": { "x": 147, "y": 162 },
-            "hurtAnchor": { "x": 109, "y": 102 },
-            "weaponAnchor": { "x": 147, "y": 162 },
-            "weakPointAnchor": { "x": 90, "y": 87 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 70, "y": 103 },
+            "attackAnchor": { "x": 128, "y": 133 },
+            "hurtAnchor": { "x": 74, "y": 102 },
+            "weaponAnchor": { "x": 128, "y": 133 },
+            "weakPointAnchor": { "x": 68, "y": 90 },
+            "impactAnchor": { "x": 123, "y": 175 },
+            "mouthAnchor": { "x": 132, "y": 76 }
           },
-          "attackActive": true,
-          "hitbox": { "x": 133, "y": 148, "width": 28, "height": 28 },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 4,
-          "label": "impact",
-          "duration": 111,
+          "label": "rise",
+          "duration": 83,
           "x": 704,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 69, "width": 107, "height": 107 },
+          "bounds": { "x": 4, "y": 62, "width": 132, "height": 114 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 105, "y": 111 },
-            "attackAnchor": { "x": 159, "y": 164 },
-            "hurtAnchor": { "x": 110, "y": 104 },
-            "weaponAnchor": { "x": 159, "y": 164 },
-            "weakPointAnchor": { "x": 92, "y": 88 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 70, "y": 98 },
+            "attackAnchor": { "x": 110, "y": 69 },
+            "hurtAnchor": { "x": 74, "y": 98 },
+            "weaponAnchor": { "x": 110, "y": 69 },
+            "weakPointAnchor": { "x": 68, "y": 86 },
+            "impactAnchor": { "x": 106, "y": 175 },
+            "mouthAnchor": { "x": 132, "y": 77 }
           },
-          "attackActive": true,
-          "hitbox": { "x": 145, "y": 150, "width": 28, "height": 28 },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 5,
-          "label": "recover",
-          "duration": 156,
+          "label": "wind-up",
+          "duration": 179,
           "x": 880,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 62, "width": 93, "height": 114 },
+          "bounds": { "x": 3, "y": 18, "width": 131, "height": 158 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 100, "y": 104 },
-            "attackAnchor": { "x": 146, "y": 157 },
-            "hurtAnchor": { "x": 103, "y": 96 },
-            "weaponAnchor": { "x": 146, "y": 157 },
-            "weakPointAnchor": { "x": 82, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 69, "y": 97 },
+            "attackAnchor": { "x": 100, "y": 25 },
+            "hurtAnchor": { "x": 72, "y": 96 },
+            "weaponAnchor": { "x": 100, "y": 25 },
+            "weakPointAnchor": { "x": 66, "y": 84 },
+            "impactAnchor": { "x": 96, "y": 175 },
+            "mouthAnchor": { "x": 129, "y": 73 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 6,
-          "label": "settle",
-          "duration": 111,
+          "label": "peak",
+          "duration": 67,
           "x": 1056,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 61, "y": 60, "width": 81, "height": 116 },
+          "bounds": { "x": 4, "y": 16, "width": 128, "height": 160 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 100 },
-            "attackAnchor": { "x": 130, "y": 154 },
-            "hurtAnchor": { "x": 98, "y": 92 },
-            "weaponAnchor": { "x": 130, "y": 154 },
-            "weakPointAnchor": { "x": 75, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 68, "y": 96 },
+            "attackAnchor": { "x": 98, "y": 23 },
+            "hurtAnchor": { "x": 72, "y": 95 },
+            "weaponAnchor": { "x": 98, "y": 23 },
+            "weakPointAnchor": { "x": 65, "y": 83 },
+            "impactAnchor": { "x": 94, "y": 175 },
+            "mouthAnchor": { "x": 128, "y": 68 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 7,
-          "label": "return",
-          "duration": 111,
+          "label": "swing",
+          "duration": 46,
           "x": 1232,
           "y": 352,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 6, "y": 69, "width": 149, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 154, "y": 121 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 154, "y": 121 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 148, "y": 175 },
+            "mouthAnchor": { "x": 142, "y": 85 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 8,
+          "label": "drop",
+          "duration": 46,
+          "x": 1408,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 11, "y": 77, "width": 145, "height": 99 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 82, "y": 110 },
+            "attackAnchor": { "x": 154, "y": 141 },
+            "hurtAnchor": { "x": 86, "y": 110 },
+            "weaponAnchor": { "x": 154, "y": 141 },
+            "weakPointAnchor": { "x": 85, "y": 97 },
+            "impactAnchor": { "x": 148, "y": 175 },
+            "mouthAnchor": { "x": 148, "y": 112 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 9,
+          "label": "strike",
+          "duration": 50,
+          "x": 1584,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 13, "y": 80, "width": 145, "height": 96 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 84, "y": 112 },
+            "attackAnchor": { "x": 152, "y": 159 },
+            "hurtAnchor": { "x": 87, "y": 113 },
+            "weaponAnchor": { "x": 152, "y": 159 },
+            "weakPointAnchor": { "x": 87, "y": 100 },
+            "impactAnchor": { "x": 147, "y": 175 },
+            "mouthAnchor": { "x": 149, "y": 116 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 136, "y": 143, "width": 32, "height": 32 },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 10,
+          "label": "impact",
+          "duration": 83,
+          "x": 1760,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 13, "y": 82, "width": 146, "height": 94 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 84, "y": 114 },
+            "attackAnchor": { "x": 150, "y": 173 },
+            "hurtAnchor": { "x": 88, "y": 115 },
+            "weaponAnchor": { "x": 150, "y": 173 },
+            "weakPointAnchor": { "x": 87, "y": 101 },
+            "impactAnchor": { "x": 145, "y": 175 },
+            "mouthAnchor": { "x": 150, "y": 115 }
+          },
+          "attackActive": true,
+          "hitbox": { "x": 134, "y": 157, "width": 32, "height": 32 },
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
+        },
+        {
+          "index": 11,
+          "label": "compress",
+          "duration": 117,
+          "x": 1936,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 14, "y": 85, "width": 145, "height": 91 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 84, "y": 116 },
+            "attackAnchor": { "x": 150, "y": 173 },
+            "hurtAnchor": { "x": 88, "y": 117 },
+            "weaponAnchor": { "x": 150, "y": 173 },
+            "weakPointAnchor": { "x": 88, "y": 104 },
+            "impactAnchor": { "x": 145, "y": 175 },
+            "mouthAnchor": { "x": 150, "y": 120 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
+        },
+        {
+          "index": 12,
+          "label": "hold",
+          "duration": 117,
+          "x": 2112,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 14, "y": 82, "width": 145, "height": 94 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 84, "y": 115 },
+            "attackAnchor": { "x": 150, "y": 173 },
+            "hurtAnchor": { "x": 88, "y": 116 },
+            "weaponAnchor": { "x": 150, "y": 173 },
+            "weakPointAnchor": { "x": 88, "y": 102 },
+            "impactAnchor": { "x": 145, "y": 175 },
+            "mouthAnchor": { "x": 150, "y": 120 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
+        },
+        {
+          "index": 13,
+          "label": "wrench",
+          "duration": 100,
+          "x": 2288,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 10, "y": 78, "width": 142, "height": 98 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 81, "y": 112 },
+            "attackAnchor": { "x": 146, "y": 168 },
+            "hurtAnchor": { "x": 85, "y": 112 },
+            "weaponAnchor": { "x": 146, "y": 168 },
+            "weakPointAnchor": { "x": 84, "y": 98 },
+            "impactAnchor": { "x": 141, "y": 175 },
+            "mouthAnchor": { "x": 147, "y": 114 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 14,
+          "label": "haul back",
+          "duration": 100,
+          "x": 2464,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 8, "y": 75, "width": 142, "height": 101 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 79, "y": 109 },
+            "attackAnchor": { "x": 144, "y": 164 },
+            "hurtAnchor": { "x": 83, "y": 109 },
+            "weaponAnchor": { "x": 144, "y": 164 },
+            "weakPointAnchor": { "x": 82, "y": 96 },
+            "impactAnchor": { "x": 137, "y": 175 },
+            "mouthAnchor": { "x": 145, "y": 111 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 15,
+          "label": "rise",
+          "duration": 100,
+          "x": 2640,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 8, "y": 72, "width": 141, "height": 104 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 79, "y": 106 },
+            "attackAnchor": { "x": 145, "y": 165 },
+            "hurtAnchor": { "x": 83, "y": 106 },
+            "weaponAnchor": { "x": 145, "y": 165 },
+            "weakPointAnchor": { "x": 81, "y": 93 },
+            "impactAnchor": { "x": 138, "y": 175 },
+            "mouthAnchor": { "x": 144, "y": 108 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 16,
+          "label": "settle",
+          "duration": 100,
+          "x": 2816,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 6, "y": 70, "width": 142, "height": 106 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 105 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 105 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 92 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 103 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 17,
+          "label": "return",
+          "duration": 83,
+          "x": 2992,
+          "y": 352,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 101 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         }
       ],
       "events": [
-        { "frame": 3, "type": "ATTACK_START" },
-        { "frame": 4, "type": "EFFECT", "name": "ground_impact" },
-        { "frame": 5, "type": "ATTACK_END" }
+        { "frame": 2, "type": "EFFECT", "name": "roar_blast", "anchor": "mouthAnchor", "x": 133, "y": 78 },
+        { "frame": 9, "type": "ATTACK_START" },
+        {
+          "frame": 10,
+          "type": "EFFECT",
+          "name": "ground_slam_shockwave",
+          "anchor": "impactAnchor",
+          "x": 145,
+          "y": 175
+        },
+        { "frame": 11, "type": "ATTACK_END" }
       ],
       "attack": {
-        "activeFrames": [ 3, 4 ],
-        "activeFrameStart": 3,
-        "activeFrameEnd": 4,
-        "origin": { "x": 147, "y": 162 },
-        "reach": 28,
-        "width": 28,
-        "height": 28
+        "activeFrames": [ 9, 10 ],
+        "activeFrameStart": 9,
+        "activeFrameEnd": 10,
+        "origin": { "x": 152, "y": 159 },
+        "reach": 32,
+        "width": 32,
+        "height": 32
       }
     },
     "attack_2": {
       "state": "ATTACK_2",
-      "label": "CLAW SWEEP",
+      "label": "LUNGE_RAKE",
       "row": 3,
       "strip": "attack_2.png",
       "fps": 11,
       "loop": false,
       "playMode": "NORMAL",
-      "frameCount": 8,
-      "totalDuration": 818,
+      "frameCount": 10,
+      "totalDuration": 968,
       "source": "PROCEDURAL",
       "mirror": "FLIP_X",
       "frames": [
@@ -690,39 +998,43 @@
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 101 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
-          "label": "draw back",
+          "label": "coil",
           "duration": 91,
           "x": 176,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 44, "y": 59, "width": 95, "height": 117 },
+          "bounds": { "x": 2, "y": 70, "width": 138, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 91, "y": 98 },
-            "attackAnchor": { "x": 129, "y": 148 },
-            "hurtAnchor": { "x": 92, "y": 89 },
-            "weaponAnchor": { "x": 129, "y": 148 },
-            "weakPointAnchor": { "x": 68, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 71, "y": 105 },
+            "attackAnchor": { "x": 132, "y": 163 },
+            "hurtAnchor": { "x": 75, "y": 105 },
+            "weaponAnchor": { "x": 116, "y": 147 },
+            "weakPointAnchor": { "x": 71, "y": 92 },
+            "impactAnchor": { "x": 124, "y": 175 },
+            "mouthAnchor": { "x": 135, "y": 93 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
@@ -732,141 +1044,200 @@
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 33, "y": 61, "width": 105, "height": 115 },
+          "bounds": { "x": 0, "y": 70, "width": 137, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 88, "y": 99 },
-            "attackAnchor": { "x": 128, "y": 147 },
-            "hurtAnchor": { "x": 89, "y": 90 },
-            "weaponAnchor": { "x": 128, "y": 147 },
-            "weakPointAnchor": { "x": 64, "y": 87 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 69, "y": 106 },
+            "attackAnchor": { "x": 126, "y": 143 },
+            "hurtAnchor": { "x": 73, "y": 105 },
+            "weaponAnchor": { "x": 106, "y": 137 },
+            "weakPointAnchor": { "x": 68, "y": 93 },
+            "impactAnchor": { "x": 116, "y": 175 },
+            "mouthAnchor": { "x": 132, "y": 91 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
-          "label": "sweep",
+          "label": "lunge",
           "duration": 50,
           "x": 528,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 62, "width": 107, "height": 114 },
+          "bounds": { "x": 11, "y": 71, "width": 142, "height": 105 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 103, "y": 103 },
-            "attackAnchor": { "x": 173, "y": 97 },
-            "hurtAnchor": { "x": 107, "y": 96 },
-            "weaponAnchor": { "x": 134, "y": 162 },
-            "weakPointAnchor": { "x": 86, "y": 83 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 82, "y": 105 },
+            "attackAnchor": { "x": 132, "y": 135 },
+            "hurtAnchor": { "x": 86, "y": 105 },
+            "weaponAnchor": { "x": 132, "y": 135 },
+            "weakPointAnchor": { "x": 84, "y": 92 },
+            "impactAnchor": { "x": 131, "y": 175 },
+            "mouthAnchor": { "x": 148, "y": 95 }
           },
-          "attackActive": true,
-          "hitbox": { "x": 161, "y": 85, "width": 24, "height": 24 },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": false, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 4,
           "label": "rake",
-          "duration": 91,
+          "duration": 50,
           "x": 704,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 62, "width": 107, "height": 114 },
+          "bounds": { "x": 16, "y": 72, "width": 148, "height": 104 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 105, "y": 104 },
-            "attackAnchor": { "x": 173, "y": 71 },
-            "hurtAnchor": { "x": 109, "y": 96 },
-            "weaponAnchor": { "x": 135, "y": 163 },
-            "weakPointAnchor": { "x": 88, "y": 83 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 86, "y": 106 },
+            "attackAnchor": { "x": 162, "y": 137 },
+            "hurtAnchor": { "x": 90, "y": 106 },
+            "weaponAnchor": { "x": 162, "y": 137 },
+            "weakPointAnchor": { "x": 89, "y": 93 },
+            "impactAnchor": { "x": 148, "y": 175 },
+            "mouthAnchor": { "x": 153, "y": 90 }
           },
           "attackActive": true,
-          "hitbox": { "x": 161, "y": 59, "width": 24, "height": 24 },
-          "contacts": { "N": true, "F": true }
+          "hitbox": { "x": 149, "y": 124, "width": 26, "height": 26 },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 5,
-          "label": "recover",
-          "duration": 118,
+          "label": "follow",
+          "duration": 91,
           "x": 880,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 60, "width": 85, "height": 116 },
+          "bounds": { "x": 17, "y": 74, "width": 155, "height": 102 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 99, "y": 101 },
-            "attackAnchor": { "x": 149, "y": 131 },
-            "hurtAnchor": { "x": 102, "y": 93 },
-            "weaponAnchor": { "x": 129, "y": 157 },
-            "weakPointAnchor": { "x": 80, "y": 83 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 88, "y": 107 },
+            "attackAnchor": { "x": 162, "y": 153 },
+            "hurtAnchor": { "x": 92, "y": 108 },
+            "weaponAnchor": { "x": 162, "y": 153 },
+            "weakPointAnchor": { "x": 90, "y": 95 },
+            "impactAnchor": { "x": 149, "y": 175 },
+            "mouthAnchor": { "x": 155, "y": 98 }
           },
-          "contacts": { "N": true, "F": true }
+          "attackActive": true,
+          "hitbox": { "x": 149, "y": 140, "width": 26, "height": 26 },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 6,
-          "label": "settle",
+          "label": "bite",
           "duration": 91,
           "x": 1056,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 60, "y": 60, "width": 82, "height": 116 },
+          "bounds": { "x": 16, "y": 76, "width": 146, "height": 100 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 96, "y": 100 },
-            "attackAnchor": { "x": 125, "y": 154 },
-            "hurtAnchor": { "x": 98, "y": 91 },
-            "weaponAnchor": { "x": 125, "y": 154 },
-            "weakPointAnchor": { "x": 75, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 87, "y": 108 },
+            "attackAnchor": { "x": 154, "y": 155 },
+            "hurtAnchor": { "x": 91, "y": 109 },
+            "weaponAnchor": { "x": 154, "y": 155 },
+            "weakPointAnchor": { "x": 91, "y": 95 },
+            "impactAnchor": { "x": 145, "y": 175 },
+            "mouthAnchor": { "x": 157, "y": 120 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 7,
-          "label": "return",
-          "duration": 91,
+          "label": "recover",
+          "duration": 127,
           "x": 1232,
           "y": 528,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 12, "y": 72, "width": 144, "height": 104 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 83, "y": 106 },
+            "attackAnchor": { "x": 152, "y": 161 },
+            "hurtAnchor": { "x": 87, "y": 106 },
+            "weaponAnchor": { "x": 152, "y": 161 },
+            "weakPointAnchor": { "x": 86, "y": 93 },
+            "impactAnchor": { "x": 142, "y": 175 },
+            "mouthAnchor": { "x": 151, "y": 109 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": false, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 8,
+          "label": "settle",
+          "duration": 91,
+          "x": 1408,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 7, "y": 69, "width": 142, "height": 107 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 79, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 83, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 80, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 144, "y": 102 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
+        },
+        {
+          "index": 9,
+          "label": "return",
+          "duration": 91,
+          "x": 1584,
+          "y": 528,
+          "width": 176,
+          "height": 176,
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
+          "anchors": {
+            "origin": { "x": 0, "y": 0 },
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 101 }
+          },
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         }
       ],
       "events": [
-        { "frame": 3, "type": "ATTACK_START" },
-        { "frame": 5, "type": "ATTACK_END" }
+        { "frame": 4, "type": "ATTACK_START" },
+        { "frame": 4, "type": "EFFECT", "name": "claw_slash", "anchor": "weaponAnchor", "x": 162, "y": 137 },
+        { "frame": 6, "type": "ATTACK_END" }
       ],
       "attack": {
-        "activeFrames": [ 3, 4 ],
-        "activeFrameStart": 3,
-        "activeFrameEnd": 4,
-        "origin": { "x": 173, "y": 97 },
-        "reach": 24,
-        "width": 24,
-        "height": 24
+        "activeFrames": [ 4, 5 ],
+        "activeFrameStart": 4,
+        "activeFrameEnd": 5,
+        "origin": { "x": 162, "y": 137 },
+        "reach": 26,
+        "width": 26,
+        "height": 26
       }
     },
     "hit": {
@@ -889,18 +1260,20 @@
           "y": 704,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 54, "y": 59, "width": 83, "height": 117 },
+          "bounds": { "x": 3, "y": 65, "width": 138, "height": 111 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 90, "y": 98 },
-            "attackAnchor": { "x": 126, "y": 147 },
-            "hurtAnchor": { "x": 91, "y": 89 },
-            "weaponAnchor": { "x": 126, "y": 147 },
-            "weakPointAnchor": { "x": 66, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 72, "y": 101 },
+            "attackAnchor": { "x": 139, "y": 156 },
+            "hurtAnchor": { "x": 76, "y": 100 },
+            "weaponAnchor": { "x": 139, "y": 156 },
+            "weakPointAnchor": { "x": 71, "y": 88 },
+            "impactAnchor": { "x": 135, "y": 175 },
+            "mouthAnchor": { "x": 134, "y": 83 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
@@ -910,18 +1283,20 @@
           "y": 704,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 54, "y": 60, "width": 79, "height": 116 },
+          "bounds": { "x": 2, "y": 67, "width": 141, "height": 109 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 90, "y": 99 },
-            "attackAnchor": { "x": 122, "y": 150 },
-            "hurtAnchor": { "x": 91, "y": 90 },
-            "weaponAnchor": { "x": 122, "y": 150 },
-            "weakPointAnchor": { "x": 67, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 72, "y": 102 },
+            "attackAnchor": { "x": 142, "y": 160 },
+            "hurtAnchor": { "x": 76, "y": 102 },
+            "weaponAnchor": { "x": 142, "y": 160 },
+            "weakPointAnchor": { "x": 72, "y": 89 },
+            "impactAnchor": { "x": 137, "y": 175 },
+            "mouthAnchor": { "x": 136, "y": 92 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
@@ -931,18 +1306,20 @@
           "y": 704,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 57, "y": 60, "width": 81, "height": 116 },
+          "bounds": { "x": 6, "y": 68, "width": 141, "height": 108 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 93, "y": 99 },
-            "attackAnchor": { "x": 121, "y": 152 },
-            "hurtAnchor": { "x": 94, "y": 90 },
-            "weaponAnchor": { "x": 121, "y": 152 },
-            "weakPointAnchor": { "x": 71, "y": 85 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 76, "y": 103 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 80, "y": 103 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 77, "y": 90 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 141, "y": 100 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
@@ -952,22 +1329,24 @@
           "y": 704,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 59, "width": 81, "height": 117 },
+          "bounds": { "x": 7, "y": 69, "width": 141, "height": 107 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 99 },
-            "attackAnchor": { "x": 123, "y": 152 },
-            "hurtAnchor": { "x": 96, "y": 90 },
-            "weaponAnchor": { "x": 123, "y": 152 },
-            "weakPointAnchor": { "x": 73, "y": 84 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 78, "y": 104 },
+            "attackAnchor": { "x": 146, "y": 165 },
+            "hurtAnchor": { "x": 82, "y": 104 },
+            "weaponAnchor": { "x": 146, "y": 165 },
+            "weakPointAnchor": { "x": 79, "y": 91 },
+            "impactAnchor": { "x": 139, "y": 175 },
+            "mouthAnchor": { "x": 143, "y": 101 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         }
       ],
       "events": [
-        { "frame": 0, "type": "EFFECT", "name": "hit_flash" }
+        { "frame": 0, "type": "EFFECT", "name": "ichor_splash", "anchor": "hurtAnchor", "x": 76, "y": 100 }
       ]
     },
     "death": {
@@ -984,45 +1363,49 @@
       "frames": [
         {
           "index": 0,
-          "label": "stagger",
+          "label": "shriek",
           "duration": 107,
           "x": 0,
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 52, "y": 60, "width": 88, "height": 116 },
+          "bounds": { "x": 7, "y": 61, "width": 127, "height": 115 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 88, "y": 97 },
-            "attackAnchor": { "x": 130, "y": 144 },
-            "hurtAnchor": { "x": 89, "y": 89 },
-            "weaponAnchor": { "x": 130, "y": 144 },
-            "weakPointAnchor": { "x": 64, "y": 86 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 71, "y": 97 },
+            "attackAnchor": { "x": 126, "y": 125 },
+            "hurtAnchor": { "x": 74, "y": 96 },
+            "weaponAnchor": { "x": 126, "y": 125 },
+            "weakPointAnchor": { "x": 68, "y": 84 },
+            "impactAnchor": { "x": 121, "y": 175 },
+            "mouthAnchor": { "x": 130, "y": 66 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 1,
-          "label": "sag",
+          "label": "stagger",
           "duration": 107,
           "x": 176,
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 59, "y": 68, "width": 83, "height": 108 },
+          "bounds": { "x": 6, "y": 70, "width": 139, "height": 106 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 94, "y": 108 },
-            "attackAnchor": { "x": 131, "y": 162 },
-            "hurtAnchor": { "x": 96, "y": 100 },
-            "weaponAnchor": { "x": 131, "y": 162 },
-            "weakPointAnchor": { "x": 73, "y": 92 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 75, "y": 106 },
+            "attackAnchor": { "x": 138, "y": 156 },
+            "hurtAnchor": { "x": 79, "y": 105 },
+            "weaponAnchor": { "x": 138, "y": 156 },
+            "weakPointAnchor": { "x": 75, "y": 93 },
+            "impactAnchor": { "x": 134, "y": 175 },
+            "mouthAnchor": { "x": 140, "y": 95 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 2,
@@ -1032,60 +1415,66 @@
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 78, "width": 94, "height": 98 },
+          "bounds": { "x": 9, "y": 85, "width": 141, "height": 91 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 98, "y": 119 },
-            "attackAnchor": { "x": 148, "y": 169 },
-            "hurtAnchor": { "x": 102, "y": 111 },
-            "weaponAnchor": { "x": 148, "y": 169 },
-            "weakPointAnchor": { "x": 80, "y": 101 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 80, "y": 119 },
+            "attackAnchor": { "x": 145, "y": 166 },
+            "hurtAnchor": { "x": 84, "y": 119 },
+            "weaponAnchor": { "x": 145, "y": 166 },
+            "weakPointAnchor": { "x": 82, "y": 106 },
+            "impactAnchor": { "x": 141, "y": 175 },
+            "mouthAnchor": { "x": 145, "y": 124 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 3,
-          "label": "slump",
+          "label": "fall",
           "duration": 107,
           "x": 528,
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 86, "width": 105, "height": 90 },
+          "bounds": { "x": 14, "y": 100, "width": 145, "height": 76 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 101, "y": 127 },
-            "attackAnchor": { "x": 162, "y": 168 },
-            "hurtAnchor": { "x": 106, "y": 119 },
-            "weaponAnchor": { "x": 162, "y": 168 },
-            "weakPointAnchor": { "x": 85, "y": 106 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 84, "y": 131 },
+            "attackAnchor": { "x": 152, "y": 171 },
+            "hurtAnchor": { "x": 88, "y": 132 },
+            "weaponAnchor": { "x": 152, "y": 171 },
+            "weakPointAnchor": { "x": 88, "y": 119 },
+            "impactAnchor": { "x": 147, "y": 175 },
+            "mouthAnchor": { "x": 150, "y": 142 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": false, "HAND_F": false }
         },
         {
           "index": 4,
-          "label": "slump",
+          "label": "fall",
           "duration": 107,
           "x": 704,
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 91, "width": 109, "height": 85 },
+          "bounds": { "x": 21, "y": 113, "width": 146, "height": 63 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 104, "y": 133 },
-            "attackAnchor": { "x": 167, "y": 169 },
-            "hurtAnchor": { "x": 109, "y": 126 },
-            "weaponAnchor": { "x": 167, "y": 169 },
-            "weakPointAnchor": { "x": 90, "y": 110 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 88, "y": 142 },
+            "attackAnchor": { "x": 157, "y": 173 },
+            "hurtAnchor": { "x": 91, "y": 143 },
+            "weaponAnchor": { "x": 157, "y": 173 },
+            "weakPointAnchor": { "x": 93, "y": 130 },
+            "impactAnchor": { "x": 152, "y": 175 },
+            "mouthAnchor": { "x": 153, "y": 154 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
         },
         {
           "index": 5,
@@ -1095,18 +1484,20 @@
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 96, "width": 110, "height": 80 },
+          "bounds": { "x": 27, "y": 118, "width": 144, "height": 58 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 106, "y": 139 },
-            "attackAnchor": { "x": 169, "y": 171 },
-            "hurtAnchor": { "x": 111, "y": 132 },
-            "weaponAnchor": { "x": 169, "y": 171 },
-            "weakPointAnchor": { "x": 95, "y": 115 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 90, "y": 150 },
+            "attackAnchor": { "x": 160, "y": 173 },
+            "hurtAnchor": { "x": 93, "y": 152 },
+            "weaponAnchor": { "x": 160, "y": 173 },
+            "weakPointAnchor": { "x": 97, "y": 139 },
+            "impactAnchor": { "x": 155, "y": 175 },
+            "mouthAnchor": { "x": 155, "y": 160 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
         },
         {
           "index": 6,
@@ -1116,25 +1507,172 @@
           "y": 880,
           "width": 176,
           "height": 176,
-          "bounds": { "x": 63, "y": 97, "width": 109, "height": 79 },
+          "bounds": { "x": 29, "y": 118, "width": 143, "height": 58 },
           "anchors": {
             "origin": { "x": 0, "y": 0 },
-            "pivot": { "x": 86, "y": 175 },
-            "footAnchor": { "x": 86, "y": 175 },
-            "bodyAnchor": { "x": 106, "y": 140 },
-            "attackAnchor": { "x": 169, "y": 171 },
-            "hurtAnchor": { "x": 111, "y": 134 },
-            "weaponAnchor": { "x": 169, "y": 171 },
-            "weakPointAnchor": { "x": 95, "y": 116 }
+            "pivot": { "x": 88, "y": 175 },
+            "footAnchor": { "x": 88, "y": 175 },
+            "bodyAnchor": { "x": 90, "y": 152 },
+            "attackAnchor": { "x": 161, "y": 173 },
+            "hurtAnchor": { "x": 93, "y": 154 },
+            "weaponAnchor": { "x": 161, "y": 173 },
+            "weakPointAnchor": { "x": 97, "y": 141 },
+            "impactAnchor": { "x": 156, "y": 175 },
+            "mouthAnchor": { "x": 155, "y": 163 }
           },
-          "contacts": { "N": true, "F": true }
+          "contacts": { "N": true, "F": true, "HAND_N": true, "HAND_F": true }
         }
       ],
       "events": [
-        { "frame": 0, "type": "EFFECT", "name": "tank_sparks" },
-        { "frame": 2, "type": "EFFECT", "name": "ground_impact" },
-        { "frame": 5, "type": "EFFECT", "name": "death_impact" }
+        {
+          "frame": 0,
+          "type": "EFFECT",
+          "name": "core_burst",
+          "anchor": "weakPointAnchor",
+          "x": 68,
+          "y": 84
+        }
       ]
+    }
+  },
+  "effects": {
+    "roar_blast": {
+      "label": "ROAR blast (shock fronts, speed lines, spittle)",
+      "image": "effects/roar_blast.png",
+      "layout": "STRIP",
+      "frameWidth": 104,
+      "frameHeight": 80,
+      "frameCount": 8,
+      "fps": 14,
+      "frameDuration": 71,
+      "lifetime": 568,
+      "origin": { "x": 6, "y": 48 },
+      "mirror": "FLIP_WITH_FACING",
+      "spawns": [
+        {
+          "animation": "attack_1",
+          "state": "ATTACK_1",
+          "frame": 2,
+          "anchor": "mouthAnchor",
+          "x": 133,
+          "y": 78
+        }
+      ],
+      "alpha": [ 1, 1, 1, 0.95, 0.85, 0.7, 0.5, 0.3 ],
+      "groundAligned": false,
+      "direction": "FACING"
+    },
+    "ground_slam_shockwave": {
+      "label": "GROUND_SLAM shockwave",
+      "image": "effects/ground_slam_shockwave.png",
+      "layout": "STRIP",
+      "frameWidth": 232,
+      "frameHeight": 40,
+      "frameCount": 10,
+      "fps": 15,
+      "frameDuration": 67,
+      "lifetime": 670,
+      "origin": { "x": 116, "y": 39 },
+      "mirror": "SYMMETRIC",
+      "spawns": [
+        {
+          "animation": "attack_1",
+          "state": "ATTACK_1",
+          "frame": 10,
+          "anchor": "impactAnchor",
+          "x": 145,
+          "y": 175
+        }
+      ],
+      "alpha": [ 1, 1, 1, 1, 0.95, 0.85, 0.7, 0.55, 0.4, 0.25 ],
+      "groundAligned": true,
+      "direction": "LEFT_AND_RIGHT",
+      "travel": { "px": 100, "easing": "OUT_QUAD" },
+      "speed": { "initialPx": 313, "averagePx": 149 },
+      "fronts": [ 0, 21, 40, 56, 69, 80, 89, 95, 99, 100 ],
+      "hitAreas": [
+        { "from": 0, "to": 9, "height": 6 },
+        { "from": 10, "to": 21, "height": 5 },
+        { "from": 24, "to": 40, "height": 8 },
+        { "from": 37, "to": 56, "height": 10 },
+        { "from": 52, "to": 69, "height": 9 },
+        { "from": 64, "to": 80, "height": 8 },
+        { "from": 75, "to": 89, "height": 7 },
+        { "from": 82, "to": 95, "height": 6 },
+        { "from": 88, "to": 99, "height": 5 },
+        { "from": 91, "to": 100, "height": 4 }
+      ]
+    },
+    "claw_slash": {
+      "label": "CLAW slash trail + claw marks",
+      "image": "effects/claw_slash.png",
+      "layout": "STRIP",
+      "frameWidth": 80,
+      "frameHeight": 64,
+      "frameCount": 6,
+      "fps": 18,
+      "frameDuration": 56,
+      "lifetime": 336,
+      "origin": { "x": 50, "y": 18 },
+      "mirror": "FLIP_WITH_FACING",
+      "spawns": [
+        {
+          "animation": "attack_2",
+          "state": "ATTACK_2",
+          "frame": 4,
+          "anchor": "weaponAnchor",
+          "x": 162,
+          "y": 137
+        }
+      ],
+      "alpha": [ 1, 1, 1, 0.9, 0.7, 0.45 ],
+      "groundAligned": false,
+      "direction": "FACING"
+    },
+    "ichor_splash": {
+      "label": "ICHOR splash (hit)",
+      "image": "effects/ichor_splash.png",
+      "layout": "STRIP",
+      "frameWidth": 56,
+      "frameHeight": 48,
+      "frameCount": 6,
+      "fps": 16,
+      "frameDuration": 63,
+      "lifetime": 378,
+      "origin": { "x": 36, "y": 20 },
+      "mirror": "FLIP_WITH_FACING",
+      "spawns": [
+        { "animation": "hit", "state": "HIT", "frame": 0, "anchor": "hurtAnchor", "x": 76, "y": 100 }
+      ],
+      "alpha": [ 1, 1, 1, 0.9, 0.7, 0.45 ],
+      "groundAligned": false,
+      "direction": "FACING"
+    },
+    "core_burst": {
+      "label": "CORE burst (death)",
+      "image": "effects/core_burst.png",
+      "layout": "STRIP",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "frameCount": 10,
+      "fps": 12,
+      "frameDuration": 83,
+      "lifetime": 830,
+      "origin": { "x": 40, "y": 46 },
+      "mirror": "SYMMETRIC",
+      "spawns": [
+        {
+          "animation": "death",
+          "state": "DEATH",
+          "frame": 0,
+          "anchor": "weakPointAnchor",
+          "x": 68,
+          "y": 84
+        }
+      ],
+      "alpha": [ 1, 1, 1, 1, 0.95, 0.85, 0.7, 0.55, 0.4, 0.25 ],
+      "groundAligned": false,
+      "direction": "RADIAL"
     }
   }
 }
