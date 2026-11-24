@@ -8,11 +8,11 @@ import com.hung.save.SaveData;
  */
 public interface Navigator {
 
-    /** Starts a fresh run of this mode, saving into this slot (0-based). */
-    void startNewGame(int slot, GameMode mode);
+    /** Starts a fresh run of this mode, replacing its save. */
+    void startNewGame(GameMode mode);
 
-    /** Continues the run saved in this slot. */
-    void continueGame(int slot, SaveData save);
+    /** Continues the run of this save. */
+    void continueGame(SaveData save);
 
     void returnToMainMenu();
 

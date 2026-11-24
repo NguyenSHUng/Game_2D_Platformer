@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.hung.combat.definition.FireDefinition;
+import com.hung.combat.definition.WeaponDefinition;
 
 /**
  * A loaded weapon: its image and default size/pivot from the weapon JSON.

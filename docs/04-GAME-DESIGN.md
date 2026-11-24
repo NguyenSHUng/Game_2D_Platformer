@@ -1,378 +1,204 @@
-# 04 - Game Design
+# 04 - Gameplay
 
-[← Index](README.md)
+[← Mục lục](README.md)
 
-## Game Overview
+Người chơi làm được gì và các con số đang dùng. Con số lấy từ code (hằng số trong các class được nêu) và từ JSON của
+asset; cách các system cài đặt: [05-SYSTEMS-GUIDE.md](05-SYSTEMS-GUIDE.md).
 
-**Title**: Maze Shooter
-**Genre**: 2D Side-View Platformer Shooter (underground bunker / dungeon)
-**Core Loop**: Explore → Survive → Defeat → Upgrade → Next Level
+## 1. Vòng chơi
 
-Player explores procedurally generated underground levels (map generator in `build_asset/build_map`),
-runs, jumps and climbs through multi-level rooms, fights enemies (enemy generator in `build_asset/build_enemy`),
-collects items, upgrades weapons and faces increasingly difficult bosses.
-
-## Core Gameplay Loop
-
-```
-1. SPAWN
-   └─ Player starts in maze
-   
-2. EXPLORE
-   └─ Run, jump and climb through the level
-   └─ Tile collision: walls, floors, one-way platforms, ladders
-   
-3. COMBAT
-   └─ Encounter enemies
-   └─ Aim with mouse
-   └─ Shoot with left-click
-   └─ Dodge enemy fire
-   
-4. SURVIVE
-   └─ Manage health
-   └─ Pick up items
-   └─ Escape to exit
-   
-5. PROGRESS
-   └─ Defeat enough enemies
-   └─ Reach exit = win level
-   └─ Go to next level (harder)
+```text
+Màn hình chính ─► chọn chế độ ─► vào boong-ke
+     ▲                                     │ đi qua các phòng, đánh quái, chạm checkpoint (tự lưu)
+     │                                     │ chết → hồi sinh ở checkpoint cuối
+     └── về menu (tự lưu) ◄── Esc ─────────┤
+                                           ▼
+                              tới lối ra ─► "Mission complete" (ván được đánh dấu hoàn thành)
 ```
 
-**One play session**: 30+ minutes playing multiple levels
+- **Chế độ:** mỗi chế độ một map boong-ke riêng, xuất bằng `node tools/export-game.mjs --mode <chế độ>` của tool map
+  (seed và kích thước ở bảng `MODES` trong file đó):
 
-## Camera & Perspective
+  | Chế độ | File | Kích thước (tile) | Phòng | Checkpoint | Melee | Quái khác |
+  |---|---|---|---|---|---|---|
+  | Easy | `bunker_easy/map_easy.tmx` | 290 × 71 | 13 | 3 | 10 | 3 crawler, 2 wasp |
+  | Medium | `bunker_medium/map_medium.tmx` | 470 × 71 | 26 | 6 | 19 | 6 crawler, 5 wasp |
+  | Hard | `bunker_hard/map_hard.tmx` | 780 × 93 | 42 | 9 | 26 | 11 crawler, 9 wasp |
+- **Hard đang tạm khoá:** menu hiện LOCKED, không bắt đầu hay chơi tiếp được; save Hard vẫn giữ. Mở lại: đổi `true` thành `false` ở dòng HARD của
+  `GameMode`.
+- **Cỡ phòng:** ô phòng rộng 22–29 tile, cao khoảng 22 (`ROOMS` trong `export-game.mjs`; trước là 28–38 × 25).
+- **Thua:** không có Game Over; chết là hồi sinh ở checkpoint cuối với đầy máu.
 
-The game is a **plain 2D side view** (platformer): x is left/right, y is up/down, gravity pulls down.
-There is no floor depth.
-- Levels are tile maps (16 × 16 px tiles) exported from the map generator as Tiled `.tmx` files.
-- Characters stand on tiles; ceilings, walls, one-way platforms and ladders shape the route.
-- The level is a chain of **rooms**. The camera eases after the player (looking slightly above the feet)
-  and never shows past the walls of the current room; it cuts to the next room when the player goes
-  through a door. `-` / `=` (or the mouse wheel) zoom in / out, `0` resets; the view is never allowed to
-  get bigger than the room.
-- `F2` switches to the free camera (pan / zoom around the map) and back; the player stands still
-  meanwhile. Without a player character the camera is always free.
-- The player sprite is drawn at half its pixel size (`drawScale` 0.5): the 64 px frame becomes
-  32 world units and the body ~26.5 units (≈ 1.7 tiles), crisp at the 2× camera.
+## 2. Điều khiển
 
-## Lighting
+**Khi chơi** (`KeyboardController`, `GameScreen`):
 
-The bunker is dark: the scene is multiplied by a light map (ambient ≈ 30 % brightness, slightly blue) in which
-every light of the map's `lights` layer is added — 145 warm lamps, cold monitors / electrics, fires, toxic tanks —
-with the generator's flicker (soft / pulse / strong stutter), plus a soft colour glow. The player carries a dim light
-(3.5 tiles) so they never vanish; muzzle flashes and impact sparks light up briefly. `L` turns it off (map preview look).
+| Hành động | Phím |
+|-----------|------|
+| Đi trái / phải | `A` / `D` hoặc `←` / `→` |
+| Nhảy | `Space` |
+| Leo thang (bám, leo, đứng lên bậc trên cùng) | `W` / `S` hoặc `↑` / `↓` |
+| Ngồi | `S` / `↓` khi đứng trên mặt đất |
+| Xuống khỏi bệ một chiều | `S` + `Space` |
+| Đánh dao / bắn | `J` hoặc chuột trái |
+| Bắn liên thanh (súng trường) | Giữ `J` / chuột trái |
+| Nạp đạn | `R` (tự nạp khi hết đạn) |
+| Chọn dao / súng lục / súng trường; vũ khí kế tiếp | `1` / `2` / `3`; `Q` |
+| Bảng nhân vật (tạm dừng; `1` `2` `3` vẫn chọn vũ khí) | `I` hoặc `F1` |
+| Bản đồ toàn màn hình | `M` |
+| Bật / tắt ánh sáng | `L` |
+| Zoom camera / về mặc định | `=` / `-` hoặc lăn chuột; `0` |
+| Menu tạm dừng | `Esc` (nếu bảng nhân vật đang mở thì Esc đóng bảng trước) |
+| Camera tự do | `F2` |
+| Lớp debug (tile va chạm, hộp, attack box, đoạn tuần tra, checkpoint, giới hạn phòng, cửa) | `F3` |
 
-## Rooms, doors & minimap
+**Camera tự do** (`F2`, hoặc map không có player):
 
-- Every doorway, ladder shaft and drop hole between two rooms is a **door**. Walking into a doorway, climbing
-  through a shaft or falling down a hole fades the screen to black for a moment (the world pauses), puts the
-  player just inside the next room and fades back in. Ladder climbs and falls carry on through the door.
-- Drop holes are one-way; doorways and ladders work both ways.
-- Respawning at a checkpoint in another room moves the camera there at once.
-- **Minimap** (top-right): rooms you have entered are drawn (current room green, set pieces blue, side rooms
-  gold, doorways as small marks); rooms behind a door of an explored room show as dark outlines; the rest
-  stays hidden. The blinking red mark is you. `M` opens the whole map in the middle of the screen.
+| Hành động | Phím |
+|-----------|------|
+| Di chuyển | `W` `A` `S` `D` hoặc mũi tên (`Shift` = nhanh) |
+| Zoom | `Q` / `E` hoặc lăn chuột |
+| Về điểm xuất phát | `Home` |
+| Tới quái kế tiếp | `Tab` |
 
-## Controls
+**Menu:** mũi tên lên / xuống (hoặc `W` / `S`), `Enter` / `Space` chọn, `Esc` / `Backspace` quay lại, chuột di và bấm.
 
-| Action | Keys | Status |
-|--------|------|--------|
-| Move left / right | `A` / `D` or `←` / `→` | ✅ Implemented |
-| Jump | `Space` | ✅ Implemented |
-| Climb ladders (grab, climb, top rung) | `W` / `S` or `↑` / `↓` | ✅ Implemented |
-| Crouch | `S` / `↓` on the ground | ✅ Implemented |
-| Drop through a one-way platform | `S` + `Space` | ✅ Implemented |
-| Knife attack / shoot (with the pistol in hand) | `J` or left click | ✅ Implemented |
-| Pick weapon: knife / pistol / assault rifle, next weapon | `1` / `2` / `3`, `Q` | ✅ Implemented |
-| Full-auto (rifle) | hold `J` / left button | ✅ Implemented |
-| Reload | `R` (automatic when the magazine is empty) | ✅ Implemented |
-| Free camera on / off | `F2` | ✅ Implemented |
-| Character sheet (player + weapon stats; pauses, `1`/`2`/`3` pick a weapon) | `I` or `F1` | ✅ Implemented |
-| Lighting on / off | `L` | ✅ Implemented |
-| Whole map on / off | `M` | ✅ Implemented |
-| Camera zoom in / out, reset | `=` / `-` or mouse wheel, `0` | ✅ Implemented |
-| Toggle debug overlay (collision tiles, boxes, attack boxes, patrols, checkpoints, room bounds, doors) | `F3` | ✅ Dev tool |
-| Aim | Mouse | Planned |
-| Free aim (shoot at the mouse) | Mouse | Planned — shots follow the weapon (level, ±1.5° spread) |
+> Windows + bộ gõ tiếng Việt (Telex): bộ gõ có thể nuốt các phím chữ (WASD) trước khi tới game. Chuyển sang ENG
+> (`Win + Space`) hoặc dùng phím mũi tên.
 
-**Free camera (`F2`, or no player in the map):**
+## 3. Di chuyển
 
-| Action | Keys |
-|--------|------|
-| Pan | `W` `A` `S` `D` or arrows (`Shift` = faster) |
-| Zoom in / out | `Q` / `E` or mouse wheel |
-| Back to the player spawn | `Home` |
-| Jump to the next enemy | `Tab` |
+Tốc độ đi và nhảy lấy từ **thuộc tính `physics.*` của map** (map generator chỉ tạo những khoảng nhảy được với 80% các
+con số này), không cứng trong code.
 
-Key bindings live in one place per controller: the key arrays at the top of
-`com.hung.input.KeyboardController` (player) and `com.hung.input.CameraInput` (free camera).
+| Thông số | Giá trị (map hiện tại) | Nguồn |
+|----------|------------------------|-------|
+| Tốc độ đi | 6 tile/s = 96 px/s | `physics.moveSpeed` |
+| Nhảy cao / xa / thời gian trên không | 3,5 tile / 6 tile / 1 s | `physics.jumpHeight`, `physics.jumpDistance` |
+| Tốc độ leo thang | 4 tile/s | `PhysicsSettings` |
+| Coyote time (vẫn nhảy được sau khi rời mép) | 0,08 s | `InputSystem` |
+| Jump buffer (bấm sớm trước khi chạm đất) | 0,1 s | `InputSystem` |
+| Hộp va chạm của người lính | 7 × 26,5 đơn vị (ngồi: cao 21,5) | JSON player × `drawScale` 0,5 |
 
-> **Windows + Vietnamese keyboard:** when the Windows Vietnamese (Telex) input method is active,
-> the letter keys (WASD) are consumed by the IME and never reach the game. Switch to ENG
-> (`Win + Space`) or use the arrow keys.
+- Điều khiển trái / phải vẫn có tác dụng khi đang trên không.
+- Ngồi dừng bước đi và hạ thấp hộp va chạm; chỉ đứng dậy khi đủ chỗ.
+- **Thang:** lên / xuống để bám và căn vào giữa thang; trái / phải để rời; `Space` nhảy khỏi; leo quá bậc trên cùng là
+  đứng lên trên; chạm sàn là buông. Khi leo, animation IDLE được dùng.
+- **Bệ một chiều:** đứng lên từ trên, nhảy xuyên qua từ dưới.
+- Animation WALK chạy nhanh hơn khi đi nhanh (tối đa 2,5 lần); JUMP chạy theo vận tốc dọc (bật lên → đỉnh → rơi).
 
-## Core Mechanics
+## 4. Chiến đấu
 
-### 1. Movement
-- **Input**: A/D or left/right arrows
-- **Speed**: from the map's physics contract — default 6 tiles/s (96 px/s with 16 px tiles)
-- **Collision**: tile box collision: SOLID walls/floors/ceilings, one-way PLATFORMs and ladder tops
-  (land on them from above, jump through from below); enemies don't block, they hurt on touch
-- **Facing**: Sprite faces the last horizontal direction (mirrored when moving left)
-- **Box**: the character JSON's `colliderWidth` × `colliderHeight` (sprite px) × `drawScale` —
-  7 × 26.5 world units for the soldier; 21.5 high while crouching (the CROUCH pose's `hurtbox`)
-- **Crouch**: `S` on the ground — stops walking, lowers the box; stands up only when there is room
-- **Animation**: WALK is authored for 15 world units/s but the player walks at 96, so WALK plays
-  faster (capped at 2.5×) until the character generator adds a RUN animation
+**Vũ khí mang theo:** dao (ô 1), súng lục (ô 2), súng trường (ô 3). Đổi vũ khí đổi luôn tư thế cầm của người lính;
+không đổi được khi đang vung dao, đang bị thương hay đã chết; đổi khi đang nạp thì huỷ lượt nạp.
 
-### 2. Jumping
-- **Input**: Space while standing on something; also within 0.08 s after walking off a ledge
-  (coyote time), and a press up to 0.1 s before landing still jumps (jump buffer)
-- **Height / distance**: from the map — default 3.5 tiles high, 6 tiles far, 1 second in the air.
-  The map generator only builds gaps and ledges reachable with 80% of these numbers, so the game
-  must use the same ones (they are read from the map file; see 05-SYSTEMS-GUIDE §2)
-- **Air control**: Left/right still works in the air
-- **Animation**: JUMP frames follow the vertical speed (launch → tuck → apex → fall), so short
-  hops and long falls both look right
+| | Dao | Súng lục | Súng trường |
+|---|---|---|---|
+| Kiểu | Cận chiến | Bán tự động (mỗi lần bấm 1 viên) | Liên thanh (giữ để bắn) |
+| Sát thương | 10 | 12 | 11 |
+| Tốc độ bắn | — | 5 viên/s | 9 viên/s |
+| Băng đạn / nạp | — | 12 viên / 1,1 s | 30 viên / 1,8 s |
+| Tốc độ đạn / tầm | — | 30 tile/s / 22 tile | 40 tile/s / 32 tile |
+| Độ lệch | — | ±1,5° | ±2,5° |
+| Tư thế cầm | Một tay | Hai tay (`*_PISTOL`) | Báng tì vai (`*_RIFLE`) |
 
-### 2b. Ladders, hazards, checkpoints
-- **Ladders**: up/down grabs a ladder in front of the body (or the top rung under the feet) and
-  snaps to its column; up/down climbs at 4 tiles/s without gravity; left/right steps off; Space
-  jumps off; climbing past the top rung stands on it; reaching the floor lets go.
-  No CLIMB animation yet — IDLE plays while climbing
-- **Spikes / toxic sludge**: touching one sends the player back to the last checkpoint (no damage
-  yet — trap damage tiers are planned, see build_asset/build_map/PROGRESS.md §6). Falling out of
-  the map does the same
-- **Checkpoints**: the map's `pois` objects of type CHECKPOINT; touching one makes it the respawn point
-- **Breakable walls** (BREAKABLE tiles): the knife's attack box destroys them (grid + drawn tile)
-- **Exit**: reaching it is logged; level transitions are planned
+Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `fire` của JSON vũ khí.
 
-### 3. Aiming
-- **Input**: Mouse position
-- **Output**: Aim direction
-- **Feedback**: Side view — the sprite only faces left/right (mirrored), so aiming turns the weapon/projectile direction, not the sprite. Exact rules to be decided with combat.
-- **Range**: 360 degrees
+- **Dao:** khung "HIT" của animation ATTACK có attack box (kéo dài tới mũi dao). Trong khung đó hộp gây sát thương mọi
+  quái chạm vào, tối đa một lần mỗi cú vung, và phá tile BREAKABLE. Đứng trên đất thì dừng lại khi vung; không đánh
+  được khi đang leo.
+- **Súng:** đạn ra từ đầu nòng đúng chỗ súng đang vẽ, kèm lửa nòng và vỏ đạn văng ra; đứng yên thì hiện tư thế bắn.
+  Đạn được kiểm tra mỗi 2 đơn vị: dừng ở tường hoặc tile BREAKABLE (xuyên qua bệ một chiều và thang), hoặc ở thân sống
+  đầu tiên của phe kia; không bao giờ trúng người bắn; hết tầm thì biến mất.
+- **HUD:** thanh máu, tên vũ khí, số đạn (`Service Pistol 9 / 12`), chữ `RELOADING` khi nạp.
 
-### 4. Shooting (implemented: service pistol, assault rifle)
-- **Weapons carried**: knife (`1`), service pistol (`2`) and assault rifle (`3`); `Q` cycles. Switching changes
-  the player's animation set: with the pistol the soldier holds it with **both hands** (`*_PISTOL` animations
-  from the character generator — idle, walk, crouch and jump all keep the gun aimed); with the rifle the stock is
-  at the shoulder, the front hand on the handguard and the back hand on the pistol grip (`*_RIFLE`) — not during
-  a swing or a hurt reaction; a reload in progress is cancelled
-- **Rifle data**: full-auto (hold the trigger), 9 rounds/s, 11 damage (3 rounds per enemy), 30-round magazine,
-  1.8 s reload, bullets 40 tiles/s, range 32 tiles, ±2.5° spread; the SHOOT_RIFLE pose rocks the body back, the
-  rifle stays level; a longer flash / tracer / casing than the pistol
-- **Input**: `J` / left click pulls the trigger (semi-automatic: one shot per press); `R` reloads
-- **Pistol data** (weapon JSON `fire`, from the weapon generator): 12 damage (enemies 30 HP → 3 shots),
-  12-round magazine, 1.1 s reload (automatic when empty), max 5 shots/s, bullets 30 tiles/s, range
-  22 tiles, ±1.5° spread
-- **Shot**: the bullet leaves the muzzle (the pistol's muzzle anchor where it is drawn, so it follows the
-  pose), with a muzzle flash, a brass casing flying back from the ejection port, and the SHOOT pose
-  (muzzle kicks up 15°) when standing still; walking / jumping / crouching keep their stance animation
-- **Projectile**: tested every 2 world units — stops at the first wall / breakable tile (one-way platforms
-  and ladders let it through) with an impact spark, or at the first enemy body (damage + knockback); it
-  never hits the shooter; it vanishes after its range
-- **HUD**: weapon name and rounds (`Service Pistol 9 / 12`, `RELOADING`) under the health bar
+## 5. Máu, sát thương, hồi sinh
 
-### 4b. Knife (implemented placeholder)
-- **Asset**: a separate sprite from the weapon generator (`build_asset/build_weapon`, combat knife 24×9 px),
-  held at each frame's hand anchor; the player strips carry no weapon (see character-weapon-system.md)
-- **Input**: `J` or left click; can't attack while climbing; on the ground the player stops for the swing
-- **Hit**: the ATTACK animation's HIT frame carries an `attackBox` (sprite px); for that frame the
-  box (mirrored when facing left, stretched to the knife's tip) damages every enemy it touches, once per
-  swing — 10 damage
-- **Enemies**: 30 HP (3 hits); a hit plays HIT, knocks back a little; at 0 HP DEATH plays, the
-  body stays 1.5 s, then it is removed
-- **Contact damage**: touching a living enemy costs the player 10 HP, knocks them back, plays HIT
-  and gives 1 s of invulnerability (the sprite blinks). Enemies have no attack AI yet
+| | Giá trị | Nguồn |
+|---|---|---|
+| Máu player | 100 | `PlayerFactory.PLAYER_MAX_HEALTH` |
+| Bất tử sau mỗi đòn trúng (player) | 1 s, sprite nhấp nháy | `PlayerFactory.PLAYER_INVULNERABILITY` |
+| Chạm thân quái | −10 máu × hệ số chế độ | `Enemy.CONTACT_DAMAGE` |
+| Hồi sinh sau khi chết | animation DEATH + 1 s, đầy máu, bất tử 1,5 s | `HealthSystem`, `PlayerRespawn` |
+| Xác quái biến mất | sau animation DEATH + 1,5 s | `HealthSystem.CORPSE_LINGER` |
 
-### 5. Health & Damage
-- **Current build**: player 100 HP (HUD bar top-left); at 0 HP DEATH plays, then the player
-  respawns at the last checkpoint with full health (Game Over comes later)
-- **Player Health**: 100 HP max
-- **Damage Types**:
-  - Projectile hit: 10-30 HP
-  - Enemy melee: 5-15 HP
-  - Boss attack: 20-50 HP
-- **Healing**: Health packs restore 50 HP
-- **Death**: HP ≤ 0 → Game Over
+- Bị trúng: mất máu, chạy animation HIT (bị khoá điều khiển trong lúc đó), bị đẩy lùi theo hướng ngược nguồn đòn.
+- **Gai, chất độc** (chạm vào 80% phía dưới của tile) và **rơi khỏi map** (64 đơn vị dưới đáy): đưa player về
+  checkpoint cuối, không trừ máu.
+- **Checkpoint:** chạm vào là thành điểm hồi sinh và game tự lưu (hiện thông báo "SAVE Checkpoint n of 7 - saved").
 
-### 6. Items & Pickups
-Items spawn randomly or on enemy defeat:
-- **Health Pack**: +50 HP (max health)
-- **Weapon Crate**: Swap to new weapon
-- **Speed Boost**: +50% movement speed for 5 seconds
-- **Shield**: Absorb 1 hit without damage (3 seconds)
-- **Ammo Pack**: Refill ammunition
+## 6. Quái
 
-## Weapon System
+**Quái melee** (`MeleeEnemy`; đặt trong file map, `small_melee_ghoul` / `_prison` / `_toxic` theo loại phòng): 30 máu, đi qua lại
+trong đoạn tuần tra, quay đầu ở hai đầu đoạn, ở tường và trước mép vực; thấy player trong tầm thì đuổi và vung vuốt (bảng dưới).
+Ba con cùng họ hình với crawler (đứng hai chân): ghoul nâu, prison xám tím có tấm sắt và còng, toxic xanh ô liu có sừng.
 
-### Weapon Types
+Mọi quái phát hiện player trong tầm, quay mặt, đuổi theo và tấn công bằng hitbox của animation. Số gốc, trước khi nhân theo chế độ:
 
-**1. Basic Gun (Starting)**
-- Damage: 10 HP
-- Fire Rate: 0.3 sec (3.3 shots/sec)
-- Projectile Speed: 500 px/s
-- Magazine: Unlimited ammo
-- Best for: Beginning players, learning
+| Loại | Class | Máu | Sát thương đòn đánh | Tầm phát hiện | Hồi chiêu | Tốc độ đuổi |
+|------|-------|-----|---------------------|---------------|-----------|-------------|
+| Melee (`small_melee_*`) | `MeleeEnemy` | 30 | 8 | 120 | 1,2 s | ×2,2 |
+| Crawler (`crawler_01`) | `CrawlerEnemy` | 20 | 8 | 160 | 0,9 s | ×1,6 |
+| Quái bay (`flyer_wasp_01`) | `FlyingEnemy` | 20 | 12 | 180 | 1,4 s | ×1,4 |
 
-**2. Assault Rifle**
-- Damage: 15 HP
-- Fire Rate: 0.1 sec (10 shots/sec)
-- Projectile Speed: 600 px/s
-- Magazine: 30 rounds
-- Best for: Sustained damage, swarms
+Nguồn: máu và sát thương là hằng số theo mức LOW / MEDIUM trong `EnemyFactory` (file của quái chỉ ghi mức);
+tầm phát hiện, hồi chiêu, tốc độ đuổi là hằng số trong từng class (`com.hung.entity.enemy`). Mọi quái
+cũng gây −10 máu khi chạm (`Enemy.CONTACT_DAMAGE`). Quái to hơn file 1,2 lần (`EnemyFactory.SIZE_SCALE`: hình, thân, tầm đánh, tốc độ).
 
-**3. Shotgun**
-- Damage: 30 HP (per pellet)
-- Pellets: 8 per shot
-- Fire Rate: 0.8 sec (1.25 shots/sec)
-- Projectile Speed: 400 px/s (slower spread)
-- Magazine: 8 rounds
-- Best for: Close range, boss fights
+**Độ khó theo chế độ** (`EnemySkill`, gắn với `GameMode.enemySkill`; nhân với con số ở bảng trên):
 
-**4. Sniper Rifle** (Unlockable)
-- Damage: 50 HP
-- Fire Rate: 1.0 sec (1 shot/sec)
-- Projectile Speed: 800 px/s (fastest)
-- Magazine: 5 rounds
-- Best for: Precision, one-shot kills
+| | Easy | Medium | Hard |
+|---|---|---|---|
+| Máu | ×1 | ×1,25 | ×1,6 |
+| Sát thương (đòn và chạm) | ×1 | ×1,25 | ×1,5 |
+| Tầm phát hiện | ×1,15 | ×1,3 | ×1,5 |
+| Tốc độ đuổi (tối đa 84, chậm hơn player 96) | ×1,1 | ×1,3 | ×1,5 |
+| Hồi chiêu | ×0,95 | ×0,8 | ×0,65 |
+| Kháng đẩy lùi | 0 | 20% | 40% |
+| Nhớ player sau khi mất dấu | 1,5 s | 3 s | 5 s |
+| Gọi đồng đội khi phát hiện (bán kính) | – | 96 | 160 |
+| Đón đầu player đang lao tới | – | 0,12 s | 0,2 s |
+| Nhảy qua hố, gai, bậc và lên bệ thấp | không | có | có |
 
-**5. Minigun** (Unlockable)
-- Damage: 8 HP (very fast)
-- Fire Rate: 0.05 sec (20 shots/sec)
-- Projectile Speed: 550 px/s
-- Magazine: 100 rounds
-- Best for: Rapid-fire, sustained barrages
+Ở mọi chế độ: bị bắn từ xa thì lao tới kẻ bắn; không vung đòn khi player ở quá cao hoặc quá thấp; không đuổi qua gai hay
+chất độc nếu không nhảy được; bỏ cuộc khi player xa hơn 2,5 lần tầm phát hiện.
 
-### Weapon Mechanics
-- **Switch**: E key changes weapon
-- **Ammo**: Depletes as you shoot, refills from packs
-- **Cooldown**: Can't fire until cooldown expires
-- **Accuracy**: 100% (no spread except shotgun)
-- **Upgrade**: Each weapon level increases damage by 20%
+- Quái mặt đất dừng ở mép vực và tường; từ Medium thì nhảy nếu có chỗ đáp an toàn (hố tới 4 tile, cao 2, sâu 2).
+- Quái bay không chịu trọng lực: tuần tra cao 40 đơn vị trên sàn, khi săn thì bay ngay trên đầu player và lao xuống
+  khi tấn công; chết thì xác rơi xuống sàn.
 
-## Enemy System
+## 7. Thế giới
 
-### Enemy Types
+- **Phòng và cửa:** mỗi lối đi, giếng thang, hố rơi giữa 2 phòng là một cửa. Đi vào cửa: màn hình tối dần (thế giới
+  dừng), player xuất hiện ngay trong phòng kế, rồi sáng lại; đang leo thang hay đang rơi thì tiếp tục. Hố rơi là một
+  chiều; lối đi và thang đi hai chiều.
+- **Camera:** bám theo chân player (lệch lên 24 đơn vị), không bao giờ lộ ra ngoài tường phòng hiện tại, chuyển ngay
+  sang phòng mới khi qua cửa. Zoom 0,5–1 (mặc định 0,8) và không lớn hơn phòng. Camera tự do zoom 0,25–6.
+- **Minimap** (góc phải trên): phòng đã vào được vẽ (phòng hiện tại xanh lá, phòng đặc biệt xanh dương, phòng phụ
+  vàng, có dấu cửa); phòng sau một cửa của phòng đã khám phá hiện viền tối; còn lại ẩn. Chấm đỏ nhấp nháy là player.
+  `M` mở bản đồ toàn bộ.
+- **Ánh sáng:** boong-ke tối; mọi đèn trong map được cộng vào (đèn ấm, màn hình lạnh, lửa, bể độc) với kiểu nhấp nháy
+  của tool tạo map; player có đèn nhỏ bán kính 56 đơn vị (3,5 tile); lửa nòng và tia lửa đạn sáng lên chốc lát.
+- **Tường phá được** (tile BREAKABLE): dao phá được; đạn dừng lại ở đó.
+- **Lối ra:** tới lối ra thì mở màn "Mission complete" và đánh dấu ván hoàn thành; có thể chơi tiếp hoặc về menu.
 
-#### 1. Chaser (Basic)
-- **HP**: 30
-- **Damage**: 5 HP per hit
-- **Speed**: 150 px/s
-- **AI**: Chase player when visible, melee attack in range
-- **Weapon**: Fists (no projectiles)
-- **Behavior**:
-  - Idle when far away
-  - Chase when player spotted
-  - Melee attack from close range
-  - Flee if low health
-- **Reward**: 10 points, drops items 30% chance
+## 8. Màn hình, lưu game, cài đặt
 
-#### 2. Turret (Ranged)
-- **HP**: 50
-- **Damage**: 10 HP per shot
-- **Speed**: 0 (stationary, can rotate)
-- **AI**: Fire at player if visible
-- **Weapon**: Basic Gun
-- **Behavior**:
-  - Stays in place (spawned position)
-  - Rotates to track player
-  - Shoots when player in view
-  - Wide field of view (300 px)
-- **Reward**: 20 points, drops items 50% chance
+| Màn | Nội dung |
+|-----|----------|
+| Màn hình chính | Continue (ván dở dang lưu gần nhất), New Game (chọn chế độ; đã có save thì chọn chơi tiếp hoặc chơi lại từ đầu), Settings, Quit |
+| Menu tạm dừng | Resume, Settings, Save and exit to menu, Save and quit |
+| Settings | Toàn màn hình, VSync, hiện FPS (lưu và áp dụng ngay), bảng phím |
 
-#### 3. Ranged (Intermediate)
-- **HP**: 40
-- **Damage**: 8 HP per shot
-- **Speed**: 120 px/s (slower than player)
-- **AI**: Keep distance, shoot
-- **Weapon**: Assault Rifle
-- **Behavior**:
-  - Chase player to medium range
-  - Maintain distance (200 px away)
-  - Retreat if approached
-  - Shoot while moving
-- **Reward**: 15 points, drops items 40% chance
+- Mỗi chế độ một save: `~/.mygame/saves/easy.json`, `medium.json`, `hard.json`. Save từ 3 ô lưu cũ được nhập một lần (bản mới nhất của mỗi chế độ),
+  file cũ chuyển vào `old_slots/`; cài đặt trong `~/.mygame/settings.json` (ngoài repo).
+- Tự lưu khi chạm checkpoint mới, khi tới lối ra, và khi rời ván (về menu, thoát, đóng hoặc thu nhỏ cửa sổ). Nếu lúc
+  rời ván đang chết hoặc đang qua cửa thì lưu ở checkpoint thay vì chỗ đứng.
+- **Lưu những gì:** vị trí, điểm hồi sinh, checkpoint cuối, máu, vũ khí đang cầm, đạn của từng súng, phòng đã khám phá,
+  thời gian chơi, trạng thái hoàn thành. **Không lưu:** quái đã giết, tường đã phá (hồi lại khi Continue).
+- File lưu hỏng hoặc của phiên bản mới hơn: game không crash, trang của chế độ ghi lý do và cho chơi lại từ đầu. Map đã xuất lại khác kích thước: Continue chạy lại từ điểm xuất phát nhưng giữ máu và vũ khí.
 
-#### 4. Heavy (Tank)
-- **HP**: 100
-- **Damage**: 15 HP melee, 12 HP ranged
-- **Speed**: 80 px/s (slowest)
-- **AI**: Slow but powerful
-- **Weapon**: Shotgun
-- **Behavior**:
-  - Slow relentless advance
-  - Charge attack at close range
-  - Can't strafe (moves forward only)
-  - High damage output
-- **Reward**: 30 points, drops items 60% chance
+## 9. Chưa có
 
-#### 5. Boss (Encounter)
-- **HP**: 300-500 (scales with level)
-- **Damage**: 20-40 HP (multiple attacks)
-- **Speed**: 100 px/s
-- **AI**: Multi-phase behavior
-- **Weapon**: Multiple (switches weapons)
-- **Behavior**:
-  - Phase 1 (100% HP): Aggressive chase + projectiles
-  - Phase 2 (50% HP): Summons minions, grenade attacks
-  - Phase 3 (20% HP): Berserker mode - rapid fire
-  - Special attacks: Circle strafe, charge, area damage
-- **Reward**: 100 points, guaranteed weapon drop
-
-### Enemy Spawning
-- **Now (✅ implemented)**: enemies are placed **in the map file**. The map generator puts spawn points
-  on flat, hazard-free floor stretches (never next to the player spawn or a checkpoint), each with a
-  patrol range; the game export picks a concrete enemy (look + animations from the enemy generator)
-  that fits the room (lab → `LAB_MUTANT`, prison → `PRISON_SHADE`, toxic → `TOXIC_GRUB`,
-  machinery → `RUST_CRAWLER`, otherwise `BUNKER_GHOUL` / `STEEL_GRAY`). Enemies can also be added
-  or moved by hand in Tiled (`enemies` object layer). In game they patrol back and forth
-  (turning at the range ends, walls and ledges). See 05-SYSTEMS-GUIDE §6.
-- **Density**: map generator setting *Enemy density* (default 50%), scaled up by region difficulty
-- **Trial (2026-10-06, ✅)**: the enemy generator's phase 2 archetypes — CRAWLER (small, fast, low),
-  FLYING (drone / mutant wasp that dives from above) and MINI_BOSS (Juggernaut: overhead smash + claw sweep,
-  300 HP) — are placed by `world/TrialEnemies` in the rooms right after the start room (room_2: crawler,
-  room_3: drone, room_4: wasp, room_6: boss on the current map) until the map generator places them itself.
-  They notice the player, chase and attack (`EnemyBrainSystem`, 05-SYSTEMS-GUIDE §6). Drawn at the player's
-  pixel density (drawScale 0.5). Turn the trial off by emptying `Constants.TRIAL_ENEMIES`.
-- **Planned**: map-generator placement of the new archetypes (crawlers in low passages, flyers in tall rooms,
-  the mini-boss in the arena), ranged enemies, timed respawns
-- **Difficulty**: Increases with level
-  - Level 1: Mostly Chasers, 1 Turret
-  - Level 5: Mix of all types, 2 Turrets, Ranged enemies
-  - Level 10+: Heavy units, multiple Ranged, Boss fights
-
-## Level & Progression
-
-### Level Structure
-
-**Level = generated underground map + enemies + exit arena (future boss)**
-
-Each level is a bunker map from the map generator: 800–1600 × 80–120 tiles, rooms on several floors joined
-by doors, drop shafts and ladders, set pieces (labs, prison corridors, toxic bridges, machinery rooms…),
-side branches with chests, secret rooms, checkpoints, and an arena with the EXIT at the far end.
-
-```
-Level Progression (planned)
-├─ Level 1 (Tutorial)      easy difficulty, low enemy density, small melee enemies
-├─ Level 5 (Intermediate)  normal difficulty, mixed enemies, mini-boss in the exit arena
-└─ Level 10+ (Expert)      hard difficulty, all enemy types, multi-phase boss
-```
-
-## Win & Lose Conditions
-
-### WIN
-```
-Player reaches EXIT DOOR
-└─ All levels beat = Final Victory
-└─ Or escape current level alive
-```
-
-### LOSE
-```
-Player Health ≤ 0
-└─ Game Over screen
-└─ Show: Score, Enemies killed, Distance traveled, Level reached
-```
+Âm thanh, vật phẩm nhặt được, ngắm bằng chuột, chuyển sang màn tiếp theo, mini boss,
+sát thương của bẫy.

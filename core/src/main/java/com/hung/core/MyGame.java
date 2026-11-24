@@ -8,11 +8,11 @@ import com.hung.save.GameSession;
 import com.hung.save.SaveData;
 import com.hung.save.SaveManager;
 import com.hung.save.Settings;
-import com.hung.ui.MenuScreen;
 import com.hung.ui.UiTheme;
+import com.hung.ui.menu.MenuScreen;
 import com.hung.util.ResourceLoader;
 import com.hung.world.World;
-import com.hung.world.WorldLoader;
+import com.hung.world.loader.WorldLoader;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. Starts on the
@@ -49,14 +49,14 @@ public class MyGame extends Game implements Navigator {
     // Switches run after the current frame, never in the middle of a screen's render
 
     @Override
-    public void startNewGame(int slot, GameMode mode) {
-        Gdx.app.postRunnable(() -> startRun(new GameSession(slot, mode, null)));
+    public void startNewGame(GameMode mode) {
+        Gdx.app.postRunnable(() -> startRun(new GameSession(mode, null)));
     }
 
     @Override
-    public void continueGame(int slot, SaveData save) {
+    public void continueGame(SaveData save) {
         GameMode mode = GameMode.fromName(save.mode);
-        Gdx.app.postRunnable(() -> startRun(new GameSession(slot, mode, save)));
+        Gdx.app.postRunnable(() -> startRun(new GameSession(mode, save)));
     }
 
     @Override
@@ -74,9 +74,8 @@ public class MyGame extends Game implements Navigator {
 
     private void startRun(GameSession session) {
         endRun();
-        Gdx.app.log(TAG, (session.loaded != null ? "Continuing" : "New") + " " + session.mode.label
-            + " run in slot " + (session.slot + 1));
-        World world = WorldLoader.load(session.mode.mapPath, resources);
+        Gdx.app.log(TAG, (session.loaded != null ? "Continuing" : "New") + " " + session.mode.label + " run");
+        World world = WorldLoader.load(session.mode.mapPath, session.mode.enemySkill, resources);
         runMapPath = session.mode.mapPath;
         run = new GameScreen(batch, world, session, saves, settings, theme, this);
         setScreen(run);

@@ -5,14 +5,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.hung.component.HealthComponent;
-import com.hung.core.EventBus;
+import com.hung.core.event.EventBus;
 import com.hung.entity.Entity;
-import com.hung.world.CheckpointEvent;
-import com.hung.world.ExitReachedEvent;
 import com.hung.world.Level;
-import com.hung.world.PlayerRespawn;
 import com.hung.world.TileGrid;
 import com.hung.world.World;
+import com.hung.world.event.CheckpointEvent;
+import com.hung.world.event.ExitReachedEvent;
+import com.hung.world.system.PlayerRespawn;
 
 /**
  * What the level does to the player:

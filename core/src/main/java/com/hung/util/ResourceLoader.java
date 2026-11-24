@@ -41,12 +41,7 @@ public class ResourceLoader implements Disposable {
         this.pixelArtMaps.generateMipMaps = false;
     }
 
-    /** Parses one of the game's own JSON definitions (strict: unknown fields are an error). */
-    public <T> T loadDefinition(Class<T> type, String path) {
-        return json.fromJson(type, Gdx.files.internal(path));
-    }
-
-    /** Like {@link #loadDefinition}, but returns null when the file doesn't exist. */
+    /** Parses one of the game's own JSON definitions (strict: unknown fields are an error); null when the file doesn't exist. */
     public <T> T loadOptionalDefinition(Class<T> type, String path) {
         FileHandle file = Gdx.files.internal(path);
         return file.exists() ? json.fromJson(type, file) : null;

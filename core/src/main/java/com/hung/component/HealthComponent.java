@@ -22,7 +22,7 @@ public class HealthComponent {
     /** Seconds left of the current invulnerability; hits are ignored while above 0. */
     public float invulnerableTime;
 
-    /** 0 = full knockback when hit, 1 = none (a MINI_BOSS barely moves). */
+    /** 0 = full knockback when hit, 1 = none. */
     public float knockbackResistance;
 
     /** Seconds since death. */

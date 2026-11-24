@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.hung.core.EventListener;
+import com.hung.core.event.EventListener;
 import com.hung.util.Constants;
 import com.hung.util.SmoothDamp;
 import com.hung.world.Level;
-import com.hung.world.RoomTransitionEvent;
+import com.hung.world.event.RoomTransitionEvent;
 
 /**
  * The game camera.
@@ -164,7 +164,4 @@ public class CameraController implements EventListener<RoomTransitionEvent> {
 
     public OrthographicCamera getCamera() { return camera; }
     public float getZoom() { return camera.zoom; }
-    public float getFollowZoom() { return followZoom; }
-    /** The current room's camera bounds, or null before the first room (or on maps without rooms). */
-    public Rectangle getRoomBounds() { return hasRoomBounds ? roomBounds : null; }
 }

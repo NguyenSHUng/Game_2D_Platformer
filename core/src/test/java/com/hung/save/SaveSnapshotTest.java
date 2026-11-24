@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.hung.combat.Weapon;
-import com.hung.combat.WeaponDefinition;
+import com.hung.combat.definition.WeaponDefinition;
 import com.hung.component.ArsenalComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.WeaponComponent;
 import com.hung.core.GameMode;
 import com.hung.entity.Entity;
-import com.hung.ui.MinimapState;
+import com.hung.ui.minimap.MinimapState;
 import com.hung.world.Level;
 import com.hung.world.Room;
 import com.hung.world.RoomTransition;
@@ -73,7 +73,7 @@ class SaveSnapshotTest {
         world.setRespawnPoint(100f, 32f);
         exploration = new MinimapState(4);
         exploration.restore(new int[] {0, 1}, new int[] {0, 1, 2});
-        session = new GameSession(0, GameMode.HARD, null);
+        session = new GameSession(GameMode.HARD, null);
         session.playTime = 42f;
     }
 

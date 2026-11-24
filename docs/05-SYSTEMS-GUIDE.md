@@ -1,633 +1,340 @@
-# 05 - Systems Guide
+# 05 - Dữ liệu và các system
 
-[← Index](README.md)
+[← Mục lục](README.md)
 
-For AI: This explains each game system, what it does, and how it integrates.
+Định dạng file dữ liệu game đọc, và từng system làm gì, theo quy tắc nào. Thứ tự các system trong một khung hình:
+[02-ARCHITECTURE.md → mục 3](02-ARCHITECTURE.md#3-thứ-tự-một-khung-hình). Con số gameplay: [04-GAME-DESIGN.md](04-GAME-DESIGN.md).
 
-Systems marked **✅ Implemented** exist in code; the rest are the plan.
+| Mục | Nội dung |
+|-----|----------|
+| [0](#0-toạ-độ-và-file-dữ-liệu) | Toạ độ và file dữ liệu (map, quái, player, vũ khí) |
+| [1](#1-input) | Input |
+| [2](#2-vật-lý) | Vật lý |
+| [3](#3-va-chạm-và-vùng-nguy-hiểm) | Va chạm và vùng nguy hiểm |
+| [4](#4-chiến-đấu) | Chiến đấu |
+| [5](#5-máu-và-sát-thương) | Máu và sát thương |
+| [6](#6-ai-của-quái) | AI của quái |
+| [7](#7-animation-và-hiệu-ứng) | Animation và hiệu ứng |
+| [8](#8-vẽ) | Vẽ |
+| [9](#9-thế-giới-phòng-và-cửa) | Thế giới, phòng và cửa |
+| [10](#10-màn-hình-menu-và-lưu-game) | Màn hình, menu và lưu game |
 
-## 0. Coordinates & Data Files
+## 0. Toạ độ và file dữ liệu
 
-### World Coordinates
-- **Plain 2D side view**: x is left/right, **y is up**, gravity pulls towards −y. There is no floor depth.
-- **1 world unit = 1 map pixel**; map tiles are 16 × 16 px. Origin is the bottom-left of the map.
-- `TransformComponent.position` is the **feet point** (bottom-center) of an entity. Sprites are drawn
-  centered on x with their feet on y; `ColliderComponent` boxes span `x ± width/2`, `y .. y + height`.
-- `Constants.VIEW_MIN_WIDTH × VIEW_MIN_HEIGHT` (640 × 360 world units ≈ 40 × 22 tiles) is the minimum
-  visible area, so a 1280 × 720 window shows the 16 px pixel art at 2×.
+### Toạ độ
 
-### Level Data: `assets/maps/<name>/map.tmx` (Tiled)
+- 2D góc nhìn ngang: x trái / phải, **y hướng lên**, trọng lực kéo về −y.
+- **1 đơn vị thế giới = 1 pixel của map**; tile 16 × 16 px; gốc ở góc dưới trái của map.
+- `TransformComponent.position` là **điểm chân** (giữa đáy) của entity. Sprite vẽ căn giữa theo x, chân đặt trên y;
+  hộp `ColliderComponent` trải `x ± width/2`, `y .. y + height`.
+- Toạ độ trong JSON của tool (khung hình, anchor, hitbox) là pixel của khung, gốc trên trái, y hướng xuống. `Hitboxes`,
+  `RenderingSystem` đổi sang toạ độ thế giới (lật khi entity quay trái).
+- Vùng nhìn tối thiểu `Constants.VIEW_MIN_WIDTH × VIEW_MIN_HEIGHT` = 640 × 360 đơn vị (≈ 40 × 22 tile), nên cửa sổ
+  1280 × 720 hiển thị pixel art 16 px ở tỉ lệ 2×.
 
-Exported by the map generator: `node tools/export-game.mjs --seed <n> --name <name>` in
-`build_asset/build_map/platformer-map-generator` (see that folder's README and `build_asset/build_map/PROGRESS.md`).
-The file opens in the [Tiled](https://www.mapeditor.org) editor, so maps can be adjusted by hand.
+### Map: `assets/maps/<tên>/map_<chế độ>.tmx` (Tiled)
 
-| Part | Content |
-|---|---|
-| tile layers | `walls` · `decor_back` · `terrain` · `props` · `decor_front` (drawn back to front; entities between `props` and `decor_front`) |
-| `terrain` tileset | every tile has a **`type`** property: `SOLID`, `PLATFORM`, `LADDER`, `SPIKE`, `TOXIC`, `BREAKABLE`, `EMPTY` → collision |
-| `spawns` objects | `PLAYER_SPAWN` and `EXIT` rectangles (1 × 2 tiles; bottom edge = feet) |
-| `enemies` objects | one `ENEMY` rectangle per enemy; properties `definition` (path of the enemy JSON), `enemy`, `patrolMinX`, `patrolMaxX`, `facing`, `hint`, `room` |
-| `pois`, `lights`, `zones` | checkpoints/chests/signposts, point lights, rooms/landmarks (data for later systems) |
-| `rooms` objects | one `ROOM` rectangle per room = its **camera bounds** (interior + 1 wall tile, grown over its secret pocket); `kind`, `region`, `onPath` |
-| `doors` objects | one `DOOR` rectangle per door = its **trigger**; `room`, `targetRoom`, `targetDoor` (null = one-way drop), `kind` (`SIDE` / `LADDER` / `DROP`), `direction`, arrival feet point `spawnX` / `spawnY` (Tiled pixels, y down) |
-| map properties | `physics.moveSpeed`, `physics.jumpHeight`, `physics.jumpDistance` (tiles), `seed`, `theme`; optional `playerCharacter`, `playerWeapon` (JSON paths) |
+Xuất bởi map generator (`build_asset/build_map/platformer-map-generator`, `node tools/export-game.mjs --mode easy|medium|hard`).
+File mở được bằng [Tiled](https://www.mapeditor.org) để chỉnh tay. Mỗi chế độ một map: `GameMode.EASY` / `MEDIUM` / `HARD` → `Constants.EASY_MAP_PATH` / `MEDIUM_MAP_PATH` / `HARD_MAP_PATH`.
+Mỗi map một thư mục (`bunker_easy`, `bunker_medium`, `bunker_hard`). Tool chỉ đặt những quái đang có trong `assets/sprites/enemies/`; bảng `MODES` có `roomWidthMin` / `roomWidthMax` / `roomHeight` (cỡ ô phòng, tile), `enemyDensity`,
+`enemySpacing` (bề rộng phòng cho mỗi quái) và `mix` (bao nhiêu melee đổi thành crawler / wasp, rải đều). Object `ENEMY` của quái bay đặt cao 40 px trên sàn.
 
-- Loaded by `com.hung.world.WorldLoader` → `Level` (map + `TileGrid` + `PhysicsSettings` + spawn/exit) + `World`.
-- The start map is `Constants.START_MAP_PATH`.
-- `level.json` next to the map is the generator's full data export (rooms, decor, lights…), not read by the game yet.
-- **Physics contract:** the generator only builds jumps the player can make with 80% of
-  `physics.*`, so `PhysicsSettings` derives gravity and jump speed from those values
-  (air time T = jumpDistance / moveSpeed, gravity = 8·jumpHeight / T², jumpSpeed = 4·jumpHeight / T).
-  Don't hard-code player speeds; change them in the generator and re-export.
+| Phần | Nội dung |
+|------|----------|
+| Layer tile | `walls` · `decor_back` · `terrain` · `props` · `decor_front` (vẽ từ sau ra trước; entity nằm giữa `props` và `decor_front`) |
+| Tileset `terrain` | Mỗi tile có thuộc tính **`type`**: `SOLID`, `PLATFORM`, `LADDER`, `SPIKE`, `TOXIC`, `BREAKABLE`, `EMPTY` → va chạm |
+| Object `spawns` | Hình chữ nhật `PLAYER_SPAWN` và `EXIT` (1 × 2 tile; cạnh dưới = chân) |
+| Object `enemies` | Mỗi quái một `ENEMY`; thuộc tính `definition` (đường dẫn JSON quái), `patrolMinX`, `patrolMaxX`, `facing`, `room` |
+| Object `pois` | Checkpoint (`CHECKPOINT`) và các điểm khác |
+| Object `lights` | Nguồn sáng (`LightSource`: loại, bán kính px, màu, cường độ, kiểu nhấp nháy, pha) |
+| Object `rooms` | Mỗi phòng một `ROOM` = **giới hạn camera** của phòng; `kind`, `region`, `onPath` |
+| Object `doors` | Mỗi cửa một `DOOR` = **vùng kích hoạt**; `room`, `targetRoom`, `targetDoor` (null = hố rơi một chiều), `kind` (`SIDE` / `LADDER` / `DROP`), `direction`, điểm xuất hiện `spawnX` / `spawnY` (pixel Tiled, y xuống) |
+| Thuộc tính map | `physics.moveSpeed`, `physics.jumpHeight`, `physics.jumpDistance` (tile), `seed`, `theme`; tuỳ chọn `playerCharacter`, `playerWeapon` (đường dẫn JSON) |
 
-### Enemy Data: `assets/sprites/enemies/<id>/character.json`
+- **Hợp đồng vật lý:** map generator chỉ tạo khoảng nhảy làm được với 80% `physics.*`, nên `PhysicsSettings` tính trọng
+  lực và lực nhảy từ chính các giá trị đó: thời gian bay T = jumpDistance / moveSpeed, trọng lực = 8·jumpHeight / T²,
+  lực nhảy = 4·jumpHeight / T. Đổi tốc độ player ở map generator rồi xuất lại, không cứng trong code.
+- Tool ghi thêm `export/maps/<tên>/level.json` trong thư mục của nó (dữ liệu đầy đủ, hub trong `build_asset/` đọc); game không dùng.
 
-Written by the enemy generator (`build_asset/build_enemy/enemy-character-generator`) and copied here by the map export.
-Read into `EntityFactory`/`EnemyDefinition` (unknown fields ignored):
+### Quái: `assets/sprites/enemies/<id>/character.json`
 
-- `spriteSheet` (`image`, `frameWidth`, `frameHeight`) — one row per animation in `sprite-sheet.png`
-- `animations.<name>` — `state` (`IDLE`, `MOVE`→`WALK`, `ATTACK`, `DEFEND`, `HIT`, `DEATH`), `loop`, `frames[]`
-  with the frame rect and its own `duration` (ms; honored by repeating the frame every 10 ms tick)
-- `animations.move.move.groundSpeed` — patrol speed (px/s) that keeps the planted foot from sliding
-- `anchors.feet` — ground line inside the frame; IDLE frame 0 `bounds` → collision box
+Do enemy generator (`build_asset/build_enemy/enemy-character-generator`) tạo; `node tools/sync-game.mjs` chép 5 quái của game; tool map chỉ đặt vị trí, không chép sprite.
+Đọc vào `EnemyDefinition` (bỏ qua trường lạ):
 
-Enemy art is drawn at scale 1 (same pixel size as the map). Pixel coordinates in the file are top-left, y down.
+| Trường | Ý nghĩa |
+|--------|---------|
+| `drawScale` | Pixel sprite → đơn vị thế giới (0,5 cho mọi quái hiện có; không có = 1) |
+| `anchors.footAnchor` / `anchors.feet` | Đường sàn trong khung hình |
+| `spriteSheet` | `image`, `frameWidth`, `frameHeight` |
+| `animations.<tên>` | `state` (`IDLE`, `MOVE`→WALK, `ATTACK_1`→ATTACK, `HIT`, `DEATH`), `loop`, `frames[]` (vị trí, `duration` ms, `bounds`, `attackActive`, `hitbox`) |
+| `animations.move.move` | `groundSpeed` / `airSpeed`: tốc độ không trượt chân (px/s) |
+| `gameplay` | `locomotion` (`GROUND` / `AIR`), `durabilityClass`, `damageClass`, `attacks.<state>.reach.world` |
 
-### Player Character Data: `assets/sprites/players/<id>/<id>.json`
+- Hộp va chạm lấy từ `bounds` của khung IDLE đầu tiên: (rộng − 4) × cao, nhân `drawScale` và `SIZE_SCALE` (1,2). Với quái `small_melee_*`, số trong file
+  được giữ cố định, không đo lại theo hình.
+- Ba con `small_melee_*` xuất bằng `tools/melee-export.mjs` (ghoul thêm `--polish small_melee_ghoul`), không dùng `generate.mjs`; xuất ra
+  `export/enemies/` của tool, rồi `node tools/sync-game.mjs` chép cả 5 quái của game vào `assets/`. Wasp chỉnh bằng `tools/wasp-polish.py`.
+- `EnemyFactory` đổi các mức LOW / MEDIUM thành con số máu và sát thương ([04 → mục 6](04-GAME-DESIGN.md#6-quái)).
 
-Written by the character generator (`build_asset/build_character/player-character-generator`):
-`node tools/export-game.mjs --id player_soldier --scale 0.5` copies the JSON and its strips into
-`assets/sprites/players/<id>/`. The file holds much more (anchors, parts, palette…); the game reads:
+### Player: `assets/sprites/players/<id>/<id>.json`
 
-```json
-{
-  "id": "player_soldier",
-  "frameWidth": 64, "frameHeight": 64,
-  "drawScale": 0.5,
-  "footOffset": 0,
-  "colliderWidth": 14, "colliderHeight": 53,
-  "animations": [
-    { "type": "WALK", "sheet": "walk.png", "frameCount": 8, "frameDuration": 0.1, "playMode": "LOOP",
-      "frames": [ { "duration": 100, "event": "FOOTSTEP" }, ... ],
-      "walk": { "groundSpeed": 30 } },
-    { "type": "ATTACK", "sheet": "attack_knife.png", "frameCount": 7, "playMode": "NORMAL",
-      "frames": [ ..., { "duration": 55, "event": "HIT", "attackBox": { "x": 50, "y": 29, "width": 14, "height": 9 } }, ... ] },
-    { "type": "CROUCH", "sheet": "crouch.png", "frameCount": 4, "playMode": "NORMAL",
-      "hurtbox": { "x": 21, "y": 21, "width": 14, "height": 43 } }
-  ]
-}
+Do character generator xuất (`build_asset/build_character/player-character-generator`,
+`node tools/export-game.mjs --id player_soldier --scale 0.5`). File chứa nhiều dữ liệu hơn; game đọc vào `CharacterDefinition`:
+
+| Trường | Ý nghĩa |
+|--------|---------|
+| `id` | Tên thư mục profile cầm vũ khí (`assets/attachments/<id>/`) |
+| `frameWidth`, `frameHeight` | 64 × 64 |
+| `drawScale` | 0,5: khung 64 px = 32 đơn vị, thân ≈ 26,5 đơn vị (1,7 tile) |
+| `footOffset` | Pixel trong suốt dưới chân (0) |
+| `colliderWidth`, `colliderHeight` | Hộp thân tính bằng **pixel sprite** (14 × 53), nhân `drawScale` |
+| `weaponLayer` | `SEPARATE`: dải animation chỉ có thân, vũ khí là sprite riêng, bàn tay trước nằm ở `<anim>_hand.png` |
+| `animations[]` | `type` (một `AnimationType`), `stance` (không có / `PISTOL` / `RIFLE`), `sheet`, `handSheet`, `frameCount`, `frameDuration`, `playMode`, `frames[]` (`duration` ms, `event`, `attackBox`), `handFrames` (anchor tay mỗi khung), `walk.groundSpeed`, `hurtbox` (của CROUCH = chiều cao khi ngồi) |
+
+- Mỗi sheet là **một hàng khung bằng nhau**, đọc từ trái sang. Tên file không có thư mục nằm cạnh JSON.
+- `IDLE` bắt buộc. Animation có `stance: PISTOL` / `RIFLE` tạo bộ animation thứ hai / thứ ba (IDLE, WALK, CROUCH,
+  JUMP, SHOOT); trạng thái bộ đó thiếu (HIT, DEATH) lấy từ bộ mặc định.
+- Tốc độ đi / nhảy / leo **không** nằm trong file này mà lấy từ map.
+- Player là thuộc tính map `playerCharacter`, nếu không có thì `Constants.DEFAULT_PLAYER_CHARACTER`. Không có file đó
+  thì map nạp không có player và camera tự do.
+- Player `SEPARATE` cầm `Constants.DEFAULT_PLAYER_WEAPON` (dao) hoặc `playerWeapon` của map, cộng mọi vũ khí trong
+  `Constants.DEFAULT_PLAYER_ARSENAL` (súng lục, súng trường): dao = ô 1, súng lục = ô 2, súng trường = ô 3.
+
+### Vũ khí: `assets/sprites/weapons/<id>/<id>.json`
+
+Do weapon generator xuất (`build_asset/build_weapon/pixel-weapon-generator`, `node tools/export-game.mjs`):
+
+| Trường | Ý nghĩa |
+|--------|---------|
+| `id`, `name`, `texture` | Định danh, tên hiển thị, đường dẫn hình (tính từ gốc asset) |
+| `drawScale`, `pivot`, `rotation` | Tỉ lệ, điểm cầm (pixel vũ khí, gốc trên trái), góc gốc |
+| `tipAnchor` | Mũi dao (kéo attack box tới đây) |
+| `muzzleAnchor`, `ejectionAnchor`, `supportAnchor` (game chưa dùng), `stance` | Súng: đầu nòng, cửa văng vỏ, tay đỡ, bộ animation cầm (`PISTOL` / `RIFLE`) |
+| `fire` | `mode` (`SEMI` / `AUTO`), `roundsPerSecond`, `damage`, `magazine`, `reloadSeconds`, `projectileSpeedTiles`, `rangeTiles`, `spreadDegrees`, `recoilDegrees` (game chưa dùng), `shellEject {speedTiles, angleDegrees}` (tile × kích thước tile của map) |
+| `effects` | `muzzleFlash`, `tracer`, `casing`, `impact`: mỗi cái `{texture, frameWidth, frameHeight, frameCount, durations (ms), origin, loop}`, ảnh trong `fx/` |
+
+Cách nhân vật cầm vũ khí (anchor tay, profile `assets/attachments/<nhân vật>/<vũ khí>.json`):
+[character-weapon-system.md](character-weapon-system.md).
+
+### Thêm nội dung
+
+| Muốn | Làm |
+|------|-----|
+| Map mới | Tạo trong map tool, `node tools/export-game.mjs --seed <n> --name <tên>`; hoặc sửa bảng `MODES` rồi chạy với `--mode`; trỏ hằng `*_MAP_PATH` tới `maps/<tên>/` |
+| Quái mới | `node tools/generate.mjs ...` trong enemy tool, rồi chạy lại map export |
+| Thêm / dời quái bằng tay | Mở `.tmx` trong Tiled, nhân bản object trong layer `enemies`, sửa `definition`, `patrolMinX` / `patrolMaxX` |
+| Trạng thái animation mới | Thêm vào `AnimationType`, chọn nó trong `AnimationSystem`, thêm vào JSON |
+
+## 1. Input
+
+`com.hung.input` · `InputSystem` đọc `Controller` của entity được điều khiển (kèm collider, máu, lưới tile).
+
+| Việc | Quy tắc |
+|------|---------|
+| Đi | `velocity.x = direction.x × moveSpeed`; dừng khi đang ngồi hoặc đang vung dao trên mặt đất |
+| Nhảy | `velocity.y = jumpSpeed` nếu đã bấm nhảy trong 0,1 s gần nhất (`jumpBufferTime`) **và** đã đứng trên vật gì đó trong 0,08 s gần nhất (`airTime`, coyote time) |
+| Ngồi | Xuống khi đứng trên mặt đất → `isCrouching` (collider dùng `crouchHeight`); chỉ đứng dậy khi đủ chỗ trên đầu |
+| Xuống bệ | Ngồi + nhảy trên bệ một chiều: dời chân xuống 2 đơn vị dưới mặt bệ |
+| Thang | Lên / xuống tại thang → `isClimbing`, căn x vào cột thang; sau đó lên / xuống với `climbSpeed`; trái / phải rời; nhảy để nhảy khỏi; quá bậc trên cùng → đứng lên; chạm sàn → buông |
+| Đánh / bắn / nạp / đổi vũ khí | Đặt cờ yêu cầu: `AttackComponent.isRequested`, `WeaponComponent.isFireRequested` (giữ nút: tiếp tục với súng `AUTO`), `isReloadRequested`, `ArsenalComponent.requestedSlot` / `isNextRequested` |
+| Không điều khiển | Đang bị thương hoặc đã chết: giữ knockback; `setEnabled(false)` (camera tự do) dừng player |
+
+Phím đặt thành mảng ở đầu `KeyboardController` (player) và `CameraInput` (camera tự do). Khi bảng nhân vật mở, phím
+chọn vũ khí được đọc ở `GameScreen` ([02 → mục 5](02-ARCHITECTURE.md#5-input)).
+
+## 2. Vật lý
+
+`com.hung.physics` · `PhysicsSystem`
+
+- Mọi entity có `MovementComponent` (trừ khi đang leo hoặc bay) chịu trọng lực: `velocity.y -= gravity × delta`,
+  giới hạn ở `maxFallSpeed`; `gravity` lấy từ `PhysicsSettings` của level.
+- Entity có `ColliderComponent` di chuyển qua `CollisionSystem.move(entity, dx, dy)`; entity khác cộng thẳng
+  `velocity × delta`. Đạn do `ProjectileSystem` tự di chuyển, `PhysicsSystem` bỏ qua.
+
+## 3. Va chạm và vùng nguy hiểm
+
+`CollisionSystem` (do `PhysicsSystem` gọi): đẩy hộp qua `TileGrid` theo từng trục, cùng luật với bộ kiểm tra của map
+generator.
+
+| Hướng | Luật |
+|-------|------|
+| Ngang | `SOLID` / `BREAKABLE` chặn → `isBlocked` |
+| Đi lên | `SOLID` chặn đầu; `PLATFORM` và thang xuyên qua được |
+| Rơi xuống | Đáp lên `SOLID`, `PLATFORM` hoặc bậc trên cùng của thang, chỉ khi chân đi qua mặt tile từ trên xuống → `isGrounded`; đang leo thì bậc trên cùng không giữ lại |
+| Ngoài map | Hai bên là tường, trên và dưới là khoảng trống |
+
+Hộp va chạm là `Hitboxes.body(entity)`: `width` × `height`, hoặc `crouchHeight` khi ngồi.
+
+`HazardSystem` (sau vật lý, chỉ player):
+- Chạm checkpoint (`pois`) → `World.setRespawnPoint`, phát `CheckpointEvent`.
+- Chạm 80% dưới của tile `SPIKE` / `TOXIC`, hoặc rơi 64 đơn vị dưới đáy map → `PlayerRespawn.respawn` (không trừ máu).
+- Tới lối ra (một lần) → phát `ExitReachedEvent`.
+
+Va chạm thân với thân: `ContactDamageSystem` (quái còn sống chạm player → `Damage.apply`). Quái không chặn đường đi.
+
+## 4. Chiến đấu
+
+`com.hung.combat` (+ `combat.system`, `combat.definition`)
+
+**Cận chiến** (`AttackSystem`, dữ liệu từ animation):
+- `AttackComponent`: `damage`, `isRequested`, `isAttacking`, `hasHit`.
+- Yêu cầu bắt đầu đòn đánh (nếu còn sống và không bị thương); `AnimationSystem` chạy animation tấn công.
+- Ở mỗi khung có attack box (`Hitboxes.fromSprite`, lật khi quay trái, với player kéo dài tới `tipAnchor` của dao), hộp
+  gây sát thương mọi entity phe kia (player ↔ không phải player) mà nó chồng lên, và xoá tile `BREAKABLE` khỏi lưới
+  lẫn layer `terrain` của map. Đòn kết thúc khi animation tấn công chạy xong.
+
+**Vũ khí trên tay và súng:**
+
+| Phần | Việc |
+|------|------|
+| `ArsenalComponent` | Danh sách vũ khí mang theo (mỗi vũ khí một `WeaponComponent`, nên băng đạn giữ nguyên khi đổi) và ô đang cầm |
+| `WeaponSwitchSystem` | Đổi `Entity.weapon` sang ô được yêu cầu và gọi `AnimationComponent.useStance` theo tư thế của vũ khí; bỏ qua yêu cầu trùng ô đang cầm; không đổi khi đang vung / bị thương / chết; huỷ lượt nạp |
+| `WeaponComponent` (trạng thái súng) | `ammo`, `cooldown`, `reloadTime`, `shootTime`, `isFireRequested`, `isReloadRequested` |
+| `ShootingSystem` | Bóp cò → bắn khi hết hồi chiêu (1 / roundsPerSecond) và còn đạn (hết thì nạp); đạn sinh ở `Hitboxes.weaponPoint(muzzleAnchor)` theo `Hitboxes.weaponAngle` ± độ lệch; lửa nòng (`Effects.spawn`) và vỏ đạn (có trọng lực, va tile); `shootTime` giữ tư thế bắn trong một lượt animation SHOOT |
+| `ProjectileSystem` | Đạn di chuyển từng bước ≤ 2 đơn vị; dừng ở tile `SOLID` / `BREAKABLE` hoặc thân sống đầu tiên của phe kia (`Damage.apply`, hiệu ứng trúng); hết tầm thì xoá |
+
+## 5. Máu và sát thương
+
+`HealthComponent` (đóng gói): `getHealth()`, `getMaxHealth()`, `isDead()`; thay đổi qua `applyDamage(n)`,
+`restoreFull()`, `setHealthClamped(n)`. Các bộ đếm để public: `hurtTime` (thời gian phản ứng HIT, không điều khiển được),
+`invulnerability` (số giây bất tử mỗi đòn), `invulnerableTime` (còn lại; sprite nhấp nháy), `knockbackResistance`, `deadTime`.
+
+`Damage.apply(target, amount, sourceX)` (dùng chung cho mọi system gây sát thương): bỏ qua nếu mục tiêu đã chết hoặc
+đang bất tử; trừ máu; bắt đầu phản ứng HIT (độ dài animation HIT) hoặc chết; cấp `invulnerability` giây bất tử; đẩy lùi
+khỏi `sourceX` (90 đơn vị/s × (1 − kháng)); huỷ đòn đánh, leo thang, ngồi của mục tiêu.
+
+`HealthSystem` (sau các system gây sát thương):
+- Đếm lùi các bộ đếm, giảm dần knockback (400 đơn vị/s²).
+- Quái chết: chạy DEATH, nằm lại 1,5 s, rồi `World.removeEntity`.
+- Player chết: chạy DEATH, chờ 1 s, hồi sinh ở điểm hồi sinh với đầy máu (`PlayerRespawn`, bất tử 1,5 s).
+
+## 6. AI của quái
+
+`com.hung.ai`
+
+**`PatrolSystem`:** mọi entity có `PatrolComponent` đi với `moveSpeed` giữa `minX` và `maxX`, quay đầu ở hai đầu đoạn, khi
+bị tường chặn, hoặc trước mép vực (`TileGrid.hasFloorAhead`). Quái bay không xét mép vực. Bỏ qua quái đang bị thương
+hoặc đã chết.
+
+**`EnemyBrainSystem`:** chạy sau `PatrolSystem`, gọi `Enemy.updateBehaviour(delta, world, player)` của từng quái. Hành
+vi nằm trong class quái (`com.hung.entity.enemy`); thứ tự các bước cố định ở `Enemy`:
+
+| Bước | Mặc định | Override |
+|------|----------|----------|
+| Đã chết → `whileDead()` | Không làm gì | `FlyingEnemy`: treo trên không khi DEATH chạy, xong thì bật trọng lực, xác rơi xuống sàn |
+| `tick(delta)` | — | `HunterEnemy`: đếm lùi hồi chiêu và trí nhớ |
+| Bị thương → `whileHurt()` | Không làm gì | `HunterEnemy`: bị khiêu khích (săn dù chưa thấy player); `FlyingEnemy`: thêm dừng vận tốc dọc |
+| Còn lại → `think()` | (trừu tượng) | `HunterEnemy`: săn (dưới đây) |
+
+`HunterEnemy.think()` ghi đè vận tốc tuần tra khi đang săn:
+- Player trong `aggroRange()` × `aggroScale` (và `aggroHeight()` tính từ `floorY()`), hoặc còn trong trí nhớ (`memorySeconds`), hoặc vừa bị
+  bắn / được gọi (`provoke()`) → quay mặt, `chase()` với `moveSpeed × chaseSpeedScale() × chaseScale` (tối đa 84).
+- Lúc vừa thấy player, quái gọi mọi `HunterEnemy` trong `alertRange`; con được gọi không gọi tiếp.
+- Gặp mép vực, gai, chất độc hay tường: nếu `canJump` và `JumpPlanner` tìm được chỗ đáp thì nhảy, không thì dừng. Player ở bệ thấp ngay trên đầu
+  thì nhảy thẳng lên. Đáp xong, quái tuần tra chỗ mới. `FlyingEnemy` bay qua mọi thứ này.
+- Trong `attackRange` (80% tầm đánh do tool đo + khoảng nửa bề rộng player), hoặc sắp tới tầm (`aimLeadSeconds`), đúng độ cao
+  (`canReachHeight()`), hết hồi chiêu và `canStrike()` (mặt đất: đang chạm đất; bay: luôn được) → đứng lại, yêu cầu đòn ATTACK. Sát thương do
+  hitbox của animation qua `AttackSystem`.
+- Trong lúc chờ hồi chiêu, quái dừng áp sát ở `attackRange × holdRatio()` (mặc định 0,6; `MeleeEnemy` 0,75 để không húc vào player).
+- Đòn giữ nguyên hướng lúc bắt đầu (nếu không, `PatrolSystem` xoay quái về hướng tuần tra và đòn đánh ngược).
+- `afterThink()`: quái mặt đất đứng yên khi đòn đang chạy; `FlyingEnemy` lái độ cao: tuần tra cao
+  `FlyingEnemy.CRUISE_HEIGHT` (40) trên sàn, săn ở trên đầu player 18 đơn vị, hạ xuống giữa thân player khi lao.
+
+Con số theo loại quái: [04 → mục 6](04-GAME-DESIGN.md#6-quái); cây class: [02 → mục 4](02-ARCHITECTURE.md#4-entity-component-và-cây-nhân-vật). Quái không có `Controller`.
+
+## 7. Animation và hiệu ứng
+
+`com.hung.animation` (+ `animation.system`, `animation.definition`) · dùng `Animation<TextureRegion>` của LibGDX.
+
+**`AnimationComponent`:** các bộ animation theo tư thế (`stances`; 5 map của tư thế đang dùng chỉ đổi qua
+`useStance`), `currentType`, `stateTime`, `drawScale`, `footOffset`, `strideSpeed`. Thời lượng riêng từng khung được
+chơi bằng cách lặp khung trên nhịp 10 ms; `keyFrameSources` đổi khung lặp về khung gốc (cho anchor tay và attack box).
+
+**`AnimationSystem`** mỗi khung hình:
+1. Chọn trạng thái (điều kiện đầu tiên khớp): chết → DEATH; `hurtTime` > 0 → HIT; đang tấn công → animation tấn công;
+   vừa bắn (`shootTime`) và đứng yên → SHOOT; đang leo → IDLE; đang ngồi → CROUCH; không chạm đất → JUMP;
+   |velocity.x| > 1 → WALK; còn lại → IDLE. Trạng thái không có trong dữ liệu → IDLE.
+2. Đổi trạng thái → `stateTime = 0`; giữ trạng thái → `stateTime += delta × tốc độ` (WALK: |vx| / `strideSpeed`, giới hạn 0,5–2,5).
+3. JUMP: `stateTime` theo vận tốc dọc (bật lên với +jumpSpeed → rơi với −jumpSpeed).
+
+**Hiệu ứng:**
+- `Effects.spawn` tạo entity hiệu ứng (`SpriteComponent` + `EffectComponent`), lật theo hướng; `Effects.light` gắn ánh sáng tắt dần.
+- `EffectSystem`: chạy animation của sprite, đếm lùi thời gian sống, xoá hiệu ứng xong; vỏ đạn chạm đất thì dừng trượt.
+
+## 8. Vẽ
+
+`com.hung.rendering` (+ `ui.minimap`)
+
+| Phần | Việc |
+|------|------|
+| `RenderingSystem` | Vẽ layer tile của map bằng `OrthogonalTiledMapRenderer` (chỉ phần camera thấy), entity nằm giữa `props` và `decor_front`. Mỗi nhân vật: thân → vũ khí → bàn tay trước; sprite quay phải, quay trái thì lật. Entity đang bất tử nhấp nháy (ẩn mỗi 0,08 s) |
+| `CameraController` | `ExtendViewport` (thấy ít nhất 640 × 360). Bám chân player + 24 đơn vị bằng lò xo giảm chấn mỗi trục (`SmoothDamp`, 0,18 s); nghe `RoomTransitionEvent` để ở trong giới hạn phòng hiện tại và chuyển ngay sang phòng mới. Zoom 0,5–1 (mặc định 0,8), không lớn hơn phòng. Không có phòng thì giới hạn theo map |
+| `CameraInput` | Camera tự do (F2): bỏ qua phòng, zoom 0,25–6 |
+| `LightingRenderer` | Sau cảnh: light map ¼ độ phân giải (nền màu tối, cộng mọi đèn nhìn thấy của level, đèn player bán kính 56, ánh sáng của hiệu ứng) nhân lên màn hình, rồi một lớp glow cộng thêm. Công thức nhấp nháy khớp map generator. `L` bật tắt |
+| `FadeRenderer` | Lớp đen khi qua cửa (độ mờ = `RoomTransition.fade`) |
+| `HudRenderer` | Thanh máu và số máu, vũ khí và đạn; phím điều khiển xem ở Settings → Controls (chỉ camera tự do có dòng gợi ý) |
+| `StatsPanel` | Bảng nhân vật (I / F1): máu, di chuyển tính bằng tile, hộp thân, phòng thủ, vị trí, điểm hồi sinh, tư thế; mỗi ô vũ khí một thẻ (hình ×4, sát thương, DPS, tầm, băng đạn, kiểu bắn, nạp, tốc độ đạn, độ lệch, thanh so sánh) |
+| `DebugRenderer` | F3: tile va chạm (đỏ tường, xanh lơ bệ, xanh lá thang, hồng bẫy, vàng tường phá được), hộp entity, attack box, đoạn tuần tra, checkpoint, điểm xuất phát, lối ra, giới hạn phòng, cửa |
+| `MinimapRenderer` | Minimap góc phải trên (2 px mỗi tile, cuộn theo player; `M` = toàn map), vẽ theo `MinimapState` |
+
+## 9. Thế giới, phòng và cửa
+
+`com.hung.world` (+ `world.loader`, `world.system`, `world.event`)
+
+**`World`** chứa `Level` (TiledMap + `TileGrid` + `PhysicsSettings` + điểm xuất phát / lối ra + checkpoint + đèn + phòng),
+danh sách entity, player, điểm hồi sinh, `RoomTransition`. Không có logic.
+
+**`WorldLoader.load(mapPath, enemySkill, resources)`:** nạp `.tmx` và tileset, dựng lưới va chạm từ layer `terrain`, đọc spawn / lối ra,
+layer `enemies`, checkpoint, đèn; xếp hàng nạp mọi định nghĩa và texture (player, vũ khí, quái) rồi
+`finishLoading()` một lần; tạo `Level`, quái, player kèm vũ khí, `World`.
+`RoomLoader` thêm phòng (layer `rooms`) và một entity cửa cho mỗi object `doors`.
+
+**Phòng và cửa (theo sự kiện):**
+
+```text
+map generator (DoorPlacer) ─► layer "rooms" + "doors" ─► RoomLoader ─► Room[] + entity cửa
+                                                                           │
+DoorSystem: player chạm cửa của phòng hiện tại                             ▼
+  → tối dần (thế giới dừng) → dời player tới door.spawn ─► EventBus.publish(RoomTransitionEvent)
+  → sáng lại                                                   │                     │
+                                              CameraController ◄┘                     └► MinimapState
+                                              (giới hạn phòng mới, chuyển ngay)          (đánh dấu phòng, dời chấm)
 ```
 
-- Each sheet is **one row of equal frames**, read left to right. A bare file name (`walk.png`) is
-  next to the JSON; a path with folders is from the asset root.
-- `drawScale` — sprite px → world units. The export uses 0.5: the 64 px frame is 32 units, the body
-  ≈ 26.5 units (1.7 tiles), drawn crisp by the 2× camera.
-- `footOffset` — transparent sprite pixels below the feet (before scaling); 0 for the generator.
-- `colliderWidth` / `colliderHeight` — body box in **sprite pixels** (× `drawScale`), 0 = derived from
-  the frame. The map generator assumes a 1 × 2 tile (16 × 32) player; keep the box within that.
-- `frames[].duration` (ms) — per-frame timing (played by repeating frames on a 10 ms tick;
-  `AnimationComponent.keyFrameSources` maps back to the authored frame). `frames[].attackBox` —
-  where the HIT frame reaches (sprite px, top-left origin). `walk.groundSpeed` — stride speed.
-  `hurtbox` on CROUCH — the crouched box height.
-- Walk / jump / climb speeds are **not** in this file: they come from the map (physics contract above).
-- `type` must be an `AnimationType`; `IDLE` is required; missing types fall back to `IDLE`.
-  The generator's ATTACK_KNIFE row has `type: "ATTACK"`.
-- The player is the map property `playerCharacter`, else `Constants.DEFAULT_PLAYER_CHARACTER`
-  (`sprites/players/player_soldier/player_soldier.json`); when that file is missing the map loads
-  with no player and a free camera. `playerWeapon` (optional) adds a separate weapon sprite — the
-  generator's soldier already has the knife drawn into its frames, so it doesn't need one.
-- Animations may also define weapon hand anchors (`hand` / `handFrames`); see [character-weapon-system.md](character-weapon-system.md).
-- `weaponLayer: "SEPARATE"` + `handSheet` per animation: the strips are the body without a weapon and
-  `<anim>_hand.png` holds only the front hand. The player then holds `Constants.DEFAULT_PLAYER_WEAPON`
-  (`sprites/weapons/combat_knife/combat_knife.json`, from `build_asset/build_weapon`) unless the map names
-  `playerWeapon`; RenderingSystem draws body → weapon → front hand.
-
-- Animations with `"stance": "PISTOL"` (`IDLE_PISTOL`, `WALK_PISTOL`, `CROUCH_PISTOL`, `JUMP_PISTOL`, `SHOOT_PISTOL`)
-  form a second animation set used while the pistol is in hand (types IDLE / WALK / CROUCH / JUMP / SHOOT;
-  states the set lacks, like HIT and DEATH, come from the default set). `supportFrames` (back hand) is informational.
-- `"stance": "RIFLE"` (`IDLE_RIFLE` … `SHOOT_RIFLE`) is the rifle set the same way.
-- With a SEPARATE player the loader also gives the player every `Constants.DEFAULT_PLAYER_ARSENAL` weapon that
-  exists (service pistol, assault rifle): knife = slot 1, pistol = slot 2, rifle = slot 3.
-
-### Weapon Data: `assets/sprites/weapons/<id>/<id>.json`
-
-Written by the weapon generator (`build_asset/build_weapon/pixel-weapon-generator`, `node tools/export-game.mjs`):
-`id, name, texture` (asset root path), `drawScale, pivot` (grip, weapon px top-left), `rotation, tipAnchor`
-(+ the generator's metadata, ignored). `assets/attachments/<character>/<id>.json` (`weaponScale 1`) gives the
-weapon the character's pixel size. Firearms add:
-- `muzzleAnchor`, `ejectionAnchor`, `supportAnchor` (weapon px), `stance` (`PISTOL` → the player's pistol set);
-- `fire`: `mode` (SEMI = one shot per press, AUTO = while held), `roundsPerSecond, damage, magazine, reloadSeconds, projectileSpeedTiles, rangeTiles,
-  spreadDegrees, recoilDegrees, shellEject {speedTiles, angleDegrees}` (tiles × the map's tile size);
-- `effects`: `muzzleFlash`, `tracer`, `casing`, `impact` — each `{texture, frameWidth, frameHeight, frameCount,
-  durations (ms), origin (frame px), loop}`, strips in `sprites/weapons/<id>/fx/`.
-
-### Adding Content
-- **New map**: generate it in the map tool and run `node tools/export-game.mjs --seed <n> --name <name>`;
-  point `Constants.START_MAP_PATH` at `maps/<name>/map.tmx`.
-- **New enemy look**: `node tools/generate.mjs --seed <n> --id <id> --palette <PALETTE>` in the enemy tool,
-  then re-run the map export (it picks enemies from the enemy tool's export folder and copies the ones it uses).
-- **Add / move an enemy by hand**: open the `.tmx` in Tiled, duplicate an object in the `enemies` layer,
-  set `definition` to an enemy JSON under `assets/sprites/enemies/` and adjust `patrolMinX` / `patrolMaxX`.
-- **New animation state** (e.g. `SHOOT`): add it to `AnimationType`, choose it in `AnimationSystem.resolveType`, add it to the JSON.
-
-## 1. Input System ✅ Implemented (keyboard)
-
-**Location**: `com.hung.input`
-
-**Purpose**: Translate player/AI input into a unified format
-
-### Input Sources
-```
-KeyboardController (Player)
-   └─ Reads: Keyboard keys, mouse position
-   └─ Outputs: Movement vector, aim vector, fire flag
-   
-AIController (Enemy)
-   └─ Reads: Enemy state, player position
-   └─ Outputs: Movement vector, aim vector, fire flag
-   
-GamepadController (Future)
-   └─ Reads: Gamepad input
-   └─ Outputs: Same as keyboard
-```
-
-### Controller Interface (All inputs return this)
-
-Current interface (`com.hung.input.Controller`):
-
-```java
-public interface Controller {
-    // Each axis -1..1. X = left/right, Y = up/down (reserved for ladders)
-    Vector2 getMovementDirection();
-
-    // true only on the frame a jump / attack is requested
-    boolean isJumpPressed();
-    boolean isAttackPressed();
-}
-```
-
-Add methods when their feature is built (planned: `getAimDirection()`, `isFirePressed()`, `isAbilityPressed()`).
-
-### Key Bindings
-Defined as key arrays at the top of `KeyboardController` (several keys per action):
-- Move: `A` / `D` or left / right arrows; `W` / `S` or up / down climb ladders, `S` / down crouches
-- Jump: `Space` (`S` + `Space` drops through a one-way platform)
-- Attack: `J` or the left mouse button
-
-`CameraInput` (free camera: `F2` in game, or always when the map has no player): `WASD` / arrows pan
-(`Shift` faster), `Q` / `E` or mouse wheel zoom, `Home` back to the spawn, `Tab` next enemy.
-
-See [04-GAME-DESIGN.md → Controls](04-GAME-DESIGN.md#controls) for the full table.
-
-### InputSystem
-Reads each controlled entity's `Controller` (plus its collider, health and the tile grid) and writes
-velocity, facing and movement / attack state:
-- walk: `velocity.x = direction.x * moveSpeed`; stops while crouching or swinging on the ground
-- jump: `velocity.y = jumpSpeed` when jump was pressed within the last 0.1 s (`jumpBufferTime`) and the
-  entity stood on something within the last 0.08 s (`airTime`, coyote time)
-- crouch: down on the ground sets `isCrouching` (collider uses `crouchHeight`); stands up only with headroom
-- drop through: crouch + jump on a one-way platform moves the feet 2 units below its top
-- ladders: up/down at a ladder sets `isClimbing`, snaps x to the ladder column; then up/down moves at
-  `climbSpeed`, left/right steps off, jump jumps off, past the top rung → stand on it, floor → let go
-- attack: sets `AttackComponent.isRequested` (AttackSystem starts the swing)
-- hurt or dead entities get no control (knockback plays out); `setEnabled(false)` (free camera) stops them
-
-## 2. Physics System ✅ Implemented
-
-**Location**: `com.hung.physics`
-
-**Purpose**: Apply gravity and move entities by their velocity using delta time
-
-**Gravity**: every entity with a `MovementComponent` (except while `isClimbing`) gets `velocity.y -= gravity * delta` (capped at
-`maxFallSpeed`), with `gravity` from the level's `PhysicsSettings`. Entities with a `ColliderComponent`
-are moved by `CollisionSystem.move(entity, dx, dy)`; others just add `velocity * delta`.
-
-### Input
-```
-For each entity:
-├─ Current position (Vector2)
-├─ Current velocity (Vector2)
-└─ Delta time (float) in seconds
-```
-
-### Process
-```
-position.x += velocity.x * delta
-position.y += velocity.y * delta
-```
-
-### Output
-```
-Updated position for each entity
-```
-
-**Important**: 
-- Always multiply by delta time!
-- Position is absolute (world coordinates)
-- Velocity is pixels/second
-
-## 3. Collision System ✅ Implemented (tiles)
-
-**Location**: `com.hung.physics`
-
-**Purpose**: Detect collisions, prevent entities from overlapping walls
-
-**Implemented now** — box vs `TileGrid`, one axis at a time (same rules as the map generator's validator):
-- horizontal: `SOLID` / `BREAKABLE` tiles stop the box → `MovementComponent.isBlocked`
-- rising: `SOLID` tiles bonk the head; `PLATFORM` and ladders are passed through
-- falling: lands on `SOLID`, `PLATFORM` or a ladder's top rung, only when the feet cross the tile top
-  from above → `MovementComponent.isGrounded`; while climbing, ladder top rungs don't hold the box
-- the box is `Hitboxes.body(entity)`: `width` × `height`, or `crouchHeight` while crouching
-- outside the map: left/right are walls, above/below is open air
-
-**`HazardSystem`** (after physics, player only): checkpoint objects set `World.respawnPoint`; touching the
-lower 80% of a `SPIKE` / `TOXIC` tile or falling 64 units below the map → `PlayerRespawn.respawn`
-(no damage yet); reaching the exit is logged once.
-
-**Entity vs entity** (`ContactDamageSystem`): a living patrol enemy touching the player's box deals 10
-damage through `Damage.apply`. Enemies don't block movement. Projectile collisions below are planned.
-
-### Input
-```
-For each entity:
-├─ Position (after physics update)
-├─ Hitbox (size/shape)
-└─ Collision type (Player, Enemy, Projectile, Wall)
-```
-
-### Collision Types
-
-| Type | Collides With | Result |
-|------|---------------|--------|
-| Player | Walls | Stop movement (can't overlap) |
-| Player | Enemies | Damage to player |
-| Enemy | Walls | Stop movement |
-| Enemy | Other enemies | Stop movement |
-| Projectile | Walls | Projectile dies |
-| Projectile | Enemies | Damage to enemy, projectile dies |
-| Projectile | Player | (Friendly fire off, no collision) |
-
-## 4. Combat System ✅ Melee + firearms implemented
-
-**Location**: `com.hung.combat`
-
-**Purpose**: Handle weapons, projectiles, damage
-
-**Implemented now — melee driven by animation data:**
-- `AttackComponent`: `damage`, `isRequested` (input), `isAttacking`, `hasHit` (one landing per swing).
-- `AttackSystem`: a request starts the attack (if alive and not hurt); `AnimationSystem` then plays
-  ATTACK. On every authored frame with an `attackBox` the box (`Hitboxes.fromSprite`, mirrored when
-  facing left) damages each entity on the other side (player ↔ non-player) whose body it overlaps,
-  and clears `BREAKABLE` tiles from the grid and the map's `terrain` layer. The attack ends when the
-  ATTACK animation finishes.
-- `Damage.apply(target, amount, sourceX)`: lowers health, starts the hurt reaction (HIT length) or
-  death, gives the target's `invulnerability` seconds of invulnerability, knocks it back away from
-  `sourceX`, cancels its attack / climb / crouch.
-- Numbers are placeholders in `EntityFactory` / `ContactDamageSystem` until definitions carry stats:
-  knife 10, player 100 HP + 1 s invulnerability, enemies 30 HP, enemy touch 10. Firearm numbers come
-  from the weapon JSON (`fire`).
-
-**Implemented now — weapons in hand and firearms:**
-- `ArsenalComponent`: the carried weapons (one `WeaponComponent` each, so a magazine survives switching)
-  and the slot in hand; input asks for a slot (1 / 2) or the next one (Q).
-- `WeaponSwitchSystem`: switches `Entity.weapon` to the slot and the animation set to the weapon's stance
-  (`AnimationFrames.useStance`); not while swinging / hurt / dead; cancels a reload.
-- `WeaponComponent` firearm state: `ammo, cooldown, reloadTime, shootTime, isFireRequested, isReloadRequested`.
-  InputSystem asks to fire on a press, and every frame the button is held for AUTO weapons (`Controller.isAttackHeld`);
-  the cooldown (1 / roundsPerSecond) paces full-auto.
-- `ShootingSystem`: trigger → shot when the cooldown is over and there are rounds (empty → reload);
-  spawns the projectile at `Hitboxes.weaponPoint(muzzleAnchor)` along `Hitboxes.weaponAngle` ± spread,
-  a muzzle flash (`Effects.spawn`) and a casing (sprite + movement + 1×1 collider: gravity and tiles);
-  `shootTime` keeps the SHOOT pose for one SHOOT animation.
-- `ProjectileSystem`: moves bullets in ≤ 2-unit steps; a SOLID / BREAKABLE tile or the first living body
-  of the other side stops them (`Damage.apply`, impact effect); range runs out → removed.
-  PhysicsSystem skips projectiles.
-- `EffectSystem` (`com.hung.animation`): advances `SpriteComponent` animations, counts `EffectComponent`
-  lifetimes down and removes finished effects; landed casings stop sliding / spinning.
-- `SpriteComponent`: an animation placed by an origin pixel (rotation / flip around it) — effects,
-  tracers, casings; `RenderingSystem` draws them after the characters.
-
-### Weapon Component
-
-**Stores**:
-```
-├─ Current weapon
-├─ Fire rate cooldown (timer)
-├─ Ammunition count
-└─ Damage per hit
-```
-
-### Projectile Entity
-
-**Stores**:
-```
-├─ Position
-├─ Velocity (direction * speed)
-├─ Damage
-├─ Owner (player or enemy)
-└─ Lifetime (despawn if too old)
-```
-
-## 5. Health & Damage System
-
-**Location**: `com.hung.component` + `com.hung.combat`
-
-**Purpose**: Track entity health, handle damage
-
-### HealthComponent ✅
-
-```
-├─ health / maxHealth (int)
-├─ hurtTime          seconds left of the HIT reaction (no control meanwhile)
-├─ invulnerability   seconds granted per hit; invulnerableTime = seconds left (sprite blinks)
-└─ isDead + deadTime
-```
-
-**`HealthSystem`** (after attacks): counts the timers down and slows knockback (400 u/s²). A dead enemy
-plays DEATH, stays 1.5 s, then `World.removeEntity`. A dead player plays DEATH, waits 1 s, then
-respawns at `World.respawnPoint` with full health (`PlayerRespawn`, 1.5 s invulnerable).
-`PatrolSystem` leaves hurt / dead enemies alone.
-
-## 6. AI System ✅ Patrol + hunting (trial) implemented
-
-**Location**: `com.hung.ai`
-
-**Purpose**: Make enemies behave intelligently
-
-**Implemented now — `PatrolSystem`**: every entity with a `PatrolComponent` (enemies from the map) walks
-at `moveSpeed` between `minX` and `maxX` and turns around at the range ends, when blocked by a wall, or
-before stepping off a ledge. The range comes from the map's enemy object (`patrolMinX` / `patrolMaxX`).
-
-**Implemented (trial, 2026-10-06) — `EnemyBrainSystem`**: enemies with an `EnemyBrainComponent` (the enemy
-generator's phase 2 archetypes, built by `entity/EnemyFactory`) hunt the player. It runs after PatrolSystem and
-overrides it while hunting: player within `aggroRange` (and near the enemy's floor) → face, chase at
-`moveSpeed × chaseSpeedScale` (ground enemies stop at ledges and walls; they don't jump), inside `attackRange`
-(80% of the attack reach measured by the generator + ~half the player's width) and off `attackCooldown` → stand
-and attack. The attack animation's per-frame hitboxes (from `character.json`) do the damage through AttackSystem,
-like the player's knife. The MINI_BOSS alternates ATTACK (smash) and ATTACK_2 (claw sweep).
-Flyers (`MovementComponent.isFlying`, no gravity) patrol at a cruise height (40 units over their floor), hunt just
-above the player's head and sink to the player's body during the dive; after DEATH the wreck drops to the floor.
-
-| Archetype | HP (durabilityClass) | Attack damage (damageClass) | Aggro | Cooldown | Chase |
-|---|---|---|---|---|---|
-| SMALL_MELEE (phase 1) | 30 | contact only (10) | — | — | patrol only |
-| CRAWLER | 20 (LOW) | 8 (LOW) | 160 | 0.9 s | ×1.6 |
-| FLYING | 20 (LOW) | 12 (MEDIUM) | 180 | 1.4 s | ×1.4 |
-| MINI_BOSS | 300 (HIGH), 85% knockback resistance | 25 (HIGH) | 220 | 1.6 s | ×1.2 |
-
-The numbers live in `EnemyFactory` (the enemy files only carry the classes). Touching any enemy still deals
-`ContactDamageSystem.ENEMY_CONTACT_DAMAGE`.
-
-**Planned** — the full state machine below (flee, ranged, groups).
-
-### Enemy State Machine
-
-```
-State Machine:
-
-IDLE (default)
-  └─ If player visible AND in range
-     └─ Change to CHASE
-     
-CHASE
-  └─ Move toward player
-  └─ If player not visible
-     └─ Change to IDLE
-  └─ If player close (attack range)
-     └─ Change to ATTACK
-     
-ATTACK
-  └─ Shoot at player
-  └─ If player far away
-     └─ Change to CHASE
-  └─ If low health
-     └─ Change to FLEE
-     
-FLEE
-  └─ Move away from player
-  └─ If far enough
-     └─ Change to IDLE
-```
-
-## 7. Animation System ✅ Implemented (IDLE, WALK, JUMP, ATTACK, HIT, DEATH, CROUCH)
-
-**Location**: `com.hung.animation`
-
-**Purpose**: Display animated sprites based on state
-
-Uses LibGDX's built-in `com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>` (no custom Animation class).
-
-### Animation Component
-
-**Stores**:
-```
-├─ EnumMap<AnimationType, Animation<TextureRegion>>
-│   ├─ IDLE, WALK, JUMP, ATTACK, HIT, DEATH, CROUCH   ✅
-│   └─ RUN, CLIMB, SHOOT (planned)
-├─ keyFrameSources   key frame → authored frame (per-frame durations)
-├─ attackBoxes       attack box per authored frame (ATTACK)
-├─ handAnchors       weapon hand per frame (optional)
-├─ currentType + stateTime (seconds since it started)
-├─ drawScale + footOffset (from character JSON)
-└─ strideSpeed       world u/s at which WALK feet don't slide
-```
-
-### Update Process
-
-```
-Each frame (AnimationSystem.update):
-1. Pick the state (first match):
-   dead                   → DEATH
-   hurtTime > 0           → HIT
-   attacking              → ATTACK
-   climbing               → IDLE (until a CLIMB animation exists)
-   crouching              → CROUCH
-   not grounded           → JUMP
-   |velocity.x| > 1 u/s   → WALK
-   otherwise              → IDLE
-   (missing in the data   → IDLE)
-2. State changed? → currentType = new state, stateTime = 0
-   Same state?    → stateTime += delta × rate   (WALK: |vx| / strideSpeed, clamped 0.5–2.5)
-3. JUMP: stateTime follows velocity.y (launch at +jumpSpeed → fall at −jumpSpeed)
-4. RenderingSystem draws animation.getKeyFrame(stateTime)
-```
-
-## 8. Rendering System ✅ Implemented
-
-**Location**: `com.hung.rendering`
-
-**Purpose**: Draw all entities to screen
-
-- `RenderingSystem` — the map's tile layers through LibGDX's `OrthogonalTiledMapRenderer` (only what the
-  camera sees), with the entities drawn between `props` and `decor_front`. Sprites face right; facing left
-  draws them mirrored.
-- `CameraController` — `ExtendViewport` (at least `640x360` world units visible). Follows the player's feet
-  + 24 units with a critically damped spring per axis (`util/SmoothDamp`, 0.18 s), and is a
-  `RoomTransitionEvent` listener: it stays inside the current room's camera bounds and cuts to the new room
-  (behind the door fade). Gameplay zoom 0.5–1 (default 0.8, `-`/`=`, wheel, `0` resets) is eased and capped
-  so the view is never bigger than the room. Without rooms it clamps to the map. The free camera
-  (`CameraInput`, F2) ignores rooms; zoom 0.25–6.
-- `FadeRenderer` — the black overlay of a room transition (opacity = `RoomTransition.fade`).
-- `DebugRenderer` — `F3` toggles an overlay: collision tiles (red solid edges, cyan one-way tops, green
-  ladders, magenta hazards, gold breakable walls), entity boxes (yellow, crouch box while crouching),
-  attack boxes (red, during the HIT frame), patrol ranges (orange), checkpoints (sky blue), spawn and exit.
-- `HudRenderer` — screen-pixel camera: player health bar + numbers top-left, weapon + ammo, controls hint bottom-left.
-- `ui/MinimapRenderer` — exploration minimap top-right (2 px per tile, scrolls with the player; `M` shows the whole
-  map in the middle). Draws `ui/MinimapState`: visited rooms filled (current room green, landmarks blue, side rooms
-  gold, doorways marked), rooms one door away as dark outlines, the rest hidden, and a blinking player icon.
-- `LightingRenderer` — after the scene: a ¼-resolution light map (FrameBuffer cleared to the ambient colour, every
-  visible `Level.getLights()` light, the player light and `EffectComponent.lightRadius` effects drawn additively with a
-  radial falloff texture) multiplied onto the screen (`GL_DST_COLOR, GL_ZERO`), then an additive colour glow. Lights
-  come from the map's `lights` objects (`LightSource`: kind, radius px, color, intensity, flicker, phase) read by
-  WorldLoader; the flicker formulas match the map generator. `L` toggles it.
-- `StatsPanel` — the character sheet (`I` / `F1`, GameScreen pauses the systems): player health, movement in tiles
-  (walk / jump height / jump distance / air time / climb, computed from the physics), body box, defence, position,
-  respawn, stance; one card per arsenal slot with the weapon sprite ×4, damage, DPS, range / reach, magazine, fire
-  mode, rate, reload, bullet speed, spread, and comparison bars; the weapon in hand is highlighted.
-- An invulnerable entity blinks (hidden every other 0.08 s).
-
-### Rendering Order (Back to Front)
-
-```
-1. Map: walls → decor_back → terrain → props            ✅
-2. Entities (enemies, then the player)                    ✅
-3. Map: decor_front (pipes in front of the action)        ✅
-4. Projectiles / effects                                  (planned)
-5. Lighting from the map's `lights` objects               (planned)
-6. HUD/UI (always on top)                                 ✅ health bar + hints
-```
-
-## 9. Audio System
-
-**Location**: `com.hung.audio`
-
-**Purpose**: Play sounds and music
-
-### Sound Manager
-
-**Stores**:
-```
-├─ Loaded sounds (cached)
-│   ├─ "gun_shot"
-│   ├─ "impact"
-│   ├─ "enemy_death"
-│   ├─ "pickup"
-│   └─ ... more
-└─ Loaded music tracks
-```
-
-## 10. Item & Pickup System
-
-**Location**: `com.hung.item`
-
-**Purpose**: Dropped items that player can collect
-
-### Item Types
-
-```
-Abstract Item class:
-├─ HealthPack: +50 HP
-├─ WeaponCrate: Swap weapon
-├─ SpeedBoost: +50% speed (5 sec)
-├─ Shield: Block 1 hit (3 sec)
-└─ AmmoPack: Refill ammo
-```
-
-## 11. World System ✅ Implemented
-
-**Location**: `com.hung.world`
-
-**Purpose**: Container for level and entities (no logic)
-
-### World Holds
-
-```
-├─ Level (Tiled map + collision grid + physics + spawn/exit + checkpoints)   ✅
-├─ Entities (Array<Entity>; removeEntity for the dead)   ✅
-├─ Respawn point (spawn, then the last checkpoint)   ✅
-├─ RoomTransition (current room, door fade phase)   ✅
-├─ Rooms (Level.getRooms(): camera bounds, neighbours, doorways)   ✅
-├─ Door entities (Transform + DoorComponent)   ✅
-├─ Player entity (also in entities)             ✅
-├─ Enemy entities (patrolling, from the map)   ✅
-├─ Projectile / Item entities                  (planned, same entities array)
-└─ Game state                                   (planned)
-```
-
-`WorldLoader.load(mapPath, resources)` loads the `.tmx` (and its tilesets), builds the collision grid from
-the `terrain` layer, reads spawn/exit, the `enemies` layer and the CHECKPOINT objects of `pois`, loads
-every enemy and player definition and texture up front, then builds the `Level`, the enemy entities,
-the player (map property `playerCharacter`, else `Constants.DEFAULT_PLAYER_CHARACTER`) and the `World`.
-`RoomLoader` adds the rooms (`rooms` layer) and one door entity per `doors` object (target room's camera
-bounds copied into the `DoorComponent`; spawnY flipped to y up).
-
-### Rooms & doors (event-driven) ✅
-
-```
-build_map (DoorPlacer)            map.tmx                      game
-every carved link ──► doors[] ──► "rooms" + "doors" layers ──► RoomLoader ──► Room[] + door entities
-                                                                    │
-DoorSystem: player touches a door of the current room               ▼
-  → fade out (world paused) → player moved to door.spawn ──► EventBus.publish(RoomTransitionEvent)
-  → fade in                                                       │                │
-                                                CameraController ◄┘                └► MinimapState
-                                                (clamp to new bounds, cut)            (reveal, move icon)
-```
-
-- `core/EventBus` + `EventListener<T>`: observer hub. Publishers fill a reused event object; listeners copy what
-  they keep. Copy-on-write listener lists, so publishing never allocates and (un)subscribing inside a listener is safe.
-- `world/RoomTransitionEvent`: `reason` (`LEVEL_START`, `DOOR`, `RELOCATED`), `previousRoom`, `room`,
-  `cameraBounds`, `spawn` (player feet), `doorId`.
-- `world/DoorSystem`: a door only works from its own room (`DoorComponent.roomId`), so the two doors of a doorway
-  never fight. Velocity is kept through a door: a fall or a ladder climb simply continues. Every arrival point is
-  outside the target room's door triggers (checked by the map tool), so there is no ping-pong. When the player
-  leaves the current room's bounds without a door (respawn at a checkpoint), it publishes `RELOCATED`.
-- Door kinds: `SIDE` doorway (both ways), `LADDER` shaft (both ways, arrival on the ladder), `DROP` hole (one-way down).
-- Adding a listener (e.g. room music, enemy wake-up): `events.subscribe(RoomTransitionEvent.class, listener)` in
-  `GameScreen`; nothing in the door code changes.
-
-### Entities
-`Entity` is a component container: a `TransformComponent` always, plus optional
-`MovementComponent`, `ColliderComponent`, `AnimationComponent`, `WeaponComponent`, `PatrolComponent`,
-`AttackComponent`, `HealthComponent` and `Controller` (null when absent — systems skip it).
-Build entities with `EntityFactory`, never with subclasses.
-
-## 12. Game Loop Integration ✅ Implemented
-
-`MyGame` (`com.hung.core`) creates the `SpriteBatch` and `ResourceLoader`, loads the start level,
-and shows `GameScreen`. `GameScreen` owns the systems and runs them in order:
-
-```java
-// GameScreen.render(delta)
-update(Math.min(delta, Constants.MAX_FRAME_TIME));  // clamp spikes (window drag, breakpoints)
-
-player != null && !isCameraFree ? cameraController.follow(player feet, level, delta)   // F2 / no player:
-                                 : cameraInput.update(delta, cameraController, world);
-ScreenUtils.clear(BACKGROUND_COLOR);
-renderingSystem.render(batch, camera);   // tile layers + entities (manages batch begin/end)
-lightingRenderer.render(...);            // light map over the scene (L)
-if (isDebugVisible) debugRenderer.render(camera, world);
-fadeRenderer.render(world.getRoomTransition());   // door fade
-hudRenderer.render(batch, world, isCameraFree);
-minimap.render(batch, player feet, time);
-
-// GameScreen.render: update(delta) is skipped while a door fades out (RoomTransition.Phase.FADING_OUT);
-// doorSystem.update(delta) runs every frame after it: doors → RoomTransitionEvent → camera + minimap
-
-// GameScreen.update(delta)
-inputSystem.update(delta);       // Controller → walk, jump, crouch, ladders, attack / trigger / reload / weapon requests
-weaponSwitchSystem.update();     // arsenal slot → weapon in hand + animation stance
-patrolSystem.update();           // enemies: velocity.x along their patrol
-physicsSystem.update(delta);     // gravity (not on ladders), then CollisionSystem (tile collision)
-hazardSystem.update();           // checkpoints, spikes / toxic / fall-out → respawn, exit
-contactDamageSystem.update();    // enemy touches player → Damage
-attackSystem.update();           // start swings, HIT-frame box → Damage + breakable tiles
-shootingSystem.update(delta);    // cooldown / reload, shots → projectile + muzzle flash + casing
-projectileSystem.update(delta);  // bullets: walls, bodies (Damage), range; impact effects
-healthSystem.update(delta);      // hurt / death timers, remove dead enemies, respawn the player
-animationSystem.update(delta);
-effectSystem.update(delta);      // effect / bullet / casing sprites, remove finished effects
-```
-
-Planned systems slot into this order: more AI next to patrol, enemy weapons with combat, audio before render.
+- `RoomTransitionEvent`: `reason` (`LEVEL_START`, `DOOR`, `RELOCATED`), `previousRoom`, `room`, `cameraBounds`, `spawn`, `doorId`.
+- Cửa chỉ hoạt động từ phòng của nó (`DoorComponent.roomId`), nên 2 cửa của một lối đi không tranh nhau. Vận tốc được
+  giữ qua cửa. Điểm xuất hiện luôn nằm ngoài vùng kích hoạt cửa của phòng đích (map tool kiểm tra), nên không bị đá
+  qua lại. Player rời giới hạn phòng mà không qua cửa (hồi sinh ở checkpoint phòng khác) → phát `RELOCATED`.
+- Loại cửa: `SIDE` (lối đi, hai chiều), `LADDER` (giếng thang, hai chiều, xuất hiện trên thang), `DROP` (hố rơi, một chiều).
+- Thêm nơi nghe (nhạc theo phòng, đánh thức quái…): `events.subscribe(RoomTransitionEvent.class, listener)` trong
+  `GameScreen`; không cần sửa code cửa.
+
+## 10. Màn hình, menu và lưu game
+
+**Điều hướng:** `MyGame` cài đặt `Navigator` (`startNewGame`, `continueGame`, `returnToMainMenu`, `quit`); chuyển màn hình
+sau khung hình hiện tại. `MenuScreen` dựng các trang từ file lưu mỗi lần hiện ra. `PauseMenu` báo lựa chọn qua
+`PauseMenu.Actions` (do `GameScreen` cài đặt).
+
+**Giao diện:** `ui.menu.MenuView` vẽ ngăn xếp trang `Menu` thành khung terminal, dàn trang trên màn thiết kế 1280 × 720
+rồi phóng theo cửa sổ. `UiTheme` giữ bảng màu (chép từ file thiết kế `build_asset/build_ui/menu-preview.template.html`),
+font FreeType dựng theo tỉ lệ cửa sổ (`assets/ui/fonts/`: Silkscreen, Pixelify Sans) và texture sọc cảnh báo.
+
+**Chế độ:** `GameMode` = `EASY` (`Constants.EASY_MAP_PATH`), `MEDIUM` (`MEDIUM_MAP_PATH`), `HARD` (`HARD_MAP_PATH`); mỗi chế độ một map riêng. `GameMode.enemySkill` quyết định độ mạnh của quái.
+
+**File lưu** (`SaveData`, JSON, `~/.mygame/saves/<chế độ>.json`, schema phiên bản 1):
+
+| Nhóm | Trường |
+|------|--------|
+| Nhận dạng | `version`, `mode`, `mapPath`, `mapSignature` (kích thước lưới / số phòng / số checkpoint), `savedAt`, `playTime`, `reason` (`CHECKPOINT` / `QUIT` / `COMPLETE`), `isComplete` |
+| Vị trí | `x`, `y` (chân), `respawnX`, `respawnY`, `checkpointIndex`, `checkpointCount` |
+| Player | `health`, `maxHealth`, `weaponSlot`, `weaponIds[]`, `ammo[]` (cùng thứ tự) |
+| Khám phá | `visitedRooms[]`, `knownRooms[]`, `roomCount`, `roomId` |
+
+- **Chụp** (`SaveSnapshot.capture`): lưu ở checkpoint, hoặc khi player đang chết / đang qua cửa → vị trí = điểm hồi sinh;
+  ngược lại vị trí = chỗ đang đứng. Player đang chết thì lưu đầy máu.
+- **Áp** (`SaveSnapshot.apply`): chữ ký map khớp → đặt lại vị trí, điểm hồi sinh, minimap; luôn đặt máu
+  (`setHealthClamped`), đạn theo id vũ khí, yêu cầu ô vũ khí (đổi ở update đầu tiên). Chữ ký khác → chỉ giữ máu và vũ khí.
+- **Ô lưu** (`SaveManager`): đọc không bao giờ ném lỗi; `EMPTY` (không có file), `OK`, `CORRUPT` (không đọc được),
+  `INCOMPATIBLE` (phiên bản mới hơn, chế độ lạ, map không còn). Ghi vào file tạm rồi đổi tên, nên lỗi giữa chừng
+  không làm mất file cũ. `latestContinuable()` = ô OK chưa hoàn thành, lưu gần nhất.
+- **Cài đặt** (`Settings`, `~/.mygame/settings.json`): `isFullscreen`, `isVsync`, `isFpsVisible`; file hỏng thì dùng mặc định.

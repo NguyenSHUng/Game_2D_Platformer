@@ -9,15 +9,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hung.ai.EnemyBrainSystem;
 import com.hung.ai.PatrolSystem;
-import com.hung.animation.AnimationSystem;
-import com.hung.animation.EffectSystem;
-import com.hung.animation.EnemyEffectSystem;
-import com.hung.combat.AttackSystem;
-import com.hung.combat.ContactDamageSystem;
-import com.hung.combat.HealthSystem;
-import com.hung.combat.ProjectileSystem;
-import com.hung.combat.ShootingSystem;
-import com.hung.combat.WeaponSwitchSystem;
+import com.hung.animation.system.AnimationSystem;
+import com.hung.animation.system.EffectSystem;
+import com.hung.combat.system.AttackSystem;
+import com.hung.combat.system.ContactDamageSystem;
+import com.hung.combat.system.HealthSystem;
+import com.hung.combat.system.ProjectileSystem;
+import com.hung.combat.system.ShootingSystem;
+import com.hung.combat.system.WeaponSwitchSystem;
+import com.hung.component.ArsenalComponent;
+import com.hung.core.event.EventBus;
 import com.hung.entity.Entity;
 import com.hung.input.CameraInput;
 import com.hung.input.Controller;
@@ -28,29 +29,28 @@ import com.hung.physics.PhysicsSystem;
 import com.hung.rendering.CameraController;
 import com.hung.rendering.DebugRenderer;
 import com.hung.rendering.FadeRenderer;
-import com.hung.component.ArsenalComponent;
 import com.hung.rendering.HudRenderer;
 import com.hung.rendering.LightingRenderer;
-import com.hung.rendering.StatsPanel;
 import com.hung.rendering.RenderingSystem;
+import com.hung.rendering.StatsPanel;
 import com.hung.save.GameSession;
 import com.hung.save.SaveData;
 import com.hung.save.SaveManager;
 import com.hung.save.SaveSnapshot;
 import com.hung.save.Settings;
 import com.hung.ui.FpsOverlay;
-import com.hung.ui.MinimapRenderer;
-import com.hung.ui.MinimapState;
-import com.hung.ui.PauseMenu;
 import com.hung.ui.Toast;
 import com.hung.ui.UiTheme;
+import com.hung.ui.menu.PauseMenu;
+import com.hung.ui.minimap.MinimapRenderer;
+import com.hung.ui.minimap.MinimapState;
 import com.hung.util.Constants;
-import com.hung.world.CheckpointEvent;
-import com.hung.world.DoorSystem;
-import com.hung.world.ExitReachedEvent;
 import com.hung.world.RoomTransition;
-import com.hung.world.RoomTransitionEvent;
 import com.hung.world.World;
+import com.hung.world.event.CheckpointEvent;
+import com.hung.world.event.ExitReachedEvent;
+import com.hung.world.event.RoomTransitionEvent;
+import com.hung.world.system.DoorSystem;
 
 /**
  * Gameplay screen. Runs the systems in the fixed game loop order:
@@ -66,7 +66,7 @@ import com.hung.world.World;
  * camera (CameraInput). The map's lights are drawn over the scene (L toggles); M opens the whole map;
  * I / F1 opens the character sheet and pauses; Esc opens the pause menu.
  *
- * Saving (GameSession → its save slot): at every new checkpoint (CheckpointEvent), when the exit is
+ * Saving (GameSession → its mode's save): at every new checkpoint (CheckpointEvent), when the exit is
  * reached (ExitReachedEvent, the run is marked complete) and when the player leaves — back to the
  * menu, quit, closing or minimising the window (LibGDX pause()). A continued run gets its save
  * applied before the first frame: position, respawn point, health, weapon in hand and ammo, explored rooms.
@@ -97,7 +97,6 @@ public class GameScreen extends ScreenAdapter {
     private final ShootingSystem shootingSystem;
     private final ProjectileSystem projectileSystem;
     private final EffectSystem effectSystem;
-    private final EnemyEffectSystem enemyEffectSystem;
     private final HealthSystem healthSystem;
     private final AnimationSystem animationSystem;
     private final RenderingSystem renderingSystem;
@@ -151,7 +150,6 @@ public class GameScreen extends ScreenAdapter {
         this.shootingSystem = new ShootingSystem(world);
         this.projectileSystem = new ProjectileSystem(world);
         this.effectSystem = new EffectSystem(world);
-        this.enemyEffectSystem = new EnemyEffectSystem(world);
         this.healthSystem = new HealthSystem(world);
         this.animationSystem = new AnimationSystem(world);
         this.renderingSystem = new RenderingSystem(world, batch);
@@ -188,12 +186,12 @@ public class GameScreen extends ScreenAdapter {
         events.subscribe(RoomTransitionEvent.class, exploration);
         events.subscribe(CheckpointEvent.class, event -> {
             checkpointIndex = event.index;
-            if (save(SaveData.REASON_CHECKPOINT)) toast.show("SAVE", "Checkpoint " + (event.index + 1) + " of " + event.count + " - saved");
+            if (save(SaveData.REASON_CHECKPOINT)) toast.show("SAVE", "Checkpoint saved");
         });
         events.subscribe(ExitReachedEvent.class, event -> {
             session.isComplete = true;
             save(SaveData.REASON_COMPLETE);
-            pauseMenu.openComplete(crumb(), SaveManager.formatTime(session.playTime), roomsChip());
+            pauseMenu.openComplete(modeChip(), SaveManager.formatTime(session.playTime));
         });
         if (session.loaded != null) applySave(session.loaded);
     }
@@ -217,7 +215,7 @@ public class GameScreen extends ScreenAdapter {
             if (Gdx.input.isKeyJustPressed(PAUSE_KEY)) {
                 // Esc first closes the character sheet, then opens the menu
                 if (isStatsOpen) isStatsOpen = false;
-                else pauseMenu.open(crumb(), currentRoomChip(), SaveManager.formatTime(session.playTime), roomsChip());
+                else pauseMenu.open(modeChip(), SaveManager.formatTime(session.playTime));
             }
         }
         if (!isStatsOpen && !pauseMenu.isOpen()) {
@@ -263,26 +261,17 @@ public class GameScreen extends ScreenAdapter {
         hasLeft = true;
     }
 
-    /** "HARD / SLOT 1" over the pause menu's title. */
-    private String crumb() {
-        return session.mode.label.toUpperCase() + " / SLOT " + (session.slot + 1);
-    }
-
-    private String currentRoomChip() {
-        return exploration.getCurrentRoom() != null ? exploration.getCurrentRoom().id.toUpperCase() : "START";
-    }
-
-    private String roomsChip() {
-        return exploration.getVisitedCount() + "/" + exploration.getRoomCount() + " ROOMS";
+    private String modeChip() {
+        return session.mode.label.toUpperCase();
     }
 
     // ------------------------------------------------------------------ save / load
 
-    /** Writes the run to its slot (true when written). */
+    /** Writes the run to its mode's save (true when written). */
     private boolean save(String reason) {
         SaveData data = SaveSnapshot.capture(world, session, exploration, checkpointIndex, reason, System.currentTimeMillis());
-        if (data == null || !saves.write(session.slot, data)) return false;
-        Gdx.app.log(TAG, "Saved slot " + (session.slot + 1) + " (" + reason + ") at (" + data.x + "," + data.y + ")");
+        if (data == null || !saves.write(session.mode, data)) return false;
+        Gdx.app.log(TAG, "Saved " + session.mode + " (" + reason + ") at (" + data.x + "," + data.y + ")");
         return true;
     }
 
@@ -291,9 +280,9 @@ public class GameScreen extends ScreenAdapter {
         if (SaveSnapshot.apply(data, world, exploration)) {
             checkpointIndex = data.checkpointIndex;
         } else {
-            Gdx.app.error(TAG, "The map changed since slot " + (session.slot + 1) + " was saved; starting from its spawn");
+            Gdx.app.error(TAG, "The map changed since this run was saved; starting from its spawn");
         }
-        Gdx.app.log(TAG, "Continued slot " + (session.slot + 1) + " at " + world.getPlayer().getTransform().position);
+        Gdx.app.log(TAG, "Continued " + session.mode + " at " + world.getPlayer().getTransform().position);
     }
 
     @Override
@@ -366,7 +355,6 @@ public class GameScreen extends ScreenAdapter {
         projectileSystem.update(delta);
         healthSystem.update(delta);
         animationSystem.update(delta);
-        enemyEffectSystem.update();
         effectSystem.update(delta);
     }
 }

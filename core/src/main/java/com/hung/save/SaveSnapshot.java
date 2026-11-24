@@ -5,7 +5,7 @@ import com.hung.component.ArsenalComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.WeaponComponent;
 import com.hung.entity.Entity;
-import com.hung.ui.MinimapState;
+import com.hung.ui.minimap.MinimapState;
 import com.hung.world.Level;
 import com.hung.world.RoomTransition;
 import com.hung.world.World;

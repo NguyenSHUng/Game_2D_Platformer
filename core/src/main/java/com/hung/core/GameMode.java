@@ -1,30 +1,35 @@
 package com.hung.core;
 
+import com.hung.entity.enemy.EnemySkill;
 import com.hung.util.Constants;
 
 /**
- * Game modes the player picks for a new game. Each mode will get its own map (difficulty of the map
- * generator); for now only HARD has one: the bunker currently exported into the game. A mode without
- * a map shows as "Coming soon" and can't be started.
+ * Game modes the player picks for a new game. Each has its own bunker, longer and
+ * with more and stronger enemies from EASY to HARD ({@link EnemySkill}). A locked
+ * mode is shown but can't be started or continued (its save is kept).
  */
 public enum GameMode {
-    EASY("Easy", null, "Coming soon"),
-    NORMAL("Normal", null, "Coming soon"),
-    HARD("Hard", Constants.START_MAP_PATH, "The bunker as generated: full enemy density, traps and the Ravager");
+    EASY("Easy", Constants.EASY_MAP_PATH, EnemySkill.EASY, "Short, for a first run", false),
+    MEDIUM("Medium", Constants.MEDIUM_MAP_PATH, EnemySkill.MEDIUM, "Longer, enemies jump and hunt in packs", false),
+    HARD("Hard", Constants.HARD_MAP_PATH, EnemySkill.HARD, "Longest, toughest enemies", true);
 
     public final String label;
-    /** The level this mode plays; null = not available yet. */
     public final String mapPath;
+    /** Strength and behaviour of this mode's enemies. */
+    public final EnemySkill enemySkill;
     public final String description;
+    private final boolean isLocked;
 
-    GameMode(String label, String mapPath, String description) {
+    GameMode(String label, String mapPath, EnemySkill enemySkill, String description, boolean isLocked) {
         this.label = label;
         this.mapPath = mapPath;
+        this.enemySkill = enemySkill;
         this.description = description;
+        this.isLocked = isLocked;
     }
 
     public boolean isAvailable() {
-        return mapPath != null;
+        return !isLocked;
     }
 
     /** The mode with this name; null when the name is unknown (an old or edited save). */

@@ -11,8 +11,6 @@ public enum AnimationType {
     WALK,
     JUMP,
     ATTACK,
-    /** A second attack (MINI_BOSS claw sweep; its ATTACK_1 smash plays as ATTACK). */
-    ATTACK_2,
     DEFEND,
     HIT,
     DEATH,

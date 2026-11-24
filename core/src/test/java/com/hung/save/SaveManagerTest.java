@@ -3,6 +3,7 @@ package com.hung.save;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.hung.core.GameMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -15,13 +16,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SaveManagerTest {
-
-    private static final String MAP = "maps/bunker_482931/map.tmx";
 
     @TempDir
     File dir;
@@ -31,13 +31,13 @@ class SaveManagerTest {
     @BeforeEach
     void setUp() {
         folder = new FileHandle(dir);
-        saves = new SaveManager(folder, MAP::equals);
+        saves = new SaveManager(folder);
     }
 
-    private static SaveData data(long savedAt, boolean isComplete) {
+    private static SaveData data(GameMode mode, long savedAt, boolean isComplete) {
         SaveData data = new SaveData();
-        data.mode = "HARD";
-        data.mapPath = MAP;
+        data.mode = mode.name();
+        data.mapPath = mode.mapPath;
         data.savedAt = savedAt;
         data.isComplete = isComplete;
         data.health = 50;
@@ -61,84 +61,111 @@ class SaveManagerTest {
     }
 
     @Test
-    void missingFileIsAnEmptySlot() {
-        assertEquals(SaveManager.Status.EMPTY, saves.read(0).status);
+    void missingFileIsEmpty() {
+        assertEquals(SaveManager.Status.EMPTY, saves.read(GameMode.EASY).status);
     }
 
     @Test
-    void writeThenReadRoundTrips() {
-        assertTrue(saves.write(1, data(5L, false)));
-        SaveManager.Slot slot = saves.read(1);
-        assertEquals(SaveManager.Status.OK, slot.status);
-        assertEquals(50, slot.data.health);
-        assertEquals(7, slot.data.ammo[1]);
-        assertEquals("service_pistol", slot.data.weaponIds[1]);
-        assertEquals(3, slot.data.visitedRooms[1]);
+    void eachModeHasItsOwnSave() {
+        assertTrue(saves.write(GameMode.MEDIUM, data(GameMode.MEDIUM, 5L, false)));
+        SaveManager.Save save = saves.read(GameMode.MEDIUM);
+        assertEquals(SaveManager.Status.OK, save.status);
+        assertEquals(50, save.data.health);
+        assertEquals(7, save.data.ammo[1]);
+        assertEquals("service_pistol", save.data.weaponIds[1]);
+        assertEquals(3, save.data.visitedRooms[1]);
+        assertEquals(SaveManager.Status.EMPTY, saves.read(GameMode.HARD).status);
     }
 
     @Test
     void unreadableFileIsCorrupt() {
-        folder.child("slot_1.json").writeString("{ not json", false);
-        SaveManager.Slot slot = saves.read(0);
-        assertEquals(SaveManager.Status.CORRUPT, slot.status);
-        assertNull(slot.data);
+        folder.child("easy.json").writeString("{ not json", false);
+        SaveManager.Save save = saves.read(GameMode.EASY);
+        assertEquals(SaveManager.Status.CORRUPT, save.status);
+        assertNull(save.data);
     }
 
     @Test
-    void newerVersionUnknownModeOrMissingMapIsIncompatible() {
-        SaveData newer = data(1L, false);
+    void newerVersionOrAnotherModeIsIncompatible() {
+        SaveData newer = data(GameMode.EASY, 1L, false);
         newer.version = SaveData.CURRENT_VERSION + 1;
-        saves.write(0, newer);
-        assertEquals(SaveManager.Status.INCOMPATIBLE, saves.read(0).status);
+        saves.write(GameMode.EASY, newer);
+        assertEquals(SaveManager.Status.INCOMPATIBLE, saves.read(GameMode.EASY).status);
 
-        SaveData mode = data(1L, false);
-        mode.mode = "NIGHTMARE";
-        saves.write(1, mode);
-        assertEquals(SaveManager.Status.INCOMPATIBLE, saves.read(1).status);
-
-        SaveData map = data(1L, false);
-        map.mapPath = "maps/gone/map.tmx";
-        saves.write(2, map);
-        assertEquals(SaveManager.Status.INCOMPATIBLE, saves.read(2).status);
+        saves.write(GameMode.HARD, data(GameMode.EASY, 1L, false));
+        assertEquals(SaveManager.Status.INCOMPATIBLE, saves.read(GameMode.HARD).status);
     }
 
     @Test
     void latestContinuableSkipsCompletedRuns() {
-        saves.write(0, data(100L, false));
-        saves.write(1, data(300L, true));
-        saves.write(2, data(200L, false));
-        assertEquals(2, saves.latestContinuable().index);
+        saves.write(GameMode.EASY, data(GameMode.EASY, 100L, false));
+        saves.write(GameMode.MEDIUM, data(GameMode.MEDIUM, 300L, true));
+        assertEquals(GameMode.EASY, saves.latestContinuable().mode);
+
+        saves.write(GameMode.MEDIUM, data(GameMode.MEDIUM, 200L, false));
+        assertEquals(GameMode.MEDIUM, saves.latestContinuable().mode);
     }
 
     @Test
-    void deleteEmptiesTheSlot() {
-        saves.write(0, data(1L, false));
-        saves.delete(0);
-        assertEquals(SaveManager.Status.EMPTY, saves.read(0).status);
+    void lockedModeKeepsItsSaveButCannotContinue() {
+        saves.write(GameMode.HARD, data(GameMode.HARD, 900L, false));
+        assertEquals(SaveManager.Status.OK, saves.read(GameMode.HARD).status);
+        assertEquals(GameMode.HARD.isAvailable(), saves.read(GameMode.HARD).isContinuable());
+    }
+
+    /** The newest old slot of a mode is imported, every slot file is kept aside, NORMAL means MEDIUM. */
+    @Test
+    void oldSlotsBecomeModeSaves() throws IOException {
+        SaveManager writer = new SaveManager(folder);
+        String[] names = {"slot_1.json", "slot_2.json"};
+        for (int i = 0; i < 2; i++) {
+            SaveData old = data(GameMode.MEDIUM, 10L + i, false);
+            old.mode = "NORMAL";
+            old.mapPath = "maps/bunker_482931/map_normal.tmx";
+            writer.write(GameMode.MEDIUM, old);
+            folder.child("medium.json").moveTo(folder.child(names[i]));
+        }
+        folder.child("slot_3.json").writeString(fixture(), false);
+
+        saves = new SaveManager(folder);
+
+        assertEquals(11L, saves.read(GameMode.MEDIUM).data.savedAt);
+        assertEquals(GameMode.MEDIUM.mapPath, saves.read(GameMode.MEDIUM).data.mapPath);
+        assertEquals(SaveManager.Status.OK, saves.read(GameMode.HARD).status);
+        assertEquals(121.63326f, saves.read(GameMode.HARD).data.x, 1e-4f);
+        for (int i = 1; i <= 3; i++) {
+            assertFalse(folder.child("slot_" + i + ".json").exists());
+            assertTrue(folder.child("old_slots/slot_" + i + ".json").exists());
+        }
     }
 
     @Test
-    void readsASaveWrittenByTheCurrentRelease() throws IOException {
+    void anOlderSlotNeverReplacesANewerSave() throws IOException {
+        saves.write(GameMode.HARD, data(GameMode.HARD, Long.MAX_VALUE, false));
         folder.child("slot_1.json").writeString(fixture(), false);
-        SaveManager.Slot slot = saves.read(0);
-        assertEquals(SaveManager.Status.OK, slot.status);
-        SaveData data = slot.data;
-        assertEquals("QUIT", data.reason);
-        assertEquals(121.63326f, data.x, 1e-4f);
-        assertEquals(100, data.health);
-        assertEquals("1000x100/42r/7c", data.mapSignature);
-        assertEquals(3, data.weaponIds.length);
-        assertNotNull(data.knownRooms);
+
+        assertEquals(50, new SaveManager(folder).read(GameMode.HARD).data.health);
     }
 
     @Test
-    void writesTheSameTopLevelFieldsAsTheCurrentRelease() throws IOException {
-        SaveData data = data(1L, false);
+    void readsASaveWrittenByAnEarlierRelease() throws IOException {
+        folder.child("hard.json").writeString(fixture(), false);
+        SaveManager.Save save = saves.read(GameMode.HARD);
+        assertEquals(SaveManager.Status.OK, save.status);
+        assertEquals("QUIT", save.data.reason);
+        assertEquals("1000x100/42r/7c", save.data.mapSignature);
+        assertEquals(3, save.data.weaponIds.length);
+        assertNotNull(save.data.knownRooms);
+    }
+
+    @Test
+    void writesTheSameTopLevelFieldsAsEarlierReleases() throws IOException {
+        SaveData data = data(GameMode.HARD, 1L, false);
         data.knownRooms = new int[] {0};
         data.roomId = "room_1";
         data.mapSignature = "1000x100/42r/7c";
         data.reason = SaveData.REASON_QUIT;
-        saves.write(0, data);
-        assertEquals(keys(fixture()), keys(folder.child("slot_1.json").readString()));
+        saves.write(GameMode.HARD, data);
+        assertEquals(keys(fixture()), keys(folder.child("hard.json").readString()));
     }
 }

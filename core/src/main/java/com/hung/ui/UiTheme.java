@@ -49,7 +49,6 @@ public class UiTheme implements Disposable {
     public static final Color OK = rgb(0x8fb35a);
     public static final Color KEY_CAP = rgb(0x23261e);
     public static final Color BAR_BACK = rgb(0x22251d);
-    public static final Color DIVIDER = rgb(0x1c1f18);
     public static final Color SWITCH_ON_TEXT = rgb(0x1a1206);
     public static final Color SHADOW = new Color(0f, 0f, 0f, 0.55f);
     public static final Color SCRIM = new Color(0f, 0f, 0f, 0.5f);
@@ -58,16 +57,12 @@ public class UiTheme implements Disposable {
     public enum Font {
         GAME_TITLE(DISPLAY_BOLD, 96),
         SUBTITLE(DISPLAY_REGULAR, 18),
-        CRUMB(DISPLAY_REGULAR, 13),
         PANEL_TITLE(DISPLAY_BOLD, 34),
         LINE(TEXT_FONT, 17),
         ITEM(TEXT_FONT, 27),
         DETAIL(TEXT_FONT, 15),
         VALUE(DISPLAY_REGULAR, 16),
         SMALL_CAPS(DISPLAY_REGULAR, 12),
-        FOOT(TEXT_FONT, 14),
-        SLOT_NUMBER(DISPLAY_REGULAR, 30),
-        SLOT_TITLE(TEXT_FONT, 22),
         VERSION(TEXT_FONT, 15);
 
         final String file;

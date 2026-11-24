@@ -1,15 +1,10 @@
 package com.hung.component;
 
-import com.hung.animation.AnimationType;
-
 /**
  * Melee attack state. The attack animation's frames with an attack box decide when and
  * where the attack lands; see AttackSystem.
  */
 public class AttackComponent {
-    /** Animation this attack plays: ATTACK, or ATTACK_2 for an enemy's second attack. */
-    public AnimationType animation = AnimationType.ATTACK;
-
     /** Damage dealt to each target the attack box touches. */
     public int damage;
 

@@ -1,7 +1,7 @@
 package com.hung.save;
 
 /**
- * One saved run, as written to a save slot (JSON, see SaveManager). Plain data: GameScreen fills it
+ * One saved run, as written to its mode's save file (JSON, see SaveManager). Plain data: GameScreen fills it
  * from the World when saving and applies it after loading the level.
  *
  * Bump {@link #CURRENT_VERSION} when a change makes older files unreadable; older versions are then

@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="290" height="71" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#0a0a0a" nextlayerid="13" nextobjectid="141">
+ <properties><property name="mode" value="EASY"/><property name="seed" type="int" value="48"/><property name="theme" value="bunker"/><property name="environment" value="underground"/><property name="generatorVersion" type="int" value="2"/><property name="physics.moveSpeed" type="int" value="6"/><property name="physics.jumpHeight" type="float" value="3.5"/><property name="physics.jumpDistance" type="int" value="6"/><property name="physics.safetyMargin" type="float" value="0.8"/><property name="physics.playerWidth" type="int" value="1"/><property name="physics.playerHeight" type="int" value="2"/></properties>
+ <tileset firstgid="1" name="walls" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="444" columns="22">
+  <image source="tilesets/walls.png" width="396" height="378"/>
+ </tileset>
+ <tileset firstgid="445" name="decor_back" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="417" columns="21">
+  <image source="tilesets/decor_back.png" width="378" height="360"/>
+ </tileset>
+ <tileset firstgid="862" name="terrain" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="742" columns="28">
+  <image source="tilesets/terrain.png" width="504" height="486"/>
+  <tile id="0"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="1"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="2"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="3"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="4"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="5"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="6"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="7"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="8"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="9"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="10"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="11"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="12"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="13"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="14"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="15"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="16"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="17"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="18"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="19"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="20"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="21"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="22"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="23"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="24"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="25"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="26"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="27"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="28"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="29"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="30"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="31"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="32"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="33"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="34"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="35"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="36"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="37"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="38"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="39"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="40"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="41"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="42"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="43"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="44"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="45"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="46"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="47"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="48"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="49"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="50"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="51"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="52"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="53"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="54"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="55"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="56"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="57"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="58"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="59"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="60"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="61"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="62"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="63"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="64"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="65"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="66"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="67"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="68"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="69"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="70"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="71"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="72"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="73"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="74"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="75"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="76"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="77"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="78"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="79"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="80"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="81"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="82"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="83"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="84"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="85"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="86"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="87"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="88"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="89"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="90"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="91"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="92"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="93"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="94"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="95"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="96"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="97"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="98"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="99"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="100"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="101"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="102"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="103"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="104"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="105"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="106"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="107"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="108"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="109"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="110"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="111"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="112"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="113"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="114"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="115"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="116"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="117"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="118"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="119"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="120"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="121"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="122"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="123"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="124"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="125"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="126"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="127"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="128"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="129"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="130"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="131"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="132"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="133"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="134"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="135"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="136"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="137"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="138"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="139"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="140"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="141"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="142"><properties><property name="type" value="LADDER"/></properties></tile>
+  <tile id="143"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="144"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="145"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="146"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="147"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="148"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="149"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="150"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="151"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="152"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="153"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="154"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="155"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="156"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="157"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="158"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="159"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="160"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="161"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="162"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="163"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="164"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="165"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="166"><properties><property name="type" value="LADDER"/></properties></tile>
+  <tile id="167"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="168"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="169"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="170"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="171"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="172"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="173"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="174"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="175"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="176"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="177"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="178"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="179"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="180"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="181"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="182"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="183"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="184"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="185"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="186"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="187"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="188"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="189"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="190"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="191"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="192"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="193"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="194"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="195"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="196"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="197"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="198"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="199"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="200"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="201"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="202"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="203"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="204"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="205"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="206"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="207"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="208"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="209"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="210"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="211"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="212"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="213"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="214"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="215"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="216"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="217"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="218"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="219"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="220"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="221"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="222"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="223"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="224"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="225"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="226"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="227"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="228"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="229"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="230"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="231"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="232"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="233"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="234"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="235"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="236"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="237"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="238"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="239"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="240"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="241"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="242"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="243"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="244"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="245"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="246"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="247"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="248"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="249"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="250"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="251"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="252"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="253"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="254"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="255"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="256"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="257"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="258"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="259"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="260"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="261"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="262"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="263"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="264"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="265"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="266"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="267"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="268"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="269"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="270"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="271"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="272"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="273"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="274"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="275"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="276"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="277"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="278"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="279"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="280"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="281"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="282"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="283"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="284"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="285"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="286"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="287"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="288"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="289"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="290"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="291"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="292"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="293"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="294"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="295"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="296"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="297"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="298"><properties><property name="type" value="SPIKE"/></properties></tile>
+  <tile id="299"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="300"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="301"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="302"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="303"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="304"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="305"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="306"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="307"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="308"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="309"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="310"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="311"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="312"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="313"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="314"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="315"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="316"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="317"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="318"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="319"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="320"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="321"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="322"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="323"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="324"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="325"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="326"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="327"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="328"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="329"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="330"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="331"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="332"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="333"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="334"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="335"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="336"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="337"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="338"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="339"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="340"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="341"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="342"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="343"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="344"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="345"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="346"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="347"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="348"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="349"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="350"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="351"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="352"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="353"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="354"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="355"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="356"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="357"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="358"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="359"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="360"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="361"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="362"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="363"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="364"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="365"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="366"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="367"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="368"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="369"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="370"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="371"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="372"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="373"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="374"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="375"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="376"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="377"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="378"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="379"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="380"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="381"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="382"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="383"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="384"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="385"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="386"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="387"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="388"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="389"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="390"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="391"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="392"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="393"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="394"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="395"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="396"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="397"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="398"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="399"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="400"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="401"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="402"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="403"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="404"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="405"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="406"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="407"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="408"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="409"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="410"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="411"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="412"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="413"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="414"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="415"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="416"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="417"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="418"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="419"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="420"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="421"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="422"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="423"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="424"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="425"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="426"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="427"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="428"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="429"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="430"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="431"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="432"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="433"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="434"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="435"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="436"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="437"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="438"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="439"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="440"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="441"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="442"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="443"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="444"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="445"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="446"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="447"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="448"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="449"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="450"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="451"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="452"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="453"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="454"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="455"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="456"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="457"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="458"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="459"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="460"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="461"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="462"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="463"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="464"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="465"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="466"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="467"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="468"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="469"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="470"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="471"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="472"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="473"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="474"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="475"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="476"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="477"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="478"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="479"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="480"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="481"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="482"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="483"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="484"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="485"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="486"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="487"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="488"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="489"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="490"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="491"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="492"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="493"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="494"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="495"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="496"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="497"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="498"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="499"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="500"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="501"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="502"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="503"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="504"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="505"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="506"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="507"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="508"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="509"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="510"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="511"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="512"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="513"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="514"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="515"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="516"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="517"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="518"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="519"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="520"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="521"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="522"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="523"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="524"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="525"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="526"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="527"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="528"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="529"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="530"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="531"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="532"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="533"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="534"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="535"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="536"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="537"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="538"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="539"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="540"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="541"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="542"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="543"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="544"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="545"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="546"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="547"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="548"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="549"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="550"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="551"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="552"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="553"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="554"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="555"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="556"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="557"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="558"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="559"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="560"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="561"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="562"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="563"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="564"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="565"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="566"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="567"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="568"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="569"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="570"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="571"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="572"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="573"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="574"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="575"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="576"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="577"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="578"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="579"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="580"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="581"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="582"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="583"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="584"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="585"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="586"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="587"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="588"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="589"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="590"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="591"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="592"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="593"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="594"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="595"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="596"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="597"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="598"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="599"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="600"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="601"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="602"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="603"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="604"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="605"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="606"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="607"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="608"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="609"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="610"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="611"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="612"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="613"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="614"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="615"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="616"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="617"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="618"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="619"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="620"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="621"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="622"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="623"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="624"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="625"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="626"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="627"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="628"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="629"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="630"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="631"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="632"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="633"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="634"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="635"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="636"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="637"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="638"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="639"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="640"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="641"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="642"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="643"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="644"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="645"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="646"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="647"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="648"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="649"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="650"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="651"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="652"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="653"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="654"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="655"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="656"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="657"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="658"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="659"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="660"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="661"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="662"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="663"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="664"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="665"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="666"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="667"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="668"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="669"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="670"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="671"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="672"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="673"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="674"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="675"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="676"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="677"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="678"><properties><property name="type" value="EMPTY"/></properties></tile>
+  <tile id="679"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="680"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="681"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="682"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="683"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="684"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="685"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="686"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="687"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="688"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="689"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="690"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="691"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="692"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="693"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="694"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="695"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="696"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="697"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="698"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="699"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="700"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="701"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="702"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="703"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="704"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="705"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="706"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="707"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="708"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="709"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="710"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="711"><properties><property name="type" value="TOXIC"/></properties></tile>
+  <tile id="712"><properties><property name="type" value="TOXIC"/></properties></tile>
+  <tile id="713"><properties><property name="type" value="TOXIC"/></properties></tile>
+  <tile id="714"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="715"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="716"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="717"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="718"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="719"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="720"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="721"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="722"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="723"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="724"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="725"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="726"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="727"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="728"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="729"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="730"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="731"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="732"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="733"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="734"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="735"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="736"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="737"><properties><property name="type" value="SOLID"/></properties></tile>
+  <tile id="738"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="739"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="740"><properties><property name="type" value="PLATFORM"/></properties></tile>
+  <tile id="741"><properties><property name="type" value="SOLID"/></properties></tile>
+ </tileset>
+ <tileset firstgid="1604" name="props" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="35" columns="6">
+  <image source="tilesets/props.png" width="108" height="108"/>
+ </tileset>
+ <tileset firstgid="1639" name="decor_front" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="10" columns="4">
+  <image source="tilesets/decor_front.png" width="72" height="54"/>
+ </tileset>
+ <layer id="1" name="walls" width="290" height="71">
+  <data encoding="base64" compression="zlib">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</data>
+ </layer>
+ <layer id="2" name="decor_back" width="290" height="71">
+  <data encoding="base64" compression="zlib">eJztnQXUHEUSgL+phhDcw5HgEhyOBHd3dz13zl05d+Pc/Y4TOHcJ7pYAQQIc7gRJCH7A0e+feX+n0yM9K//sTn3vzdud6aqZ3pnumqqd3SpQFEVRFEVRFEVRFEVRFEVRFEVpLxcLfEjK5e5OZW5KRuVnJb3tm6Iog8M9jh2JtQ2XCHwzwg7NTUblT62gpyjK8HOvwH0y6qfE2qFLBX4eYYfGOfJz1B9SWsi0ZGQ5I4Ez0/dnJXB2Aucko+3ucq4jW7Sc58idH2i/wFs/w9vvWeniylzo7Ndvm9alOXy/56fE2qHrBQ6OsEMTHHm1Q0rbuSiBixO4JIFLE7gsgcsTuMKbG9MDc8XqzkjgygSuSnWvdnRnejrXJHBtAteletc7etkx7fy/wdO7MRm1C73+LiXzU2KP80DFuGx2IC57UOMyZUCw8cJ/S+ZG7Fy9OYFbErg1gdsSuD2BOxK4M4G7Erjb2Y+/z0z3ngTuTeC+BO5P4AFHd3agHw8m8FCqZ+UfTl+zYz6ShP2DftmhzE+JPc64inHZyYG47CG1Q8qAYO+fj5bMjXlp+2MV59DjCTyRwJMJPJXA0wk8k9qF/yXwbIEdynSt7HMJPJ++RxbUdUkERMAILCSjdig75sJSHKf02g5lfsq8yOPcJnB7hD2JlVeUJmDvn4tUHLdVv28YL6M2YFGBxZx1uyzuHM+fl+M92SXS9SVlQV2XpdL2pQWWEVhWYDmB5QVWEFix5DPG2odYqvo1Pg8LPBKhFyuvKE3AxgsrCbxIYGWBiQKT0teJ6fZVnPUqrCqwmrOsLrCGwJoCawmsXbAfV3cdgXUFJgusl25bP0fX1dtAYEOBjQQ2TrdtMsZzs66fEmu/6to7RRlLNhXYTODFApsLTBGYmr5OSbdv4axXYUvHp9lKYGvPx9mmYD+Z7rYC2wlsL7CDwI4COwnsnKO7pXeMXbz1Xcd4btb1UyZUfF5WV15RmsBuArt3edzuIbCnwF4Ce3vf1ewjsG/B8azufgL7CxwQoZsd08odKHCQVD9mJ0wq8SX/GPj+OAb3+Vcv5BWlCfTi/nmIwKEChwkc7tiSIwSOFDiq4HhW92iBY2T+515lutkxrd6xAsdJ9WPG4P5vwjK1xJf8a+B3PTFoXKa0AXv/PF7gBIETuzh+XyLwUoGXCbxc4BUCrxR4VYVjWN1X19DN9F4j8NrIY1alrr9RV0/jMqUN2Pvn6wRe/4L/8AYdv6X8Q+CfffBrMs4VOC9CL1ZeUZrASQJvFHiTwJt1/JbyH4FpffBrFKVtvEXgrQJv03lSSl1/Q/0URVEURVEURVEURVEURVEURVEURVGUweHtAu8QeKfAu3Ke9b5b4D0C7xV4X0Dm/QIfqPCc+IOy4H8V8shy9Jysz5+VhhDKY5c3nmcV5L2y63MC9Qyq5Mkrk/H7E5Kz2w4x+cfoJx9+oa8fEfiowMcEPi7wCYFPCnxK4NMCnxH4rMDnBD4v8AWBLwp8SeDLAqcIfEXgqwJfE/h6ic34hlT/z4Haof6i9TbKCdmAvPFcZodmBtqznFt+TuGyPrj4/cmzQ03JJ/4tgW8H+vsdge8KfE/g+2n7DwI1qn4o8COBH6dtPxH4aclY/plU/8+B1sPqL3Olev2ythKyAXnjucwOhdbnVqg5UGaH/P7k2aHTIq+z9bN+UbFW3ameXFEM9Etvu7tv6+f8ymmfnfPZf536TVnbKSWfzcpU/c+B2qH+8qhUr19mmSflucaHjZANyBvPdezQQ12wQ35/Dg3EX1Y3Np+49bN+U9EOnebJFcVApxfYIctvA/fG0PFPr9i3TKZqXNbr3KnKglStX2Z5TODxlvlO3YzLitYPK/jupltxWSzWz/pdxFx35WL+d+3P+9D5rfL9WVm/NGdNc8mrX/aEjCwuTwo81bLr2K247OmSeVXkq3QrLovF9bOq+giZXCf/uw6d36L+V+nbvIi4TOk/MXHZM7amScuuY7fiMj/u6qYd8vsTkqvzTKKT3Jsxun7O0d8L/MHLOdqNWMnmqP5Ty8bvoPBshK9qx9ZzLbuO3YrLimTr9MGlSlxWh07imBhdP+fonwX+Esg52im9yFGtdIcYX7WN8XW34rIi2Tp9cKkSl9XhbwJ/r3m9O9GtmwuwDI3Lmsvz9rqYanWdEjPiL/t+9DDTrbisSLZOH1yqxGV1+JfAv2te30506+YCLENrPDQXMWBMtbpOd6X+su9HDzMal/Vft1f2oo3+/KCgcVkxbYzLsroWZ3QQx3T7eVk3sH3KPtuZLRvHTSfm3tPG+LqNcVlW1+KsiGepPp34NL0aZ7ZP2Wc7u2XjuIm494SYe08b4+s2xmVZXYtzxigu61Wu9XFOzY7zWzaOm4h7TwjdexYysLCBcd5vfDUuG2HY47KsrsUFAhfWvN4ndaDbK2yfss92UcP61kbce0Lo3r6IgfEGFvXskMZlIwx7XKYo/cC9J4R84MUMLG5gCc8OtbE2URvjMkVRmkUb4zJFUZqFxmWKoow1GpcpijLWaFymKMpYo3FZbwnlJbb56Yty1NvPV7X2htJcljSwlIGlc3IALpO2LxtoL2obRjQu6y2h/FdV7FAbf1M7DNic4ssZWN7ACgZWNDDBwEr2v/ZmJM/4ygYmGphkYBUDqxpYzcDqZv62Nby2YUbjst4SyktcxQ4V/ab2MoHLBa6QkffTBWak768UuErg6nSbXWamr1buGoFrBa5L5Wc4ukrnrGlgLRMe02sbWMfAuo5Nme60T/baXCbnbLf7D80Hf1vZHPO5IWe/Gevl5Iivi8ZlvSUvL3ERs0pyvM4SuEFGXu1yo/PeLjfZeg/eNrvcXKAzS+1QV1g/nZ95ccYGZrQOi2VDZz6fIvO3ueTVa8mzQzM7tEMbmWLZjftghzQu6x4xeYkzqsRlcwquRZ4vdcuAnsNBwq+xEooz3Houfj5gv9ZLGVWvY6wdipWtIx/SnRc4X0XHKcunHNOneSXnyO/P4QMUK8fUi8koi8tg/lpt/nnL86VmR9xHlO5QJc7o1v67Ld9POxSyJ3nnKyaXe52873k6fn8Gqf7WrTXGXmztjSp1icp0lN7gnudePHsYFjsUomnPaprWnxjq1tDopPZGG/NGDAK9uC6x95Ne+hLdvrc1bRw3rT8x1K2h0UntjdsEbh/Q8zWMZPnuN3Hy30/06kYpC9K0/CdN608MdfteVc+v6WDX7xC406sBoYwdWb77Tc1o/vspPagbNWw0LQ5qWn9iyPoeshehmjG+Xhl+TYepTr0HtwaEMvYMsl8/FjTtfJX15wgDRxo4ysDRDXuWlvU9ZC9CNWN8vToMsv84zOh1iaNp56usP8cYONbAcQaOb5gd6nVcFmKQ/cdhRq9LHE07X2X9abIdqnsuO7kGTfNnlRGqXpe8/PkhNrO1GQNyedvL2jY3MCVyf0V6ndC0cVzWnybbobrnUuOy4aPqdcnLnx9iqoEtAnJbGtgqR39rA9vktG1rYLtA2/YGdijoz44Gdury3GtaLYqy/pzg2KETG2aH6p7LTq5BG/OsDwJVr8vOBnYxsGuFsbybgd0DcnsU2IU9C9r2ymnb28A+Bf2x9mvfhs09RVH6w34G9g/M/wNytlsOLGg7qMb+LAeXtCuKoiiKoiiKoiiKoiiKoiiKMrb8HyxXnH8=</data>
+ </layer>
+ <layer id="3" name="terrain" width="290" height="71">
+  <data encoding="base64" compression="zlib">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</data>
+ </layer>
+ <layer id="4" name="props" width="290" height="71">
+  <data encoding="base64" compression="zlib">eJzt3clSwkAQANA+zZe5gfuKirjr/3+ClZKUqVQ2kBjA96pyIGkm26SnTzMRAAAAAAAAAAAAAAAAAAAAAAAAAABA33bS99ZmXIjpEg/rJO+zuwP13b35efdrzn9Q2l8XVxffpK2tTTLZonuBzKimT49X3NcPU8RRijhOESc1bZ+miLMUcZ4iLlLEZU1c3tZVyzXm7V2niJsV3s9bQ91S3q9egeWtesy9TRF38+0+RUwr2i/G5HEPDXHZ8Vn6qbOKspqvfM5Zx9wBAAAAAAAAAAAAAAAAAAAAAAAAAACQexxg/tKh5tQH/l6XtSeeKmLyuZUXWbuiiyFyHtCsXBc8V3ynWS542ZLv96liTQq1EcB2q1p3pKtRT3UxAAAAAAAAAAAAAAAAAAAA8H98mrcAAAAAAKDSb+aOBdhU7yvKfR895NBF5uOe9pTDlx0b8v+V16MY0qjDtbQ98/x+Xlviur6Pumtqa5/lNb2bsecODGyyRnmoOIY31QPlsTP7XR7frDECAAAAAADr5wuLCSHy</data>
+ </layer>
+ <layer id="5" name="decor_front" width="290" height="71">
+  <data encoding="base64" compression="zlib">eJzt1DkKgAAMRcFf5aruy/0rC7FQsBNFmIEQAqlfAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/09T5bivp6u4b4Fl9JUPt+5ixkkmHgBfNl+Yslaw6BAAAAAAAAAAAAAAAAAAAAAAAAJ/YADnaBcA=</data>
+ </layer>
+ <objectgroup id="6" name="spawns">
+  <object id="1" name="player" type="PLAYER_SPAWN" x="96" y="656" width="16" height="32"></object>
+  <object id="2" name="exit" type="EXIT" x="4528" y="992" width="16" height="32"></object>
+ </objectgroup>
+ <objectgroup id="7" name="enemies">
+  <object id="3" name="enemy_1" type="ENEMY" x="720" y="640" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="688"/><property name="patrolMaxX" type="int" value="752"/><property name="facing" value="LEFT"/><property name="room" value="room_2"/></properties></object>
+  <object id="4" name="enemy_2" type="ENEMY" x="1280" y="320" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="machinery"/><property name="patrolMinX" type="int" value="1232"/><property name="patrolMaxX" type="int" value="1344"/><property name="facing" value="LEFT"/><property name="room" value="room_5"/></properties></object>
+  <object id="5" name="enemy_3" type="ENEMY" x="1952" y="320" width="16" height="32"><properties><property name="enemy" value="crawler_01"/><property name="definition" value="sprites/enemies/crawler_01/character.json"/><property name="archetype" value="CRAWLER"/><property name="hint" value="machinery"/><property name="patrolMinX" type="int" value="1904"/><property name="patrolMaxX" type="int" value="2000"/><property name="facing" value="RIGHT"/><property name="room" value="room_5"/></properties></object>
+  <object id="6" name="enemy_4" type="ENEMY" x="1776" y="280" width="16" height="32"><properties><property name="enemy" value="flyer_wasp_01"/><property name="definition" value="sprites/enemies/flyer_wasp_01/character.json"/><property name="archetype" value="FLYING"/><property name="hint" value="machinery"/><property name="patrolMinX" type="int" value="1728"/><property name="patrolMaxX" type="int" value="1808"/><property name="facing" value="LEFT"/><property name="room" value="room_5"/></properties></object>
+  <object id="7" name="enemy_5" type="ENEMY" x="2096" y="304" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="2096"/><property name="patrolMaxX" type="int" value="2240"/><property name="facing" value="LEFT"/><property name="room" value="room_6"/></properties></object>
+  <object id="8" name="enemy_6" type="ENEMY" x="2320" y="304" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="2304"/><property name="patrolMaxX" type="int" value="2400"/><property name="facing" value="LEFT"/><property name="room" value="room_6"/></properties></object>
+  <object id="9" name="enemy_7" type="ENEMY" x="2512" y="272" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="2496"/><property name="patrolMaxX" type="int" value="2592"/><property name="facing" value="RIGHT"/><property name="room" value="room_7"/></properties></object>
+  <object id="10" name="enemy_8" type="ENEMY" x="2752" y="672" width="16" height="32"><properties><property name="enemy" value="crawler_01"/><property name="definition" value="sprites/enemies/crawler_01/character.json"/><property name="archetype" value="CRAWLER"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="2704"/><property name="patrolMaxX" type="int" value="2832"/><property name="facing" value="RIGHT"/><property name="room" value="room_8"/></properties></object>
+  <object id="11" name="enemy_9" type="ENEMY" x="2752" y="1008" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="2736"/><property name="patrolMaxX" type="int" value="2800"/><property name="facing" value="LEFT"/><property name="room" value="room_9"/></properties></object>
+  <object id="12" name="enemy_10" type="ENEMY" x="2960" y="1024" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="lab"/><property name="patrolMinX" type="int" value="2896"/><property name="patrolMaxX" type="int" value="2992"/><property name="facing" value="RIGHT"/><property name="room" value="room_10"/></properties></object>
+  <object id="13" name="enemy_11" type="ENEMY" x="3488" y="984" width="16" height="32"><properties><property name="enemy" value="flyer_wasp_01"/><property name="definition" value="sprites/enemies/flyer_wasp_01/character.json"/><property name="archetype" value="FLYING"/><property name="hint" value="lab"/><property name="patrolMinX" type="int" value="3472"/><property name="patrolMaxX" type="int" value="3552"/><property name="facing" value="LEFT"/><property name="room" value="room_10"/></properties></object>
+  <object id="14" name="enemy_12" type="ENEMY" x="3952" y="992" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="3952"/><property name="patrolMaxX" type="int" value="4272"/><property name="facing" value="RIGHT"/><property name="room" value="room_11"/></properties></object>
+  <object id="15" name="enemy_13" type="ENEMY" x="3792" y="992" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="3648"/><property name="patrolMaxX" type="int" value="3856"/><property name="facing" value="LEFT"/><property name="room" value="room_11"/></properties></object>
+  <object id="16" name="enemy_14" type="ENEMY" x="4384" y="992" width="16" height="32"><properties><property name="enemy" value="crawler_01"/><property name="definition" value="sprites/enemies/crawler_01/character.json"/><property name="archetype" value="CRAWLER"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="4368"/><property name="patrolMaxX" type="int" value="4512"/><property name="facing" value="LEFT"/><property name="room" value="room_11"/></properties></object>
+  <object id="17" name="enemy_15" type="ENEMY" x="1152" y="1008" width="16" height="32"><properties><property name="enemy" value="small_melee_ghoul"/><property name="definition" value="sprites/enemies/small_melee_ghoul/character.json"/><property name="archetype" value="SMALL_MELEE"/><property name="hint" value="default"/><property name="patrolMinX" type="int" value="1008"/><property name="patrolMaxX" type="int" value="1168"/><property name="facing" value="LEFT"/><property name="room" value="branch_room_2"/></properties></object>
+ </objectgroup>
+ <objectgroup id="8" name="pois">
+  <object id="18" name="checkpoint_1" type="CHECKPOINT" x="1040" y="320" width="16" height="16"></object>
+  <object id="19" name="checkpoint_2" type="CHECKPOINT" x="2688" y="288" width="16" height="16"></object>
+  <object id="20" name="checkpoint_3" type="CHECKPOINT" x="2656" y="1024" width="16" height="16"></object>
+  <object id="21" name="chest_1" type="CHEST" x="768" y="1024" width="16" height="16"><properties><property name="tier" value="gold"/><property name="branch" value="branch_1"/></properties></object>
+  <object id="22" name="signpost_1" type="SIGNPOST" x="608" y="656" width="16" height="16"><properties><property name="direction" value="down"/><property name="branch" value="branch_1"/></properties></object>
+  <object id="23" name="chest_2" type="CHEST" x="1152" y="1024" width="16" height="16"><properties><property name="tier" value="gold"/><property name="branch" value="branch_2"/></properties></object>
+  <object id="24" name="signpost_2" type="SIGNPOST" x="1040" y="672" width="16" height="16"><properties><property name="direction" value="down"/><property name="branch" value="branch_2"/></properties></object>
+  <object id="25" name="chest_3" type="CHEST" x="4112" y="912" width="16" height="16"><properties><property name="tier" value="wood"/></properties></object>
+ </objectgroup>
+ <objectgroup id="9" name="lights">
+  <object id="26" name="light_1" type="LIGHT" x="1432" y="328"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.13"/></properties><point/></object>
+  <object id="27" name="light_2" type="LIGHT" x="1592" y="328"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.83"/></properties><point/></object>
+  <object id="28" name="light_3" type="LIGHT" x="1720" y="328"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.79"/></properties><point/></object>
+  <object id="29" name="light_4" type="LIGHT" x="1896" y="328"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.86"/></properties><point/></object>
+  <object id="30" name="light_5" type="LIGHT" x="3144" y="1000"><properties><property name="kind" value="monitor"/><property name="radius" type="int" value="48"/><property name="color" value="#7fe9ff"/><property name="intensity" type="float" value="0.5"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.94"/></properties><point/></object>
+  <object id="31" name="light_6" type="LIGHT" x="3432" y="1000"><properties><property name="kind" value="monitor"/><property name="radius" type="int" value="48"/><property name="color" value="#7fe9ff"/><property name="intensity" type="float" value="0.5"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.6"/></properties><point/></object>
+  <object id="32" name="light_7" type="LIGHT" x="2944" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.41"/></properties><point/></object>
+  <object id="33" name="light_8" type="LIGHT" x="3040" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.63"/></properties><point/></object>
+  <object id="34" name="light_9" type="LIGHT" x="3152" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.22"/></properties><point/></object>
+  <object id="35" name="light_10" type="LIGHT" x="3264" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.81"/></properties><point/></object>
+  <object id="36" name="light_11" type="LIGHT" x="3360" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.03"/></properties><point/></object>
+  <object id="37" name="light_12" type="LIGHT" x="3488" y="1016"><properties><property name="kind" value="tank"/><property name="radius" type="int" value="72"/><property name="color" value="#58e0d0"/><property name="intensity" type="float" value="0.65"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.99"/></properties><point/></object>
+  <object id="38" name="light_13" type="LIGHT" x="3960" y="868.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="160"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.53"/></properties><point/></object>
+  <object id="39" name="light_14" type="LIGHT" x="4264" y="868.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="160"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.56"/></properties><point/></object>
+  <object id="40" name="light_15" type="LIGHT" x="3768" y="868.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="160"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.09"/></properties><point/></object>
+  <object id="41" name="light_16" type="LIGHT" x="4456" y="868.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="160"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="int" value="0"/></properties><point/></object>
+  <object id="42" name="light_17" type="LIGHT" x="4544" y="984"><properties><property name="kind" value="exit"/><property name="radius" type="int" value="176"/><property name="color" value="#ffd75e"/><property name="intensity" type="int" value="1"/><property name="flicker" value="none"/><property name="phase" type="float" value="0.59"/></properties><point/></object>
+  <object id="43" name="light_18" type="LIGHT" x="1048" y="323.2"><properties><property name="kind" value="fire"/><property name="radius" type="int" value="96"/><property name="color" value="#ff8a3d"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.25"/></properties><point/></object>
+  <object id="44" name="light_19" type="LIGHT" x="2696" y="291.2"><properties><property name="kind" value="fire"/><property name="radius" type="int" value="96"/><property name="color" value="#ff8a3d"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.54"/></properties><point/></object>
+  <object id="45" name="light_20" type="LIGHT" x="2664" y="1027.2"><properties><property name="kind" value="fire"/><property name="radius" type="int" value="96"/><property name="color" value="#ff8a3d"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.66"/></properties><point/></object>
+  <object id="46" name="light_21" type="LIGHT" x="152" y="548.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.27"/></properties><point/></object>
+  <object id="47" name="light_22" type="LIGHT" x="312" y="548.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.97"/></properties><point/></object>
+  <object id="48" name="light_23" type="LIGHT" x="248" y="678.4"><properties><property name="kind" value="monitor"/><property name="radius" type="int" value="48"/><property name="color" value="#7fe9ff"/><property name="intensity" type="float" value="0.5"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.77"/></properties><point/></object>
+  <object id="49" name="light_24" type="LIGHT" x="520" y="532.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.87"/></properties><point/></object>
+  <object id="50" name="light_25" type="LIGHT" x="664" y="564.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.02"/></properties><point/></object>
+  <object id="51" name="light_26" type="LIGHT" x="776" y="548.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.7"/></properties><point/></object>
+  <object id="52" name="light_27" type="LIGHT" x="920" y="548.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.03"/></properties><point/></object>
+  <object id="53" name="light_28" type="LIGHT" x="1096" y="516.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.28"/></properties><point/></object>
+  <object id="54" name="light_29" type="LIGHT" x="936" y="196.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.38"/></properties><point/></object>
+  <object id="55" name="light_30" type="LIGHT" x="1064" y="196.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.34"/></properties><point/></object>
+  <object id="56" name="light_31" type="LIGHT" x="1304" y="212.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.8"/></properties><point/></object>
+  <object id="57" name="light_32" type="LIGHT" x="1432" y="212.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.76"/></properties><point/></object>
+  <object id="58" name="light_33" type="LIGHT" x="1592" y="212.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.46"/></properties><point/></object>
+  <object id="59" name="light_34" type="LIGHT" x="1720" y="212.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.42"/></properties><point/></object>
+  <object id="60" name="light_35" type="LIGHT" x="1848" y="180.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.56"/></properties><point/></object>
+  <object id="61" name="light_36" type="LIGHT" x="1976" y="212.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.34"/></properties><point/></object>
+  <object id="62" name="light_37" type="LIGHT" x="2392" y="196.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.05"/></properties><point/></object>
+  <object id="63" name="light_38" type="LIGHT" x="2184" y="326.4"><properties><property name="kind" value="monitor"/><property name="radius" type="int" value="48"/><property name="color" value="#7fe9ff"/><property name="intensity" type="float" value="0.5"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.52"/></properties><point/></object>
+  <object id="64" name="light_39" type="LIGHT" x="2584" y="164.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.67"/></properties><point/></object>
+  <object id="65" name="light_40" type="LIGHT" x="2744" y="164.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.37"/></properties><point/></object>
+  <object id="66" name="light_41" type="LIGHT" x="2584" y="564.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.42"/></properties><point/></object>
+  <object id="67" name="light_42" type="LIGHT" x="2776" y="564.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.86"/></properties><point/></object>
+  <object id="68" name="light_43" type="LIGHT" x="2552" y="900.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.79"/></properties><point/></object>
+  <object id="69" name="light_44" type="LIGHT" x="2680" y="868.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.93"/></properties><point/></object>
+  <object id="70" name="light_45" type="LIGHT" x="2552" y="1028.8"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.07"/></properties><point/></object>
+  <object id="71" name="light_46" type="LIGHT" x="2936" y="916.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.58"/></properties><point/></object>
+  <object id="72" name="light_47" type="LIGHT" x="3128" y="916.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.02"/></properties><point/></object>
+  <object id="73" name="light_48" type="LIGHT" x="3304" y="916.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.09"/></properties><point/></object>
+  <object id="74" name="light_49" type="LIGHT" x="3496" y="916.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.53"/></properties><point/></object>
+  <object id="75" name="light_50" type="LIGHT" x="3032" y="1064"><properties><property name="kind" value="toxic"/><property name="radius" type="int" value="64"/><property name="color" value="#a5d63a"/><property name="intensity" type="float" value="0.6"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.99"/></properties><point/></object>
+  <object id="76" name="light_51" type="LIGHT" x="3344" y="1064"><properties><property name="kind" value="toxic"/><property name="radius" type="int" value="64"/><property name="color" value="#a5d63a"/><property name="intensity" type="float" value="0.6"/><property name="flicker" value="pulse"/><property name="phase" type="float" value="0.39"/></properties><point/></object>
+  <object id="77" name="light_52" type="LIGHT" x="3736" y="884.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.26"/></properties><point/></object>
+  <object id="78" name="light_53" type="LIGHT" x="3912" y="884.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.33"/></properties><point/></object>
+  <object id="79" name="light_54" type="LIGHT" x="4088" y="884.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.4"/></properties><point/></object>
+  <object id="80" name="light_55" type="LIGHT" x="4296" y="884.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.21"/></properties><point/></object>
+  <object id="81" name="light_56" type="LIGHT" x="4456" y="884.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.91"/></properties><point/></object>
+  <object id="82" name="light_57" type="LIGHT" x="3944" y="1012.8"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.35"/></properties><point/></object>
+  <object id="83" name="light_58" type="LIGHT" x="504" y="900.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.43"/></properties><point/></object>
+  <object id="84" name="light_59" type="LIGHT" x="712" y="900.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.24"/></properties><point/></object>
+  <object id="85" name="light_60" type="LIGHT" x="904" y="900.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.68"/></properties><point/></object>
+  <object id="86" name="light_61" type="LIGHT" x="1112" y="900.8"><properties><property name="kind" value="lamp"/><property name="radius" type="int" value="144"/><property name="color" value="#ffb347"/><property name="intensity" type="int" value="1"/><property name="flicker" value="soft"/><property name="phase" type="float" value="0.49"/></properties><point/></object>
+  <object id="87" name="light_62" type="LIGHT" x="904" y="1028.8"><properties><property name="kind" value="electric"/><property name="radius" type="int" value="88"/><property name="color" value="#8ff0ff"/><property name="intensity" type="float" value="0.9"/><property name="flicker" value="strong"/><property name="phase" type="float" value="0.96"/></properties><point/></object>
+ </objectgroup>
+ <objectgroup id="10" name="zones">
+  <object id="88" name="room_1" type="ROOM" x="48" y="432" width="368" height="320"><properties><property name="kind" value="START"/><property name="profile" value="FLAT_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="89" name="room_2" type="ROOM" x="448" y="432" width="352" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="ARCH_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="90" name="room_3" type="ROOM" x="832" y="432" width="352" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="HIGH_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="91" name="room_4" type="ROOM" x="832" y="80" width="352" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="FLAT_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="92" name="room_5" type="ROOM" x="1216" y="80" width="832" height="320"><properties><property name="kind" value="MACHINERY_ROOM"/><property name="profile" value="INDUSTRIAL_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="93" name="room_6" type="ROOM" x="2080" y="80" width="368" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="BROKEN_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="94" name="room_7" type="ROOM" x="2480" y="80" width="368" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="HIGH_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_3"/></properties></object>
+  <object id="95" name="room_8" type="ROOM" x="2480" y="432" width="368" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="BROKEN_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_3"/></properties></object>
+  <object id="96" name="room_9" type="ROOM" x="2480" y="784" width="368" height="320"><properties><property name="kind" value="STANDARD"/><property name="profile" value="ARCH_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="97" name="room_10" type="ROOM" x="2880" y="784" width="720" height="320"><properties><property name="kind" value="LABORATORY_CHAMBER"/><property name="profile" value="FLAT_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="98" name="room_11" type="ROOM" x="3632" y="432" width="960" height="672"><properties><property name="kind" value="ARENA"/><property name="profile" value="HIGH_CEILING"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="99" name="branch_room_1" type="ROOM" x="448" y="784" width="352" height="320"><properties><property name="kind" value="BRANCH"/><property name="profile" value="HIGH_CEILING"/><property name="onPath" type="bool" value="false"/><property name="region" value="region_1"/></properties></object>
+  <object id="100" name="branch_room_2" type="ROOM" x="832" y="784" width="352" height="320"><properties><property name="kind" value="BRANCH"/><property name="profile" value="PIPE_CEILING"/><property name="onPath" type="bool" value="false"/><property name="region" value="region_1"/></properties></object>
+  <object id="101" name="landmark_1" type="LANDMARK" x="1216" y="80" width="832" height="320"><properties><property name="kind" value="MACHINERY_ROOM"/></properties></object>
+  <object id="102" name="landmark_2" type="LANDMARK" x="2880" y="784" width="720" height="320"><properties><property name="kind" value="LABORATORY_CHAMBER"/></properties></object>
+  <object id="103" name="landmark_3" type="LANDMARK" x="3632" y="432" width="960" height="672"><properties><property name="kind" value="ARENA"/></properties></object>
+ </objectgroup>
+ <objectgroup id="11" name="rooms">
+  <object id="104" name="room_1" type="ROOM" x="32" y="416" width="400" height="352"><properties><property name="kind" value="START"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="105" name="room_2" type="ROOM" x="432" y="416" width="384" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="106" name="room_3" type="ROOM" x="816" y="416" width="384" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_1"/></properties></object>
+  <object id="107" name="room_4" type="ROOM" x="816" y="64" width="384" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="108" name="room_5" type="ROOM" x="1200" y="64" width="864" height="352"><properties><property name="kind" value="MACHINERY_ROOM"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="109" name="room_6" type="ROOM" x="2064" y="64" width="400" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_2"/></properties></object>
+  <object id="110" name="room_7" type="ROOM" x="2464" y="64" width="400" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_3"/></properties></object>
+  <object id="111" name="room_8" type="ROOM" x="2464" y="416" width="400" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_3"/></properties></object>
+  <object id="112" name="room_9" type="ROOM" x="2464" y="768" width="400" height="352"><properties><property name="kind" value="STANDARD"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="113" name="room_10" type="ROOM" x="2864" y="768" width="752" height="352"><properties><property name="kind" value="LABORATORY_CHAMBER"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="114" name="room_11" type="ROOM" x="3616" y="416" width="992" height="704"><properties><property name="kind" value="ARENA"/><property name="onPath" type="bool" value="true"/><property name="region" value="region_4"/></properties></object>
+  <object id="115" name="branch_room_1" type="ROOM" x="432" y="768" width="384" height="352"><properties><property name="kind" value="BRANCH"/><property name="onPath" type="bool" value="false"/><property name="region" value="region_1"/></properties></object>
+  <object id="116" name="branch_room_2" type="ROOM" x="816" y="768" width="384" height="352"><properties><property name="kind" value="BRANCH"/><property name="onPath" type="bool" value="false"/><property name="region" value="region_1"/></properties></object>
+ </objectgroup>
+ <objectgroup id="12" name="doors">
+  <object id="117" name="door_1" type="DOOR" x="416" y="624" width="32" height="48"><properties><property name="room" value="room_1"/><property name="targetRoom" value="room_2"/><property name="targetDoor" value="door_2"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="472"/><property name="spawnY" type="int" value="672"/></properties></object>
+  <object id="118" name="door_2" type="DOOR" x="416" y="624" width="32" height="48"><properties><property name="room" value="room_2"/><property name="targetRoom" value="room_1"/><property name="targetDoor" value="door_1"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="392"/><property name="spawnY" type="int" value="672"/></properties></object>
+  <object id="119" name="door_3" type="DOOR" x="800" y="640" width="32" height="48"><properties><property name="room" value="room_2"/><property name="targetRoom" value="room_3"/><property name="targetDoor" value="door_4"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="856"/><property name="spawnY" type="int" value="688"/></properties></object>
+  <object id="120" name="door_4" type="DOOR" x="800" y="640" width="32" height="48"><properties><property name="room" value="room_3"/><property name="targetRoom" value="room_2"/><property name="targetDoor" value="door_3"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="776"/><property name="spawnY" type="int" value="688"/></properties></object>
+  <object id="121" name="door_5" type="DOOR" x="992" y="400" width="16" height="32"><properties><property name="room" value="room_4"/><property name="targetRoom" value="room_3"/><property name="targetDoor" value="door_6"/><property name="kind" value="LADDER"/><property name="direction" value="DOWN"/><property name="spawnX" type="int" value="1000"/><property name="spawnY" type="int" value="464"/></properties></object>
+  <object id="122" name="door_6" type="DOOR" x="992" y="400" width="16" height="32"><properties><property name="room" value="room_3"/><property name="targetRoom" value="room_4"/><property name="targetDoor" value="door_5"/><property name="kind" value="LADDER"/><property name="direction" value="UP"/><property name="spawnX" type="int" value="1000"/><property name="spawnY" type="int" value="400"/></properties></object>
+  <object id="123" name="door_7" type="DOOR" x="1184" y="304" width="32" height="48"><properties><property name="room" value="room_4"/><property name="targetRoom" value="room_5"/><property name="targetDoor" value="door_8"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="1240"/><property name="spawnY" type="int" value="352"/></properties></object>
+  <object id="124" name="door_8" type="DOOR" x="1184" y="304" width="32" height="48"><properties><property name="room" value="room_5"/><property name="targetRoom" value="room_4"/><property name="targetDoor" value="door_7"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="1160"/><property name="spawnY" type="int" value="352"/></properties></object>
+  <object id="125" name="door_9" type="DOOR" x="2048" y="288" width="32" height="48"><properties><property name="room" value="room_5"/><property name="targetRoom" value="room_6"/><property name="targetDoor" value="door_10"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="2104"/><property name="spawnY" type="int" value="336"/></properties></object>
+  <object id="126" name="door_10" type="DOOR" x="2048" y="288" width="32" height="48"><properties><property name="room" value="room_6"/><property name="targetRoom" value="room_5"/><property name="targetDoor" value="door_9"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="2024"/><property name="spawnY" type="int" value="336"/></properties></object>
+  <object id="127" name="door_11" type="DOOR" x="2448" y="256" width="32" height="48"><properties><property name="room" value="room_6"/><property name="targetRoom" value="room_7"/><property name="targetDoor" value="door_12"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="2504"/><property name="spawnY" type="int" value="304"/></properties></object>
+  <object id="128" name="door_12" type="DOOR" x="2448" y="256" width="32" height="48"><properties><property name="room" value="room_7"/><property name="targetRoom" value="room_6"/><property name="targetDoor" value="door_11"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="2424"/><property name="spawnY" type="int" value="304"/></properties></object>
+  <object id="129" name="door_13" type="DOOR" x="2640" y="400" width="16" height="32"><properties><property name="room" value="room_7"/><property name="targetRoom" value="room_8"/><property name="targetDoor" value="door_14"/><property name="kind" value="LADDER"/><property name="direction" value="DOWN"/><property name="spawnX" type="int" value="2648"/><property name="spawnY" type="int" value="464"/></properties></object>
+  <object id="130" name="door_14" type="DOOR" x="2640" y="400" width="16" height="32"><properties><property name="room" value="room_8"/><property name="targetRoom" value="room_7"/><property name="targetDoor" value="door_13"/><property name="kind" value="LADDER"/><property name="direction" value="UP"/><property name="spawnX" type="int" value="2648"/><property name="spawnY" type="int" value="400"/></properties></object>
+  <object id="131" name="door_15" type="DOOR" x="2592" y="752" width="16" height="32"><properties><property name="room" value="room_8"/><property name="targetRoom" value="room_9"/><property name="targetDoor" value="door_16"/><property name="kind" value="LADDER"/><property name="direction" value="DOWN"/><property name="spawnX" type="int" value="2600"/><property name="spawnY" type="int" value="816"/></properties></object>
+  <object id="132" name="door_16" type="DOOR" x="2592" y="752" width="16" height="32"><properties><property name="room" value="room_9"/><property name="targetRoom" value="room_8"/><property name="targetDoor" value="door_15"/><property name="kind" value="LADDER"/><property name="direction" value="UP"/><property name="spawnX" type="int" value="2600"/><property name="spawnY" type="int" value="752"/></properties></object>
+  <object id="133" name="door_17" type="DOOR" x="2848" y="1008" width="32" height="48"><properties><property name="room" value="room_9"/><property name="targetRoom" value="room_10"/><property name="targetDoor" value="door_18"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="2904"/><property name="spawnY" type="int" value="1056"/></properties></object>
+  <object id="134" name="door_18" type="DOOR" x="2848" y="1008" width="32" height="48"><properties><property name="room" value="room_10"/><property name="targetRoom" value="room_9"/><property name="targetDoor" value="door_17"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="2824"/><property name="spawnY" type="int" value="1056"/></properties></object>
+  <object id="135" name="door_19" type="DOOR" x="3600" y="976" width="32" height="48"><properties><property name="room" value="room_10"/><property name="targetRoom" value="room_11"/><property name="targetDoor" value="door_20"/><property name="kind" value="SIDE"/><property name="direction" value="RIGHT"/><property name="spawnX" type="int" value="3656"/><property name="spawnY" type="int" value="1024"/></properties></object>
+  <object id="136" name="door_20" type="DOOR" x="3600" y="976" width="32" height="48"><properties><property name="room" value="room_11"/><property name="targetRoom" value="room_10"/><property name="targetDoor" value="door_19"/><property name="kind" value="SIDE"/><property name="direction" value="LEFT"/><property name="spawnX" type="int" value="3576"/><property name="spawnY" type="int" value="1024"/></properties></object>
+  <object id="137" name="door_21" type="DOOR" x="560" y="752" width="16" height="32"><properties><property name="room" value="room_2"/><property name="targetRoom" value="branch_room_1"/><property name="targetDoor" value="door_22"/><property name="kind" value="LADDER"/><property name="direction" value="DOWN"/><property name="spawnX" type="int" value="568"/><property name="spawnY" type="int" value="816"/></properties></object>
+  <object id="138" name="door_22" type="DOOR" x="560" y="752" width="16" height="32"><properties><property name="room" value="branch_room_1"/><property name="targetRoom" value="room_2"/><property name="targetDoor" value="door_21"/><property name="kind" value="LADDER"/><property name="direction" value="UP"/><property name="spawnX" type="int" value="568"/><property name="spawnY" type="int" value="752"/></properties></object>
+  <object id="139" name="door_23" type="DOOR" x="944" y="752" width="16" height="32"><properties><property name="room" value="room_3"/><property name="targetRoom" value="branch_room_2"/><property name="targetDoor" value="door_24"/><property name="kind" value="LADDER"/><property name="direction" value="DOWN"/><property name="spawnX" type="int" value="952"/><property name="spawnY" type="int" value="816"/></properties></object>
+  <object id="140" name="door_24" type="DOOR" x="944" y="752" width="16" height="32"><properties><property name="room" value="branch_room_2"/><property name="targetRoom" value="room_3"/><property name="targetDoor" value="door_23"/><property name="kind" value="LADDER"/><property name="direction" value="UP"/><property name="spawnX" type="int" value="952"/><property name="spawnY" type="int" value="752"/></properties></object>
+ </objectgroup>
+</map>

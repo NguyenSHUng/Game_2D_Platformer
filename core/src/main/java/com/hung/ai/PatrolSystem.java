@@ -25,32 +25,57 @@ public class PatrolSystem {
     }
 
     public void update() {
+
         TileGrid grid = world.getLevel().getGrid();
         Array<Entity> entities = world.getEntities();
+        
         for (int i = 0; i < entities.size; i++) {
+        
             Entity entity = entities.get(i);
             PatrolComponent patrol = entity.getPatrol();
             MovementComponent movement = entity.getMovement();
             ColliderComponent collider = entity.getCollider();
+
             if (patrol == null || movement == null || collider == null) continue;
+            
             HealthComponent health = entity.getHealth();
+            
             if (health != null && (health.isDead() || health.hurtTime > 0f)) continue;
 
             TransformComponent transform = entity.getTransform();
             boolean canMove = movement.isGrounded || movement.isFlying;
+            
             if (canMove && shouldTurn(grid, transform, collider, movement, patrol)) {
                 patrol.direction = -patrol.direction;
             }
+            
             transform.velocity.x = canMove ? patrol.direction * movement.moveSpeed : 0f;
             transform.isFacingRight = patrol.direction > 0;
         }
     }
 
-    private static boolean shouldTurn(TileGrid grid, TransformComponent transform, ColliderComponent collider,
-                                      MovementComponent movement, PatrolComponent patrol) {
+    private static boolean shouldTurn(
+        TileGrid grid, 
+        TransformComponent transform, 
+        ColliderComponent collider,
+        MovementComponent movement, 
+        PatrolComponent patrol
+    ) {
+
         float x = transform.position.x;
-        if (patrol.direction > 0 && x >= patrol.maxX) return true;
-        if (patrol.direction < 0 && x <= patrol.minX) return true;
+
+        if (patrol.direction > 0) {
+            if (x >= patrol.maxX) {
+                return true;
+            }
+        }
+
+        if (patrol.direction < 0) {
+            if (x <= patrol.minX) {
+                return true;
+            }
+        }
+
         if (movement.isBlocked) return true;
         if (movement.isFlying) return false;
 

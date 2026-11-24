@@ -12,9 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.hung.animation.AnimationSet;
 import com.hung.animation.AnimationType;
-import com.hung.combat.ContactDamageSystem;
-import com.hung.combat.FireDefinition;
 import com.hung.combat.Weapon;
+import com.hung.combat.definition.FireDefinition;
 import com.hung.component.AnimationComponent;
 import com.hung.component.ArsenalComponent;
 import com.hung.component.AttackComponent;
@@ -23,6 +22,7 @@ import com.hung.component.HealthComponent;
 import com.hung.component.MovementComponent;
 import com.hung.component.WeaponComponent;
 import com.hung.entity.Entity;
+import com.hung.entity.enemy.Enemy;
 import com.hung.world.PhysicsSettings;
 import com.hung.world.World;
 
@@ -176,7 +176,7 @@ public class StatsPanel implements Disposable {
             if (collider.crouchHeight > 0f) y = line(batch, x, y, "Crouched", String.format(Locale.ROOT, "%.1f u tall", collider.crouchHeight));
         }
         if (health != null) y = line(batch, x, y, "Invulnerable", String.format(Locale.ROOT, "%.1f s after a hit", health.invulnerability));
-        y = line(batch, x, y, "Enemy touch", "-" + ContactDamageSystem.ENEMY_CONTACT_DAMAGE + " HP");
+        y = line(batch, x, y, "Enemy touch", "-" + Enemy.CONTACT_DAMAGE + " HP");
         if (attack != null) y = line(batch, x, y, "Melee", attack.damage + " dmg per swing");
         y -= LINE * 0.4f;
         y = section(batch, x, y, "STATE");

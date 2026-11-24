@@ -14,7 +14,7 @@ import com.hung.entity.Entity;
 import com.hung.world.World;
 
 /**
- * Screen-space overlay drawn after the world: the player's health bar and a controls hint.
+ * Screen-space overlay drawn after the world: the player's health bar and weapon, and the free camera's keys.
  * Uses its own pixel camera so it doesn't move or zoom with the game camera.
  */
 public class HudRenderer implements Disposable {
@@ -27,8 +27,6 @@ public class HudRenderer implements Disposable {
     private static final Color BAR_BACK_COLOR = new Color(0.08f, 0.08f, 0.08f, 0.85f);
     private static final Color BAR_FILL_COLOR = new Color(0.75f, 0.16f, 0.12f, 1f);
     private static final Color TEXT_COLOR = new Color(0.85f, 0.85f, 0.8f, 1f);
-    private static final String PLAYER_HINT =
-        "A/D walk  Space jump  W/S ladder  S crouch  J/mouse attack-shoot (hold: auto)  R reload  1/2/3/Q weapon  I stats  M map  -/= zoom  L lights  Esc menu  F2 free camera  F3 debug";
     private static final String RELOADING = "  RELOADING";
     private static final String FREE_CAMERA_HINT =
         "FREE CAMERA  WASD pan  Shift fast  Q/E zoom  Tab next enemy  Home spawn  F2 back to player";
@@ -84,8 +82,8 @@ public class HudRenderer implements Disposable {
             }
             font.draw(batch, weaponText, MARGIN, top - BAR_HEIGHT - TEXT_GAP);
         }
-        String hint = player == null ? NO_PLAYER_HINT : isCameraFree ? FREE_CAMERA_HINT : PLAYER_HINT;
-        font.draw(batch, hint, MARGIN, MARGIN + font.getCapHeight());
+        String hint = player == null ? NO_PLAYER_HINT : isCameraFree ? FREE_CAMERA_HINT : null;
+        if (hint != null) font.draw(batch, hint, MARGIN, MARGIN + font.getCapHeight());
         batch.end();
     }
 

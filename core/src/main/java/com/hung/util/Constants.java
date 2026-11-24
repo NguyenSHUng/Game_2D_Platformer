@@ -7,10 +7,12 @@ package com.hung.util;
 public final class Constants {
 
     /**
-     * Map loaded when the game starts: a Tiled map exported by the map generator
-     * (build_asset/build_map/platformer-map-generator, tools/export-game.mjs).
+     * One Tiled map per game mode (core/GameMode): 13, 25 and 42 rooms, each exported by the map
+     * generator (build_asset/build_map/platformer-map-generator, tools/export-game.mjs --mode <mode>).
      */
-    public static final String START_MAP_PATH = "maps/bunker_482931/map.tmx";
+    public static final String EASY_MAP_PATH = "maps/bunker_easy/map_easy.tmx";
+    public static final String MEDIUM_MAP_PATH = "maps/bunker_medium/map_medium.tmx";
+    public static final String HARD_MAP_PATH = "maps/bunker_hard/map_hard.tmx";
 
     /**
      * Player used when the map has no "playerCharacter" property (written by
@@ -33,17 +35,6 @@ public final class Constants {
     public static final String[] DEFAULT_PLAYER_ARSENAL = {
         "sprites/weapons/service_pistol/service_pistol.json",
         "sprites/weapons/assault_rifle/assault_rifle.json",
-    };
-
-    /**
-     * Trial of the enemy generator's phase 2 archetypes (world/TrialEnemies): one of each is placed in
-     * the rooms after the start room until the map generator places them itself. Empty = off.
-     */
-    public static final String[] TRIAL_ENEMIES = {
-        "sprites/enemies/crawler_01/character.json",
-        "sprites/enemies/flyer_drone_01/character.json",
-        "sprites/enemies/flyer_wasp_01/character.json",
-        "sprites/enemies/mini_boss_01/character.json",
     };
 
     /** Attachment profile for a character/weapon pair: format with (characterId, weaponId). */

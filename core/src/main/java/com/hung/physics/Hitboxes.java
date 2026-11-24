@@ -38,7 +38,7 @@ public final class Hitboxes {
         AnimationComponent animation = entity.getAnimation();
         if (animation == null) return false;
         AnimationType type = animation.currentType;
-        if (type != AnimationType.ATTACK && type != AnimationType.ATTACK_2) return false;
+        if (type != AnimationType.ATTACK) return false;
         Rectangle[] boxes = animation.getAttackBoxes().get(type);
         Rectangle spriteBox = boxes != null ? boxes[AnimationFrames.authoredFrame(animation)] : null;
         if (spriteBox == null) return false;
