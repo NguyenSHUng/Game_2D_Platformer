@@ -146,8 +146,8 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `enemy/JumpPlanner.java` | 85 | Tìm cú nhảy an toàn trên lưới tile: qua hố, gai, bậc, lên bệ thấp |
 | `enemy/CrawlerEnemy.java` | 28 | crawler_01: con số của crawler |
 | `enemy/FlyingEnemy.java` | 126 | Quái bay: override đuổi (bỏ qua mép vực), đánh trên không, lái độ cao, xác rơi sau DEATH |
-| `enemy/EnemyFactory.java` | 196 | Chọn lớp quái theo khối `gameplay` của file (`newEnemy`), rồi lắp component từ file: animation + hitbox theo khung, thân, đoạn tuần tra, hiệu ứng. Đổi các mức LOW / MEDIUM / HIGH thành con số máu và sát thương |
-| `enemy/EnemyDefinition.java` | 106 | Phần của `character.json` enemy mà game dùng: anchor, sprite sheet, animation (frame, hitbox), khối gameplay. Chỉ đọc sau khi nạp, dùng chung cho mọi con cùng loại |
+| `enemy/EnemyFactory.java` | 189 | Chọn lớp quái theo `archetype` của file (`newEnemy`), rồi lắp component từ file: animation + hitbox theo khung, thân, đoạn tuần tra, hiệu ứng. Đổi các mức LOW / MEDIUM / HIGH thành con số máu và sát thương |
+| `enemy/EnemyDefinition.java` | 107 | Phần của `character.json` enemy mà game dùng: anchor, sprite sheet, animation (frame, hitbox), khối gameplay. Chỉ đọc sau khi nạp, dùng chung cho mọi con cùng loại |
 
 ### 3.4 `component/` — dữ liệu thuần
 

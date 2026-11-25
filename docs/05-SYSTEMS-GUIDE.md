@@ -37,7 +37,7 @@
 Xuất bởi map generator (`build_asset/build_map/platformer-map-generator`, `node tools/export-game.mjs --mode easy|medium|hard`).
 File mở được bằng [Tiled](https://www.mapeditor.org) để chỉnh tay. Mỗi chế độ một map: `GameMode.EASY` / `MEDIUM` / `HARD` → `Constants.EASY_MAP_PATH` / `MEDIUM_MAP_PATH` / `HARD_MAP_PATH`.
 Mỗi map một thư mục (`bunker_easy`, `bunker_medium`, `bunker_hard`). Tool chỉ đặt những quái đang có trong `assets/sprites/enemies/`; bảng `MODES` có `roomWidthMin` / `roomWidthMax` / `roomHeight` (cỡ ô phòng, tile), `enemyDensity`,
-`enemySpacing` (bề rộng phòng cho mỗi quái) và `mix` (bao nhiêu melee đổi thành crawler / wasp, rải đều). Object `ENEMY` của quái bay đặt cao 40 px trên sàn.
+`enemySpacing` (bề rộng phòng cho mỗi quái), `enemiesPerRun`, `enemyMinRun`, `enemiesOnTiers`, `featureSpacing` và `mix` (bao nhiêu melee đổi thành crawler / wasp, rải đều). Object `ENEMY` của quái bay đặt cao 40 px trên sàn.
 
 | Phần | Nội dung |
 |------|----------|
@@ -68,7 +68,8 @@ Do enemy generator (`build_asset/build_enemy/enemy-character-generator`) tạo; 
 | `spriteSheet` | `image`, `frameWidth`, `frameHeight` |
 | `animations.<tên>` | `state` (`IDLE`, `MOVE`→WALK, `ATTACK_1`→ATTACK, `HIT`, `DEATH`), `loop`, `frames[]` (vị trí, `duration` ms, `bounds`, `attackActive`, `hitbox`) |
 | `animations.move.move` | `groundSpeed` / `airSpeed`: tốc độ không trượt chân (px/s) |
-| `gameplay` | `locomotion` (`GROUND` / `AIR`), `durabilityClass`, `damageClass`, `attacks.<state>.reach.world` |
+| `archetype` | `SMALL_MELEE`, `CRAWLER`, `FLYING`: chọn class quái |
+| `gameplay` | `durabilityClass`, `damageClass`, `attacks.<state>.reach.world` |
 
 - Hộp va chạm lấy từ `bounds` của khung IDLE đầu tiên: (rộng − 4) × cao, nhân `drawScale` và `SIZE_SCALE` (1,2). Với quái `small_melee_*`, số trong file
   được giữ cố định, không đo lại theo hình.

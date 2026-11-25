@@ -21,12 +21,14 @@ Màn hình chính ─► chọn chế độ ─► vào boong-ke
 
   | Chế độ | File | Kích thước (tile) | Phòng | Checkpoint | Melee | Quái khác |
   |---|---|---|---|---|---|---|
-  | Easy | `bunker_easy/map_easy.tmx` | 290 × 71 | 13 | 3 | 10 | 3 crawler, 2 wasp |
-  | Medium | `bunker_medium/map_medium.tmx` | 470 × 71 | 26 | 6 | 19 | 6 crawler, 5 wasp |
-  | Hard | `bunker_hard/map_hard.tmx` | 780 × 93 | 42 | 9 | 26 | 11 crawler, 9 wasp |
+  | Easy | `bunker_easy/map_easy.tmx` | 290 × 71 | 13 | 4 | 12 | 5 crawler, 4 wasp |
+  | Medium | `bunker_medium/map_medium.tmx` | 470 × 71 | 25 | 5 | 31 | 10 crawler, 8 wasp |
+  | Hard | `bunker_hard/map_hard.tmx` | 780 × 93 | 43 | 8 | 45 | 16 crawler, 12 wasp |
 - **Hard đang tạm khoá:** menu hiện LOCKED, không bắt đầu hay chơi tiếp được; save Hard vẫn giữ. Mở lại: đổi `true` thành `false` ở dòng HARD của
   `GameMode`.
 - **Cỡ phòng:** ô phòng rộng 22–29 tile, cao khoảng 22 (`ROOMS` trong `export-game.mjs`; trước là 28–38 × 25).
+- **Chướng ngoại vật và quái:** cũng ở `ROOMS`: hố (`gapFrequency`), gai và chất độc (`hazardDensity`), bệ (`platformDensity`), khoảng cách
+  giữa các vật (`featureSpacing`); quái đứng cả trên bệ cao (`enemiesOnTiers`), nhiều con chung một đoạn sàn (`enemiesPerRun`).
 - **Thua:** không có Game Over; chết là hồi sinh ở checkpoint cuối với đầy máu.
 
 ## 2. Điều khiển

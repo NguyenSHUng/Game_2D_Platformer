@@ -17,7 +17,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class EnemyDefinition {
     public String id;
     public String name;
-    public String archetype;
+    /** Which enemy class plays it (EnemyFactory); any other name in the file is a loading error. */
+    public Archetype archetype;
     public String category;
     /** Sprite pixels → world units; 1 for phase 1 files (field absent). */
     public float drawScale = 1f;
@@ -27,6 +28,8 @@ public class EnemyDefinition {
     public ObjectMap<String, Animation> animations;
     /** Phase 2 only: role and qualitative classes, plus values measured from the animations. */
     public Gameplay gameplay;
+
+    public enum Archetype { SMALL_MELEE, CRAWLER, FLYING }
 
     public static class Point {
         public int x;
@@ -87,8 +90,6 @@ public class EnemyDefinition {
     }
 
     public static class Gameplay {
-        /** GROUND or AIR. */
-        public String locomotion;
         /** LOW / MEDIUM / HIGH. */
         public String durabilityClass;
         public String damageClass;

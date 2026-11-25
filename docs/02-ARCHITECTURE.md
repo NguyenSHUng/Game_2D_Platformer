@@ -121,7 +121,7 @@ Entity                         túi component (cửa, đạn, hiệu ứng là E
 ```
 
 `EnemyFactory.newEnemy` chọn lớp theo `character.json`:
-`locomotion: AIR` → `FlyingEnemy`; `archetype: SMALL_MELEE` → `MeleeEnemy`; còn lại → `CrawlerEnemy`.
+`archetype` `SMALL_MELEE` → `MeleeEnemy`; `CRAWLER` → `CrawlerEnemy`; `FLYING` → `FlyingEnemy` (enum `EnemyDefinition.Archetype`; tên khác = lỗi khi nạp).
 
 **Component được đóng gói** (có quy tắc trải trên nhiều field):
 

@@ -18,8 +18,8 @@ import com.hung.util.ResourceLoader;
 import com.hung.world.EnemySpawn;
 
 /**
- * Builds enemies from the enemy generator's exports (build_asset/build_enemy). The file's gameplay
- * block picks the class (see {@link #newEnemy}); the class holds the behaviour and its numbers,
+ * Builds enemies from the enemy generator's exports (build_asset/build_enemy). The file's
+ * archetype picks the class (see {@link #newEnemy}); the class holds the behaviour and its numbers,
  * this factory adds the components from the file: sprite animations with attack hitboxes, body,
  * patrol stretch, health and damage from the qualitative classes (docs/04-GAME-DESIGN.md) scaled by the mode's EnemySkill.
  */
@@ -27,7 +27,6 @@ public final class EnemyFactory {
 
     /** Enemies are drawn, collide and reach this much bigger than their files say. */
     private static final float SIZE_SCALE = 1.2f;
-    private static final String SMALL_MELEE = "SMALL_MELEE";
     /** Files without a durabilityClass (small_melee_*) get this health. */
     private static final int DEFAULT_ENEMY_HEALTH = 30;
     private static final int HEALTH_LOW = 20;
@@ -60,10 +59,6 @@ public final class EnemyFactory {
         resources.queueTexture(sheetPath(definition, definitionPath));
     }
 
-    public static boolean isFlyer(EnemyDefinition definition) {
-        return definition.gameplay != null && "AIR".equals(definition.gameplay.locomotion);
-    }
-
     /**
      * Enemy at a spawn. Ground enemies stand with their feet on spawn.y and walk at the MOVE
      * animation's ground speed; flyers hover with their body bottom at spawn.y.
@@ -71,7 +66,6 @@ public final class EnemyFactory {
     public static Enemy createEnemy(EnemyDefinition definition, String definitionPath, ResourceLoader resources,
                                     EnemySpawn spawn, EnemySkill skill) {
         float scale = (definition.drawScale > 0f ? definition.drawScale : 1f) * SIZE_SCALE;
-        boolean isFlyer = isFlyer(definition);
         Enemy entity = newEnemy(definition, spawn);
         entity.setSkill(skill);
         entity.getTransform().position.set(spawn.x, spawn.y);
@@ -81,7 +75,7 @@ public final class EnemyFactory {
         EnemyDefinition.Animation move = definition.animations.get("move");
         float speed = move != null && move.move != null ? Math.max(move.move.groundSpeed, move.move.airSpeed) : 0f;
         movement.moveSpeed = speed * scale;
-        movement.isFlying = isFlyer;
+        movement.isFlying = entity instanceof FlyingEnemy;
         entity.setMovement(movement);
 
         EnemyDefinition.Bounds bounds = definition.animations.get("idle").frames.first().bounds;
@@ -158,15 +152,14 @@ public final class EnemyFactory {
         }
     }
 
-    /**
-     * The class for this enemy: AIR locomotion → flyer; SMALL_MELEE
-     * archetype → melee; anything else → crawler.
-     */
+    /** The class for this enemy, from the file's archetype. */
     private static Enemy newEnemy(EnemyDefinition definition, EnemySpawn spawn) {
         float attackRange = attackRange(definition);
-        if (isFlyer(definition)) return new FlyingEnemy(attackRange, spawn.y);
-        if (SMALL_MELEE.equals(definition.archetype)) return new MeleeEnemy(attackRange);
-        return new CrawlerEnemy(attackRange);
+        return switch (definition.archetype) {
+            case SMALL_MELEE -> new MeleeEnemy(attackRange);
+            case CRAWLER -> new CrawlerEnemy(attackRange);
+            case FLYING -> new FlyingEnemy(attackRange, spawn.y);
+        };
     }
 
     /** 80% of the shortest reach the enemy tool measured, plus half the player's width. */

@@ -7,7 +7,7 @@ package com.hung.util;
 public final class Constants {
 
     /**
-     * One Tiled map per game mode (core/GameMode): 13, 25 and 42 rooms, each exported by the map
+     * One Tiled map per game mode (core/GameMode): 13, 25 and 43 rooms, each exported by the map
      * generator (build_asset/build_map/platformer-map-generator, tools/export-game.mjs --mode <mode>).
      */
     public static final String EASY_MAP_PATH = "maps/bunker_easy/map_easy.tmx";

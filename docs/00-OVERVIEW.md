@@ -22,7 +22,7 @@
 | Di chuyển | Đi, nhảy (coyote time, jump buffer), ngồi, leo thang, xuống bệ một chiều |
 | Chiến đấu | Dao (cận chiến theo khung animation), súng lục bán tự động, súng trường liên thanh, nạp đạn, đạn bay có va chạm |
 | Quái | 3 loại melee, crawler, quái bay: biết tuần tra, phát hiện, nhớ, đuổi, tấn công; từ Medium còn gọi bầy, nhảy, đón đầu |
-| Thế giới | 13 / 26 / 42 phòng (Easy / Medium / Hard) nối bằng cửa, thang, hố rơi; camera bám phòng; minimap; checkpoint; bẫy gai, chất độc; tường phá được |
+| Thế giới | 13 / 25 / 43 phòng (Easy / Medium / Hard) nối bằng cửa, thang, hố rơi; camera bám phòng; minimap; checkpoint; bẫy gai, chất độc; tường phá được |
 | Hình ảnh | Ánh sáng theo đèn của map, hiệu ứng súng, bảng nhân vật, lớp debug |
 
 Chưa có: âm thanh, vật phẩm nhặt được, chuyển màn khi tới lối ra, ngắm bằng chuột.
