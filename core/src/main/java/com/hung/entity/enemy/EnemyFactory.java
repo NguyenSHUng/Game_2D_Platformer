@@ -25,22 +25,17 @@ import com.hung.world.EnemySpawn;
  */
 public final class EnemyFactory {
 
-    /** Enemies are drawn, collide and reach this much bigger than their files say. */
     private static final float SIZE_SCALE = 1.2f;
-    /** Files without a durabilityClass (small_melee_*) get this health. */
     private static final int DEFAULT_ENEMY_HEALTH = 30;
     private static final int HEALTH_LOW = 20;
     private static final int HEALTH_MEDIUM = 40;
-    /** Attack damage per damageClass (player: 100 HP), before EnemySkill. */
     private static final int DAMAGE_LOW = 8;
     private static final int DAMAGE_MEDIUM = 12;
     private static final int ENEMY_COLLIDER_INSET = 4;
     private static final float MIN_COLLIDER_SIZE = 4f;
     private static final float FRAME_TICK_SECONDS = 0.01f;
     private static final float MILLIS_PER_SECOND = 1000f;
-    /** Starts an attack when the player is within this share of the measured reach… */
     private static final float ATTACK_RANGE_RATIO = 0.8f;
-    /** …plus about half the player's body width (the hitbox only has to touch the body). */
     private static final float TARGET_HALF_WIDTH = 4f;
     private static final float DEFAULT_ATTACK_RANGE = 16f;
 

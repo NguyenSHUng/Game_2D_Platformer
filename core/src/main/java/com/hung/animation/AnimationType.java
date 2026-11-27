@@ -15,6 +15,5 @@ public enum AnimationType {
     HIT,
     DEATH,
     CROUCH,
-    /** Firing a firearm; its FIRE frame is when the shot leaves the muzzle. */
     SHOOT
 }

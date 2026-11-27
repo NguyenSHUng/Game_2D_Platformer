@@ -18,8 +18,8 @@ import com.hung.world.World;
  * animation) > CROUCH > JUMP > WALK > IDLE. The states come from the active stance's set (holding the
  * pistol: the two-handed *_PISTOL animations), so walking or jumping keeps the gun aimed.
  *  - JUMP frames follow the vertical speed (launch → apex → fall) instead of time.
- *  - WALK plays faster when the entity moves faster than its stride speed (capped,
- *    until there is a RUN animation), so the feet slide less.
+ *  - WALK plays faster when the entity moves faster than its stride speed (capped),
+ *    so the feet slide less.
  * Reads: TransformComponent, MovementComponent, AttackComponent, HealthComponent. Writes: AnimationComponent.
  */
 public class AnimationSystem {

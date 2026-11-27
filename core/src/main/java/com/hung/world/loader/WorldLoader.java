@@ -36,12 +36,12 @@ import com.hung.world.World;
 /**
  * Builds a ready-to-play World from a Tiled map exported by the map generator
  * (build_asset/build_map, tools/export-game.mjs):
- *   - "terrain" tile layer → collision grid (each tile's "type" property)
- *   - "spawns" objects     → player spawn and exit
- *   - "enemies" objects    → enemies from the enemy generator's character.json
- *   - "pois" objects       → checkpoints (type CHECKPOINT)
- *   - "rooms" / "doors"    → rooms with camera bounds and door entities (RoomLoader)
- *   - map properties       → movement physics ("physics.*", in tiles) and, optionally,
+ *   - "terrain" tile layer -> collision grid (each tile's "type" property)
+ *   - "spawns" objects     -> player spawn and exit
+ *   - "enemies" objects    -> enemies from the enemy generator's character.json
+ *   - "pois" objects       -> checkpoints (type CHECKPOINT)
+ *   - "rooms" / "doors"    -> rooms with camera bounds and door entities (RoomLoader)
+ *   - map properties       -> movement physics ("physics.*", in tiles) and, optionally,
  *                            "playerCharacter" / "playerWeapon" JSON paths (a player whose strips leave
  *                            the weapon out holds Constants.DEFAULT_PLAYER_WEAPON when none is named)
  * The player is the map's playerCharacter, else Constants.DEFAULT_PLAYER_CHARACTER; when

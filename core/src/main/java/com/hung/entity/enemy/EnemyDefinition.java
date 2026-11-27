@@ -17,16 +17,12 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class EnemyDefinition {
     public String id;
     public String name;
-    /** Which enemy class plays it (EnemyFactory); any other name in the file is a loading error. */
     public Archetype archetype;
     public String category;
-    /** Sprite pixels → world units; 1 for phase 1 files (field absent). */
     public float drawScale = 1f;
     public Anchors anchors;
     public SpriteSheet spriteSheet;
-    /** Keyed by animation name: idle, move, attack (attack_1), defend, hit, death. */
     public ObjectMap<String, Animation> animations;
-    /** Phase 2 only: role and qualitative classes, plus values measured from the animations. */
     public Gameplay gameplay;
 
     public enum Archetype { SMALL_MELEE, CRAWLER, FLYING }
