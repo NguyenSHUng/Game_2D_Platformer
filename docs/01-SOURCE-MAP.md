@@ -120,7 +120,8 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `loader/RoomLoader.java` | 116 | Đọc layer `rooms` và `doors` của map: phòng (vùng giới hạn camera) và entity cửa |
 | `Room.java` | 38 | Một phòng: id, index, loại, vùng, phòng kề, cửa ra vào |
 | `system/DoorSystem.java` | 126 | Chuyển phòng: chạm cửa → màn hình tối dần (thế giới dừng) → dời player → phát `RoomTransitionEvent` → sáng lại. Không biết gì về camera hay minimap |
-| `system/ChestSystem.java` | 135 | Rương: `E` khi đứng sát → OPENING (dải mở) → OPENED (giữ khung cuối), ném vật phẩm theo `LootTable` / `LootDrop`, phát `ChestOpenedEvent`; `markOpened` cho rương save nói đã mở |
+| `system/ChestReach.java` | 50 | Quy tắc duy nhất "rương nào mở được lúc này": rương CLOSED gần player nhất trong tầm `ChestSystem.REACH`. `ChestSystem` (phím E) và `InteractionPrompt` (gợi ý HUD) cùng dùng, nên không thể chọn khác rương; chỉ đọc |
+| `system/ChestSystem.java` | 123 | Rương: `E` khi đứng sát (rương gần nhất theo `ChestReach`) → OPENING (dải mở) → OPENED (giữ khung cuối), ném vật phẩm theo `LootTable` / `LootDrop`, phát `ChestOpenedEvent`; `markOpened` cho rương save nói đã mở |
 | `RoomTransition.java` | 23 | Trạng thái chuyển phòng (NONE / FADING_OUT / FADING_IN, độ tối, phòng hiện tại) |
 | `event/RoomTransitionEvent.java` | 47 | Sự kiện đổi phòng (lý do: LEVEL_START, DOOR, RELOCATED) |
 | `event/CheckpointEvent.java` | 24 | Sự kiện chạm checkpoint mới (index, tổng số, điểm hồi sinh) → GameScreen lưu game |
@@ -263,7 +264,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `CameraController.java` | 167 | Camera đi theo player bằng lò xo giảm chấn (SmoothDamp), bị giới hạn trong phòng hiện tại (nghe `RoomTransitionEvent`) |
 | `LightingRenderer.java` | 173 | Lớp ánh sáng phủ lên cảnh: bóng tối nền + đèn của map, đèn của player, lửa nòng (L bật / tắt) |
 | `HudRenderer.java` | 127 | Thanh máu, tên vũ khí và đạn (băng / dự trữ), điểm, gợi ý `E - Open Chest`, phím của camera tự do |
-| `InteractionPrompt.java` | 54 | Tìm rương CLOSED gần player nhất trong tầm mở (cùng phép thử với `ChestSystem`) cho gợi ý trên HUD; chỉ đọc |
+| `InteractionPrompt.java` | 27 | Rương mà gợi ý trên HUD chỉ tới: hỏi `ChestReach` (cùng quy tắc với phím E), chỉ khi player còn sống và có `InteractComponent`; chỉ đọc |
 | `StatsPanel.java` | 448 | Bảng nhân vật (I / F1): cột player dạng thẻ (máu, di chuyển, thân & chiến đấu, vị trí); danh sách vũ khí (hình, phím, tên) và thẻ chi tiết chỉ cho vũ khí đang cầm (sát thương, tầm, `Mag / Res` cùng chữ với HUD, nạp / vung); kiêm chọn vũ khí |
 | `DebugRenderer.java` | 166 | Lớp debug F3: tile va chạm, hộp, attack box, đoạn tuần tra, checkpoint, giới hạn camera, cửa |
 | `FadeRenderer.java` | 40 | Lớp đen khi qua cửa |

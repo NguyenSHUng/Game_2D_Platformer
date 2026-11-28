@@ -1,7 +1,6 @@
 package com.hung.world.system;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.hung.combat.LootDrop;
@@ -12,14 +11,14 @@ import com.hung.component.InteractComponent;
 import com.hung.component.SpriteComponent;
 import com.hung.core.event.EventBus;
 import com.hung.entity.Entity;
-import com.hung.physics.Hitboxes;
 import com.hung.world.World;
 import com.hung.world.event.ChestOpenedEvent;
 
 /**
  * Treasure chests, CLOSED → OPENING → OPENED, each opened once:
- *  - the interact key (InteractComponent) opens the closed chest the living player stands next to
- *    (one chest per press; the request is used up this frame either way);
+ *  - the interact key (InteractComponent) opens the closed chest the living player stands next to,
+ *    the nearest one if several are in reach (ChestReach, the rule the HUD prompt also shows);
+ *    one chest per press, and the request is used up this frame either way;
  *  - the opening plays for OPEN_SECONDS, then the chest drops its one item: chosen by the LootTable
  *    from the chest's id (the same every run) and thrown out by LootDrop to a safe spot in its room.
  * The chest plays its opening strip and keeps its last frame; without art an opened chest is drawn darkened.
@@ -39,9 +38,7 @@ public class ChestSystem {
     private final LootTable lootTable;
     private final EventBus events;
     private final ChestOpenedEvent opened = new ChestOpenedEvent();
-    // Reused every frame to avoid allocating in the game loop
-    private final Rectangle playerBox = new Rectangle();
-    private final Rectangle reachBox = new Rectangle();
+    private final ChestReach reach = new ChestReach();
 
     /** Without anyone listening to opened chests (tests). */
     public ChestSystem(World world, LootTable lootTable) {
@@ -63,18 +60,18 @@ public class ChestSystem {
             ChestComponent chest = entity.getChest();
             if (chest == null) continue;
             switch (chest.state) {
-                case CLOSED -> {
-                    if (wantsToOpen && isWithinReach(entity)) {
-                        startOpening(entity, chest);
-                        wantsToOpen = false;
-                    }
-                }
+                case CLOSED -> { }
                 case OPENING -> {
                     chest.stateTime += delta;
                     if (chest.stateTime >= OPEN_SECONDS) finishOpening(entity, chest);
                 }
                 case OPENED -> chest.stateTime += delta;
             }
+        }
+        // After the loop, as before: a chest opened this frame starts its clock next frame
+        if (wantsToOpen) {
+            Entity target = reach.nearestClosedChest(world);
+            if (target != null) startOpening(target, target.getChest());
         }
     }
 
@@ -86,15 +83,6 @@ public class ChestSystem {
         interact.isRequested = false;
         HealthComponent health = player.getHealth();
         return player.getCollider() != null && (health == null || !health.isDead());
-    }
-
-    /** The player's body touches the chest's body grown by REACH to each side. */
-    private boolean isWithinReach(Entity chest) {
-        Hitboxes.body(world.getPlayer(), playerBox);
-        Hitboxes.body(chest, reachBox);
-        reachBox.x -= REACH;
-        reachBox.width += 2f * REACH;
-        return reachBox.overlaps(playerBox);
     }
 
     private static void startOpening(Entity entity, ChestComponent chest) {

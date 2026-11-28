@@ -144,7 +144,7 @@ world/               World, Level, Room, RoomTransition, TileGrid, TileType, Phy
   event/             RoomTransitionEvent, CheckpointEvent, ExitReachedEvent, EnemyKilledEvent, ChestOpenedEvent,
                      RoomClearedEvent, PickupCollectedEvent
   loader/            WorldLoader, RoomLoader (chạy lúc nạp map)
-  system/            DoorSystem, ChestSystem, PlayerRespawn (hành vi theo khung hình)
+  system/            DoorSystem, ChestSystem, ChestReach, PlayerRespawn (hành vi theo khung hình)
 entity/              Entity, GameCharacter, EntityFactory (cửa)
   player/            Player, PlayerFactory, CharacterDefinition
   enemy/             Enemy, HunterEnemy, MeleeEnemy, CrawlerEnemy, FlyingEnemy, EnemyFactory, EnemyDefinition,
