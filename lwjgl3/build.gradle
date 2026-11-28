@@ -53,6 +53,8 @@ def os = System.properties['os.name'].toLowerCase(Locale.ROOT)
 
 run {
   workingDir = rootProject.file('assets').path
+// Session logs go to the project's logs/ folder (git-ignored), not into assets/.
+  systemProperty 'mygame.logDir', rootProject.file('logs').path
 // You can uncomment the next line if your IDE claims a build failure even when the app closed properly.
   //setIgnoreExitValue(true)
 // The next two jvmArgs additions help LWJGL3 on JDK 24 and higher.

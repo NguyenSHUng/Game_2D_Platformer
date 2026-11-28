@@ -11,6 +11,7 @@ import com.hung.save.SaveManager;
 import com.hung.save.Settings;
 import com.hung.ui.UiTheme;
 import com.hung.ui.menu.MenuScreen;
+import com.hung.util.GameLog;
 import com.hung.util.ResourceLoader;
 import com.hung.world.World;
 import com.hung.world.loader.WorldLoader;
@@ -37,6 +38,7 @@ public class MyGame extends Game implements Navigator {
 
     @Override
     public void create() {
+        GameLog.install();
         batch = new SpriteBatch();
         resources = new ResourceLoader();
         saves = new SaveManager();
@@ -102,5 +104,6 @@ public class MyGame extends Game implements Navigator {
         theme.dispose();
         batch.dispose();
         resources.dispose();
+        Gdx.app.log(TAG, "Session ended");
     }
 }

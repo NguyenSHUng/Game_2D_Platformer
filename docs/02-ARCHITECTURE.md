@@ -170,7 +170,7 @@ ui/                  UiTheme, Toast, FpsOverlay
   minimap/           MinimapState, MinimapRenderer
 save/                SaveData, SaveSnapshot, SaveManager, Settings, GameSession
 score/               ScoreRules, RunStats, ScoreKeeper (điểm của ván)
-util/                Constants, ResourceLoader, SmoothDamp
+util/                Constants, GameLog, ResourceLoader, SmoothDamp
 ```
 
 Package gốc của một domain chứa phần dùng chung; package con phụ thuộc package gốc, không theo chiều ngược lại.

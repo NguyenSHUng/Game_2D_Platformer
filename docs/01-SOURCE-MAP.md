@@ -43,7 +43,7 @@ MyGame/
                              ▼                               │
                   animation / combat (định nghĩa JSON, Weapon, Effect) ─┘
 * systems = ai, input, physics, combat, animation (các *System)
-util (Constants, ResourceLoader, SmoothDamp) được mọi package dùng.
+util (Constants, GameLog, ResourceLoader, SmoothDamp) được mọi package dùng.
 ```
 
 ---
@@ -306,6 +306,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | File | Dòng | Vai trò |
 |------|-----:|---------|
 | `Constants.java` | 57 | Hằng số toàn cục: map khởi đầu, player và vũ khí mặc định, danh sách enemy thử nghiệm, đường dẫn profile, khung hình tối đa |
+| `GameLog.java` | 126 | Log của game: mọi `Gdx.app.log/error/debug` in ra terminal (lỗi ra stderr) và ghi vào `logs/game-<ngày>_<giờ>.log`, mỗi phiên một file, flush từng dòng, ghi cả crash; giữ 20 file mới nhất. Thư mục lấy từ `-Dmygame.logDir` (task `run` trỏ về `logs/` ở gốc dự án, đã git-ignore) |
 | `ResourceLoader.java` | 89 | Nạp và cache texture, TiledMap (qua AssetManager), JSON (nghiêm ngặt cho file của game, bỏ qua trường lạ cho file của tool); `unloadMap` |
 | `SmoothDamp.java` | 56 | Lò xo giảm chấn tới hạn cho camera |
 

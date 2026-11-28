@@ -168,6 +168,9 @@ Thumbs.db
 
 ## Logs:
 *.log
+/logs/
+/assets/logs/
+/lwjgl3/logs/
 
 ## Presentations:
 /presentation

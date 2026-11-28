@@ -35,7 +35,7 @@ com.hung.animation   Kiểu animation dùng chung                      (+ animat
 com.hung.rendering   Vẽ map và entity, camera, ánh sáng, HUD, debug
 com.hung.ui          UiTheme, Toast, FpsOverlay                     (+ ui.menu, ui.minimap)
 com.hung.save        Dữ liệu lưu, snapshot, file lưu, settings
-com.hung.util        Constants, ResourceLoader, SmoothDamp
+com.hung.util        Constants, GameLog, ResourceLoader, SmoothDamp
 ```
 
 - Đặt class mới vào domain của nó; không tạo package `models/`, `services/`, `helpers/`, `managers/`.
