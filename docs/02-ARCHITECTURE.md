@@ -205,7 +205,7 @@ mỗi package.
 | `HunterEnemy.approach()` / `retreat()` | Cần world của `think()` đang chạy (`thinkingWorld`); gọi ngoài `think()` là lỗi. Là method public vì thuộc interface |
 | `World.getPlayer()` | Trả về `Entity`, không phải `Player`, để các test dựng thế giới bằng entity thường |
 | Bảng màu UI | Có ở 2 nơi: file thiết kế `build_asset/build_ui/menu-preview.template.html` và `UiTheme.java`; đổi phải chép tay |
-| Class lớn | `MenuView` (518 dòng), `HunterEnemy` (378, gần mức 400), `StatsPanel` (355), `MenuScreen` (337), `WorldLoader` (310) |
+| Class lớn | `MenuView` (518 dòng), `StatsPanel` (448, quá mức 400), `HunterEnemy` (378, gần mức 400), `MenuScreen` (337), `WorldLoader` (310) |
 
 ## 12. Bốn tính chất OOP
 

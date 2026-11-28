@@ -264,7 +264,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `LightingRenderer.java` | 173 | Lớp ánh sáng phủ lên cảnh: bóng tối nền + đèn của map, đèn của player, lửa nòng (L bật / tắt) |
 | `HudRenderer.java` | 127 | Thanh máu, tên vũ khí và đạn (băng / dự trữ), điểm, gợi ý `E - Open Chest`, phím của camera tự do |
 | `InteractionPrompt.java` | 54 | Tìm rương CLOSED gần player nhất trong tầm mở (cùng phép thử với `ChestSystem`) cho gợi ý trên HUD; chỉ đọc |
-| `StatsPanel.java` | 355 | Bảng nhân vật (I / F1): chỉ số player và thẻ từng vũ khí (súng: `Mag / Res` = băng / dự trữ, cùng chữ với HUD), kiêm chọn vũ khí |
+| `StatsPanel.java` | 448 | Bảng nhân vật (I / F1): cột player dạng thẻ (máu, di chuyển, thân & chiến đấu, vị trí); danh sách vũ khí (hình, phím, tên) và thẻ chi tiết chỉ cho vũ khí đang cầm (sát thương, tầm, `Mag / Res` cùng chữ với HUD, nạp / vung); kiêm chọn vũ khí |
 | `DebugRenderer.java` | 166 | Lớp debug F3: tile va chạm, hộp, attack box, đoạn tuần tra, checkpoint, giới hạn camera, cửa |
 | `FadeRenderer.java` | 40 | Lớp đen khi qua cửa |
 
@@ -354,7 +354,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 - Phòng, camera, minimap, lưu game nói chuyện qua sự kiện (`EventBus`), không gọi thẳng nhau.
 
 **Hạn chế đã biết** (chi tiết: [02-ARCHITECTURE.md → mục 11](02-ARCHITECTURE.md#11-nợ-kỹ-thuật-đã-biết))
-- Class lớn: `MenuView` (518 dòng), `HunterEnemy` (378), `StatsPanel` (355), `MenuScreen` (337), `WorldLoader` (310).
+- Class lớn: `MenuView` (518 dòng), `StatsPanel` (448), `HunterEnemy` (378), `MenuScreen` (337), `WorldLoader` (310).
 - Phụ thuộc vòng giữa package: 2 nhóm, 7 cặp phụ thuộc 2 chiều. Nhóm gameplay: `component` ↔ `combat`, `component` ↔ `entity`, `component` ↔ `animation`, `entity` ↔ `input`, `physics` ↔ `world.system`. Nhóm màn hình: `core` ↔ `save`, `core` ↔ `ui.menu`.
 - Hiệu ứng nằm ở 2 package (`animation`, `combat`).
 - `Entity` không có id; mỗi loại component là một field cố định (chủ ý, đơn giản và nhanh).

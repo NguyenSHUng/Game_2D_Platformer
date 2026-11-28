@@ -122,8 +122,10 @@ Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `
 - **HUD:** thanh máu, tên vũ khí, đạn trong băng / đạn dự trữ (`Service Pistol 9 / 36`), chữ `RELOADING` khi nạp,
   `NO AMMO` khi cả hai đều hết; điểm ở góc trên phải (`SCORE 1250`); dòng `E - Open Chest` giữa phía dưới khi đứng
   trong tầm mở một rương còn đóng (ẩn khi rời tầm, khi rương đã mở, khi chết hoặc ở camera tự do).
-- **Bảng nhân vật (I / F1):** thẻ súng có dòng `Mag / Res` (đạn trong băng / dự trữ, cùng số với HUD) và dưới nó
-  sức chứa `max 12 / 72`.
+- **Bảng nhân vật (I / F1):** trái là chỉ số player chia thẻ (HEALTH có thanh máu, MOVEMENT, BODY & COMBAT, LOCATION); phải là danh sách
+  3 vũ khí (hình, phím, tên; vũ khí đang cầm được tô sáng, ghi `IN HAND`) và bên dưới là thẻ chi tiết **chỉ của vũ khí
+  đang cầm**: sát thương, tầm (dao: tầm với), `Mag / Res` (đạn trong băng / dự trữ, cùng số với HUD, kèm `max 12 / 72`),
+  thời gian nạp (dao: thời gian vung). Phím 1 / 2 / 3 đổi vũ khí như trong game, thẻ chi tiết đổi theo.
 
 ## 5. Máu, sát thương, hồi sinh
 

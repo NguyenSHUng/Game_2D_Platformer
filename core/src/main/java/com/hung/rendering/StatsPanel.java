@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.hung.animation.AnimationSet;
 import com.hung.animation.AnimationType;
@@ -26,38 +27,52 @@ import com.hung.entity.enemy.Enemy;
 import com.hung.world.PhysicsSettings;
 import com.hung.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
- * Character sheet (I / F1, the game pauses meanwhile): the player's stats on the left — health,
- * movement in tiles, body box, defence, position — and one card per carried weapon on the right
- * with its sprite (pixel-scaled), its numbers and comparison bars. The weapon in hand is highlighted.
- * A firearm's "Mag / Res" line is magazine / reserve, read from its WeaponComponent like the HUD.
+ * Character sheet (I / F1, the game pauses meanwhile).
+ *  - Left: the player as cards — health (value and bar), movement, body and combat, location.
+ *  - Right, top: the carried weapons as small rows (sprite, key, name); the one in hand is highlighted.
+ *  - Right, below: the details of the weapon in hand only — damage, range / reach, magazine / reserve
+ *    (firearms, from its WeaponComponent like the HUD) and reload / swing time.
+ * Keys 1 / 2 / 3 change the weapon in hand (GameScreen runs the normal weapon switch), so the details follow.
  * Screen-space, drawn after the HUD.
  */
 public class StatsPanel implements Disposable {
 
-    private static final float PANEL_WIDTH = 980f;
-    private static final float PANEL_HEIGHT = 480f;
+    private static final float PANEL_WIDTH = 900f;
+    private static final float PANEL_HEIGHT = 440f;
     private static final float PAD = 18f;
     private static final float LINE = 19f;
-    private static final float PLAYER_COLUMN = 290f;
-    private static final float CARD_GAP = 10f;
-    private static final float ICON_SCALE = 4f;
-    private static final float ICON_BOX = 140f;
-    private static final float BAR_WIDTH = 110f;
-    /** Card columns, from the text start: label, value, bar, side notes. */
-    private static final float VALUE_X = 75f;
-    private static final float BAR_X = 140f;
-    private static final float SIDE_X = 270f;
+    private static final float PLAYER_COLUMN = 300f;
+    /** Player column cards: inner padding, gap between cards, title row, text height, health card and its bar. */
+    private static final float CARD_PAD = 8f;
+    private static final float GROUP_GAP = 8f;
+    private static final float GROUP_TITLE = 22f;
+    private static final float TEXT_HEIGHT = 14f;
+    private static final float HEALTH_CARD = 50f;
+    private static final float HP_BAR_HEIGHT = 10f;
+
+    /** Weapon list rows. */
+    private static final float ROW_HEIGHT = 38f;
+    private static final float ROW_GAP = 6f;
+    private static final float ROW_ICON_WIDTH = 64f;
+    private static final float ROW_ICON_HEIGHT = 26f;
+    /** Details card. */
+    private static final float DETAIL_GAP = 14f;
+    private static final float DETAIL_ICON_BOX = 150f;
+    private static final float DETAIL_ICON_SCALE = 4f;
+    private static final float DETAIL_LINE = 26f;
+    private static final float VALUE_X = 110f;
+    private static final float BAR_X = 200f;
+    private static final float BAR_WIDTH = 120f;
     private static final float BAR_HEIGHT = 6f;
-    private static final float HP_BAR_WIDTH = 240f;
 
     /** Bar maximums for comparing weapons. */
     private static final float MAX_DAMAGE = 20f;
-    private static final float MAX_DPS = 120f;
     private static final float MAX_RANGE_TILES = 40f;
-    private static final float MAX_MAGAZINE = 30f;
 
     private static final Color SHADE = new Color(0f, 0f, 0f, 0.55f);
     private static final Color PANEL = new Color(0.08f, 0.09f, 0.08f, 0.94f);
@@ -79,207 +94,30 @@ public class StatsPanel implements Disposable {
         camera.setToOrtho(false, width, height);
     }
 
-    public void render(Batch batch, World world) {
-        Entity player = world.getPlayer();
-        tileSize = world.getLevel().getGrid().getTileSize();
-        float width = Math.min(PANEL_WIDTH, camera.viewportWidth - 2 * PAD);
-        float height = Math.min(PANEL_HEIGHT, camera.viewportHeight - 2 * PAD);
-        float x0 = (camera.viewportWidth - width) / 2f;
-        float y0 = (camera.viewportHeight - height) / 2f;
-        float top = y0 + height - PAD;
-        float cardsX = x0 + PAD + PLAYER_COLUMN;
-        float cardsWidth = width - PLAYER_COLUMN - 2 * PAD;
+    // ---------------------------------------------------------------- weapon details (no drawing, tested)
 
-        ArsenalComponent arsenal = player != null ? player.getArsenal() : null;
-        int slots = arsenal != null ? arsenal.slots.size : 0;
-        float cardHeight = slots > 0 ? (height - 2 * PAD - LINE * 1.5f - CARD_GAP * (slots - 1)) / slots : 0f;
+    /** One line of the details card: label, value, a 0..1 bar (negative = none) or else an optional muted note in its place. */
+    record DetailRow(String label, String value, String note, float bar) { }
 
-        // Backgrounds, cards, bars (shapes) — translucent over the paused game
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapes.setProjectionMatrix(camera.combined);
-        shapes.begin(ShapeRenderer.ShapeType.Filled);
-        shapes.setColor(SHADE);
-        shapes.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
-        shapes.setColor(PANEL);
-        shapes.rect(x0, y0, width, height);
-        if (player != null) drawPlayerBars(player, x0 + PAD, top);
-        for (int i = 0; i < slots; i++) {
-            float cardTop = top - LINE * 1.5f - i * (cardHeight + CARD_GAP);
-            shapes.setColor(i == arsenal.current ? CARD_SELECTED : CARD);
-            shapes.rect(cardsX, cardTop - cardHeight, cardsWidth, cardHeight);
-            drawWeaponBars(player, arsenal.slots.get(i), cardsX + ICON_BOX + PAD, cardTop);
-        }
-        shapes.end();
-        shapes.begin(ShapeRenderer.ShapeType.Line);
-        shapes.setColor(BORDER);
-        shapes.rect(x0, y0, width, height);
-        if (arsenal != null && slots > 0) {
-            float cardTop = top - LINE * 1.5f - arsenal.current * (cardHeight + CARD_GAP);
-            shapes.rect(cardsX, cardTop - cardHeight, cardsWidth, cardHeight);
-        }
-        shapes.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        // Text and weapon sprites
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        font.setColor(TITLE);
-        font.draw(batch, "PLAYER", x0 + PAD, top);
-        font.draw(batch, "WEAPONS", cardsX, top);
-        font.setColor(MUTED);
-        font.draw(batch, "I / F1 close   1 / 2 / 3 select", x0 + width - PAD - 210f, top);
-        if (player != null) drawPlayerText(batch, world, player, x0 + PAD, top - LINE * 1.5f);
-        for (int i = 0; i < slots; i++) {
-            float cardTop = top - LINE * 1.5f - i * (cardHeight + CARD_GAP);
-            drawWeaponCard(batch, player, arsenal.slots.get(i), i, i == arsenal.current, cardsX, cardTop, cardHeight);
-        }
-        batch.end();
-    }
-
-    // ---------------------------------------------------------------- player
-
-    private void drawPlayerBars(Entity player, float x, float top) {
-        HealthComponent health = player.getHealth();
-        if (health == null) return;
-        float y = top - LINE * 2.6f;
-        shapes.setColor(BAR_BACK);
-        shapes.rect(x, y, HP_BAR_WIDTH, BAR_HEIGHT * 1.5f);
-        shapes.setColor(HP_FILL);
-        shapes.rect(x, y, HP_BAR_WIDTH * health.getHealth() / Math.max(1f, health.getMaxHealth()), BAR_HEIGHT * 1.5f);
-    }
-
-    private void drawPlayerText(Batch batch, World world, Entity player, float x, float y) {
-        HealthComponent health = player.getHealth();
-        MovementComponent movement = player.getMovement();
-        ColliderComponent collider = player.getCollider();
-        AnimationComponent animation = player.getAnimation();
-        AttackComponent attack = player.getAttack();
-        PhysicsSettings physics = world.getLevel().getPhysics();
-        float tile = world.getLevel().getGrid().getTileSize();
-
-        if (health != null) line(batch, x, y, "Health", String.format(Locale.ROOT, "%d / %d", health.getHealth(), health.getMaxHealth()));
-        y -= LINE * 1.6f;
-        y = section(batch, x, y, "MOVEMENT");
-        if (movement != null) {
-            float airTime = 2f * movement.jumpSpeed / physics.gravity;
-            float jumpHeight = movement.jumpSpeed * movement.jumpSpeed / (2f * physics.gravity);
-            y = line(batch, x, y, "Walk speed", tiles(movement.moveSpeed / tile) + " / s");
-            y = line(batch, x, y, "Jump height", tiles(jumpHeight / tile));
-            y = line(batch, x, y, "Jump distance", tiles(movement.moveSpeed * airTime / tile));
-            y = line(batch, x, y, "Air time", String.format(Locale.ROOT, "%.2f s", airTime));
-            y = line(batch, x, y, "Climb speed", tiles(movement.climbSpeed / tile) + " / s");
-        }
-        y -= LINE * 0.4f;
-        y = section(batch, x, y, "BODY & DEFENCE");
-        if (collider != null) {
-            y = line(batch, x, y, "Hit box", String.format(Locale.ROOT, "%.1f x %.1f u", collider.width, collider.height));
-            if (collider.crouchHeight > 0f) y = line(batch, x, y, "Crouched", String.format(Locale.ROOT, "%.1f u tall", collider.crouchHeight));
-        }
-        if (health != null) y = line(batch, x, y, "Invulnerable", String.format(Locale.ROOT, "%.1f s after a hit", health.invulnerability));
-        y = line(batch, x, y, "Enemy touch", "-" + Enemy.CONTACT_DAMAGE + " HP");
-        if (attack != null) y = line(batch, x, y, "Melee", attack.damage + " dmg per swing");
-        y -= LINE * 0.4f;
-        y = section(batch, x, y, "STATE");
-        Vector2 feet = player.getTransform().position;
-        Vector2 respawn = world.getRespawnPoint();
-        y = line(batch, x, y, "Position", String.format(Locale.ROOT, "tile %d, %d", (int) (feet.x / tile), (int) (feet.y / tile)));
-        y = line(batch, x, y, "Respawn", String.format(Locale.ROOT, "tile %d, %d", (int) (respawn.x / tile), (int) (respawn.y / tile)));
-        if (animation != null) line(batch, x, y, "Stance", AnimationSet.DEFAULT.equals(animation.getStance()) ? "default" : animation.getStance().toLowerCase(Locale.ROOT));
-    }
-
-    // ---------------------------------------------------------------- weapons
-
-    /** Per-weapon numbers: damage, damage per second, fire rate / speed, range, magazine. */
-    private static final class WeaponNumbers {
-        float damage;
-        float dps;
-        float rangeTiles;
-        int magazine;
-    }
-
-    private final WeaponNumbers numbers = new WeaponNumbers();
-    /** World units per tile of the current level (set each render). */
-    private float tileSize = 16f;
-
-    private WeaponNumbers numbersOf(Entity player, WeaponComponent slot) {
+    /**
+     * The four facts of the weapon in hand. Firearms read their FireDefinition and the slot's rounds;
+     * the knife takes its numbers from the player (melee damage, blade reach, swing length).
+     */
+    static List<DetailRow> details(WeaponComponent slot, float meleeDamage, float reachTiles, float swingSeconds) {
+        List<DetailRow> rows = new ArrayList<>(4);
         Weapon weapon = slot.equipped;
-        WeaponNumbers n = numbers;
         if (weapon.isFirearm()) {
             FireDefinition fire = weapon.getFire();
-            n.damage = fire.damage;
-            n.dps = fire.damage * fire.roundsPerSecond;
-            n.rangeTiles = fire.rangeTiles;
-            n.magazine = fire.magazine;
+            rows.add(new DetailRow("Damage", String.valueOf(fire.damage), null, fire.damage / MAX_DAMAGE));
+            rows.add(new DetailRow("Range", tiles(fire.rangeTiles), null, fire.rangeTiles / MAX_RANGE_TILES));
+            rows.add(new DetailRow("Mag / Res", ammoText(slot), capacityText(slot, fire), -1f));
+            rows.add(new DetailRow("Reload", String.format(Locale.ROOT, "%.1f s", fire.reloadSeconds), null, -1f));
         } else {
-            AttackComponent attack = player.getAttack();
-            float swing = swingSeconds(player);
-            n.damage = attack != null ? attack.damage : 0f;
-            n.dps = swing > 0f ? n.damage / swing : 0f;
-            n.rangeTiles = reachUnits(slot) / tileSize;
-            n.magazine = 0;
+            rows.add(new DetailRow("Damage", String.format(Locale.ROOT, "%.0f", meleeDamage), null, meleeDamage / MAX_DAMAGE));
+            rows.add(new DetailRow("Reach", tiles(reachTiles), null, reachTiles / MAX_RANGE_TILES));
+            rows.add(new DetailRow("Swing", String.format(Locale.ROOT, "%.2f s", swingSeconds), null, -1f));
         }
-        return n;
-    }
-
-    private void drawWeaponBars(Entity player, WeaponComponent slot, float x, float cardTop) {
-        if (slot.equipped == null) return;
-        WeaponNumbers n = numbersOf(player, slot);
-        float y = cardTop - LINE * 2.2f;
-        bar(x, y, n.damage / MAX_DAMAGE);
-        bar(x, y - LINE, n.dps / MAX_DPS);
-        bar(x, y - 2 * LINE, n.rangeTiles / MAX_RANGE_TILES);
-        if (n.magazine > 0) bar(x, y - 3 * LINE, n.magazine / MAX_MAGAZINE);
-    }
-
-    private void bar(float x, float y, float fraction) {
-        shapes.setColor(BAR_BACK);
-        shapes.rect(x + BAR_X, y - BAR_HEIGHT - 4f, BAR_WIDTH, BAR_HEIGHT);
-        shapes.setColor(BAR_FILL);
-        shapes.rect(x + BAR_X, y - BAR_HEIGHT - 4f, BAR_WIDTH * Math.max(0f, Math.min(1f, fraction)), BAR_HEIGHT);
-    }
-
-    private void drawWeaponCard(Batch batch, Entity player, WeaponComponent slot, int index, boolean isInHand,
-                                float x, float cardTop, float cardHeight) {
-        Weapon weapon = slot.equipped;
-        if (weapon == null) return;
-        WeaponNumbers n = numbersOf(player, slot);
-
-        // Sprite, pixel-scaled and centred in its box
-        TextureRegion region = weapon.getRegion();
-        float scale = Math.min(ICON_SCALE, (ICON_BOX - PAD) / region.getRegionWidth());
-        float w = region.getRegionWidth() * scale;
-        float h = region.getRegionHeight() * scale;
-        batch.setColor(Color.WHITE);
-        batch.draw(region, x + (ICON_BOX - w) / 2f, cardTop - cardHeight / 2f - h / 2f, w, h);
-
-        float tx = x + ICON_BOX + PAD;
-        float y = cardTop - LINE * 0.6f;
-        font.setColor(isInHand ? TITLE : TEXT);
-        font.draw(batch, "[" + (index + 1) + "] " + weapon.getName() + (isInHand ? "   - in hand" : ""), tx, y);
-        font.setColor(MUTED);
-        font.draw(batch, describe(weapon, slot), tx + SIDE_X, y);
-        y -= LINE * 1.2f;
-        y = statLine(batch, tx, y, "Damage", String.format(Locale.ROOT, "%.0f", n.damage));
-        y = statLine(batch, tx, y, "DPS", String.format(Locale.ROOT, "%.0f", n.dps));
-        y = statLine(batch, tx, y, weapon.isFirearm() ? "Range" : "Reach", tiles(n.rangeTiles));
-        if (weapon.isFirearm()) {
-            FireDefinition fire = weapon.getFire();
-            y = statLine(batch, tx, y, "Mag / Res", ammoText(slot));
-            font.setColor(MUTED);
-            font.draw(batch, capacityText(slot, fire), tx + VALUE_X, y);
-            float side = tx + SIDE_X;
-            float sy = cardTop - LINE * 1.8f;
-            font.setColor(TEXT);
-            font.draw(batch, String.format(Locale.ROOT, "%s, %.0f rounds / s", fire.isAutomatic() ? "Full-auto" : "Semi-auto", fire.roundsPerSecond), side, sy);
-            font.draw(batch, String.format(Locale.ROOT, "Reload %.1f s", fire.reloadSeconds), side, sy - LINE);
-            font.draw(batch, String.format(Locale.ROOT, "Bullet %.0f tiles / s", fire.projectileSpeedTiles), side, sy - 2 * LINE);
-            font.draw(batch, String.format(Locale.ROOT, "Spread +/-%.1f deg", fire.spreadDegrees), side, sy - 3 * LINE);
-        } else {
-            font.setColor(TEXT);
-            font.draw(batch, String.format(Locale.ROOT, "Swing %.2f s", swingSeconds(player)), tx + SIDE_X, cardTop - LINE * 1.8f);
-            font.draw(batch, "Breaks cracked walls", tx + SIDE_X, cardTop - LINE * 2.8f);
-        }
+        return rows;
     }
 
     /** "8 / 36": rounds in the magazine / reserve rounds, the same text as the HUD's (HudRenderer.appendAmmo). */
@@ -294,39 +132,294 @@ public class StatsPanel implements Disposable {
         return "max " + fire.magazine + " / " + slot.maxReserve;
     }
 
-    private static String describe(Weapon weapon, WeaponComponent slot) {
-        if (!weapon.isFirearm()) return "melee, one hand";
-        String hands = "two hands";
-        if (slot.reloadTime > 0f) return hands + " - RELOADING";
-        return hands;
+    /** Under the name: how the weapon is used, and RELOADING / NO AMMO when that applies. */
+    static String kind(WeaponComponent slot) {
+        Weapon weapon = slot.equipped;
+        if (!weapon.isFirearm()) return "Melee, one hand - breaks cracked walls";
+        String kind = (weapon.getFire().isAutomatic() ? "Full-auto" : "Semi-auto") + ", two hands";
+        if (slot.reloadTime > 0f) return kind + " - RELOADING";
+        if (slot.ammo == 0 && slot.reserve == 0) return kind + " - NO AMMO";
+        return kind;
     }
 
-    private float statLine(Batch batch, float x, float y, String label, String value) {
+    // ---------------------------------------------------------------- drawing
+
+    /** World units per tile of the current level (set each render). */
+    private float tileSize = 16f;
+
+    public void render(Batch batch, World world) {
+        Entity player = world.getPlayer();
+        tileSize = world.getLevel().getGrid().getTileSize();
+        float width = Math.min(PANEL_WIDTH, camera.viewportWidth - 2 * PAD);
+        float height = Math.min(PANEL_HEIGHT, camera.viewportHeight - 2 * PAD);
+        float x0 = (camera.viewportWidth - width) / 2f;
+        float y0 = (camera.viewportHeight - height) / 2f;
+        float top = y0 + height - PAD;
+        float rightX = x0 + PAD + PLAYER_COLUMN;
+        float rightWidth = width - PLAYER_COLUMN - 2 * PAD;
+
+        ArsenalComponent arsenal = player != null ? player.getArsenal() : null;
+        int slots = arsenal != null ? arsenal.slots.size : 0;
+        float listTop = top - LINE * 1.5f;
+        float detailTop = listTop - slots * ROW_HEIGHT - Math.max(0, slots - 1) * ROW_GAP - DETAIL_GAP;
+        float detailBottom = y0 + PAD;
+        WeaponComponent inHand = slots > 0 ? arsenal.slots.get(arsenal.current) : null;
+        List<DetailRow> rows = inHand != null && inHand.equipped != null
+            ? details(inHand, meleeDamage(player), reachUnits(inHand) / tileSize, swingSeconds(player)) : List.of();
+        float rowsTop = detailTop - LINE * 3.2f;
+        float playerX = x0 + PAD;
+        float playerWidth = PLAYER_COLUMN - PAD;
+        List<PlayerGroup> groups = player != null
+            ? playerGroups(player, world.getLevel().getPhysics(), tileSize, world.getRespawnPoint()) : List.of();
+
+        // Backgrounds, rows, bars (shapes), translucent over the paused game
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapes.setProjectionMatrix(camera.combined);
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+        shapes.setColor(SHADE);
+        shapes.rect(0, 0, camera.viewportWidth, camera.viewportHeight);
+        shapes.setColor(PANEL);
+        shapes.rect(x0, y0, width, height);
+        if (player != null) drawPlayerCards(player, groups, playerX, playerWidth, listTop);
+        for (int i = 0; i < slots; i++) {
+            float rowTop = listTop - i * (ROW_HEIGHT + ROW_GAP);
+            shapes.setColor(i == arsenal.current ? CARD_SELECTED : CARD);
+            shapes.rect(rightX, rowTop - ROW_HEIGHT, rightWidth, ROW_HEIGHT);
+        }
+        if (inHand != null) {
+            shapes.setColor(CARD);
+            shapes.rect(rightX, detailBottom, rightWidth, detailTop - detailBottom);
+            float textX = rightX + DETAIL_ICON_BOX + PAD;
+            for (int i = 0; i < rows.size(); i++) {
+                if (rows.get(i).bar() >= 0f) bar(textX + BAR_X, rowsTop - i * DETAIL_LINE, rows.get(i).bar());
+            }
+        }
+        shapes.end();
+        shapes.begin(ShapeRenderer.ShapeType.Line);
+        shapes.setColor(BORDER);
+        shapes.rect(x0, y0, width, height);
+        if (inHand != null) {
+            float rowTop = listTop - arsenal.current * (ROW_HEIGHT + ROW_GAP);
+            shapes.rect(rightX, rowTop - ROW_HEIGHT, rightWidth, ROW_HEIGHT);
+        }
+        shapes.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        // Text and weapon sprites
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        font.setColor(TITLE);
+        font.draw(batch, "PLAYER", x0 + PAD, top);
+        font.draw(batch, "WEAPONS", rightX, top);
         font.setColor(MUTED);
-        font.draw(batch, label, x, y);
-        font.setColor(TEXT);
-        font.draw(batch, value, x + VALUE_X, y);
-        return y - LINE;
+        font.draw(batch, "1 / 2 / 3 select   I close", rightX, top, rightWidth, Align.right, false);
+        if (player != null) drawPlayerText(batch, player, groups, playerX, playerWidth, listTop);
+        for (int i = 0; i < slots; i++) {
+            drawWeaponRow(batch, arsenal.slots.get(i), i, i == arsenal.current, rightX, listTop - i * (ROW_HEIGHT + ROW_GAP), rightWidth);
+        }
+        if (inHand != null && inHand.equipped != null) drawDetails(batch, inHand, rows, rightX, detailTop, detailBottom, rowsTop);
+        batch.end();
+    }
+
+    // ---------------------------------------------------------------- player
+
+    /** One labelled value of the player column. */
+    record PlayerLine(String label, String value) { }
+
+    /** A titled card of the player column. */
+    record PlayerGroup(String title, List<PlayerLine> lines) { }
+
+    /**
+     * The player's facts below the health card, in three cards: movement (in tiles), body and combat,
+     * location. Missing components leave their lines out.
+     */
+    static List<PlayerGroup> playerGroups(Entity player, PhysicsSettings physics, float tile, Vector2 respawn) {
+        List<PlayerGroup> groups = new ArrayList<>(3);
+        MovementComponent movement = player.getMovement();
+        if (movement != null) {
+            float airTime = 2f * movement.jumpSpeed / physics.gravity;
+            float jumpHeight = movement.jumpSpeed * movement.jumpSpeed / (2f * physics.gravity);
+            groups.add(new PlayerGroup("MOVEMENT", List.of(
+                new PlayerLine("Walk / climb", String.format(Locale.ROOT, "%.1f / %.1f tiles/s", movement.moveSpeed / tile, movement.climbSpeed / tile)),
+                new PlayerLine("Jump", String.format(Locale.ROOT, "%.1f high, %.1f far", jumpHeight / tile, movement.moveSpeed * airTime / tile)),
+                new PlayerLine("Air time", String.format(Locale.ROOT, "%.2f s", airTime)))));
+        }
+        List<PlayerLine> body = new ArrayList<>(4);
+        ColliderComponent collider = player.getCollider();
+        if (collider != null) {
+            String box = String.format(Locale.ROOT, "%.0f x %.0f u", collider.width, collider.height);
+            if (collider.crouchHeight > 0f) box += String.format(Locale.ROOT, ", crouch %.0f", collider.crouchHeight);
+            body.add(new PlayerLine("Hit box", box));
+        }
+        HealthComponent health = player.getHealth();
+        if (health != null) body.add(new PlayerLine("Invulnerable", String.format(Locale.ROOT, "%.1f s after a hit", health.invulnerability)));
+        body.add(new PlayerLine("Enemy touch", "-" + Enemy.CONTACT_DAMAGE + " HP"));
+        AttackComponent attack = player.getAttack();
+        if (attack != null) body.add(new PlayerLine("Melee", attack.damage + " dmg per swing"));
+        groups.add(new PlayerGroup("BODY & COMBAT", body));
+
+        List<PlayerLine> location = new ArrayList<>(3);
+        Vector2 feet = player.getTransform().position;
+        location.add(new PlayerLine("Tile", (int) (feet.x / tile) + ", " + (int) (feet.y / tile)));
+        location.add(new PlayerLine("Respawn", (int) (respawn.x / tile) + ", " + (int) (respawn.y / tile)));
+        AnimationComponent animation = player.getAnimation();
+        if (animation != null) {
+            location.add(new PlayerLine("Stance", AnimationSet.DEFAULT.equals(animation.getStance())
+                ? "default" : animation.getStance().toLowerCase(Locale.ROOT)));
+        }
+        groups.add(new PlayerGroup("LOCATION", location));
+        return groups;
+    }
+
+    /** Height of a group card: padding, its title, its lines (LibGDX text hangs down from its y). */
+    static float groupHeight(PlayerGroup group) {
+        return 2f * CARD_PAD + GROUP_TITLE + Math.max(0, group.lines().size() - 1) * LINE + TEXT_HEIGHT;
+    }
+
+    /** Total height of the player cards, so the column can be checked against the panel. */
+    static float playerColumnHeight(boolean hasHealth, List<PlayerGroup> groups) {
+        float height = hasHealth ? HEALTH_CARD + GROUP_GAP : 0f;
+        for (PlayerGroup group : groups) height += groupHeight(group) + GROUP_GAP;
+        return height - GROUP_GAP;
+    }
+
+    /** Room the player cards have under the panel title: the panel minus its padding and the title row. */
+    static float playerColumnRoom() {
+        return PANEL_HEIGHT - 2f * PAD - LINE * 1.5f;
+    }
+
+    /** Space between the bottom of the health text and the top of the health bar (must stay positive). */
+    static float healthTextToBarGap() {
+        return (HEALTH_CARD - CARD_PAD - HP_BAR_HEIGHT) - (CARD_PAD + TEXT_HEIGHT);
+    }
+
+    /** Health card and group cards (shapes pass): backgrounds and the health bar, from cardsTop down. */
+    private void drawPlayerCards(Entity player, List<PlayerGroup> groups, float x, float width, float cardsTop) {
+        float y = cardsTop;
+        HealthComponent health = player.getHealth();
+        if (health != null) {
+            shapes.setColor(CARD);
+            shapes.rect(x, y - HEALTH_CARD, width, HEALTH_CARD);
+            float barX = x + CARD_PAD;
+            float barWidth = width - 2f * CARD_PAD;
+            float barY = y - HEALTH_CARD + CARD_PAD;
+            shapes.setColor(BAR_BACK);
+            shapes.rect(barX, barY, barWidth, HP_BAR_HEIGHT);
+            shapes.setColor(HP_FILL);
+            shapes.rect(barX, barY, barWidth * health.getHealth() / Math.max(1f, health.getMaxHealth()), HP_BAR_HEIGHT);
+            y -= HEALTH_CARD + GROUP_GAP;
+        }
+        for (PlayerGroup group : groups) {
+            float h = groupHeight(group);
+            shapes.setColor(CARD);
+            shapes.rect(x, y - h, width, h);
+            y -= h + GROUP_GAP;
+        }
+    }
+
+    /** Health card and group cards (text pass): titles in olive, labels muted on the left, values on the right. */
+    private void drawPlayerText(Batch batch, Entity player, List<PlayerGroup> groups, float x, float width, float cardsTop) {
+        float y = cardsTop;
+        float inner = width - 2f * CARD_PAD;
+        HealthComponent health = player.getHealth();
+        if (health != null) {
+            font.setColor(TITLE);
+            font.draw(batch, "HEALTH", x + CARD_PAD, y - CARD_PAD);
+            font.setColor(TEXT);
+            font.draw(batch, health.getHealth() + " / " + health.getMaxHealth(), x + CARD_PAD, y - CARD_PAD, inner, Align.right, false);
+            y -= HEALTH_CARD + GROUP_GAP;
+        }
+        for (PlayerGroup group : groups) {
+            float lineY = y - CARD_PAD;
+            font.setColor(TITLE);
+            font.draw(batch, group.title(), x + CARD_PAD, lineY);
+            lineY -= GROUP_TITLE;
+            for (PlayerLine line : group.lines()) {
+                font.setColor(MUTED);
+                font.draw(batch, line.label(), x + CARD_PAD, lineY);
+                font.setColor(TEXT);
+                font.draw(batch, line.value(), x + CARD_PAD, lineY, inner, Align.right, false);
+                lineY -= LINE;
+            }
+            y -= groupHeight(group) + GROUP_GAP;
+        }
+    }
+
+    // ---------------------------------------------------------------- weapons
+
+    /** A list row: sprite, key and name; nothing else. */
+    private void drawWeaponRow(Batch batch, WeaponComponent slot, int index, boolean isInHand, float x, float rowTop, float width) {
+        Weapon weapon = slot.equipped;
+        if (weapon == null) return;
+        float middle = rowTop - ROW_HEIGHT / 2f;
+        drawSprite(batch, weapon.getRegion(), x + PAD / 2f, middle, ROW_ICON_WIDTH, ROW_ICON_HEIGHT, DETAIL_ICON_SCALE);
+        float textY = middle + font.getCapHeight() / 2f;
+        font.setColor(isInHand ? TITLE : MUTED);
+        font.draw(batch, "[" + (index + 1) + "]", x + PAD + ROW_ICON_WIDTH, textY);
+        font.setColor(isInHand ? TITLE : TEXT);
+        font.draw(batch, weapon.getName(), x + PAD + ROW_ICON_WIDTH + 34f, textY);
+        if (isInHand) {
+            font.setColor(TITLE);
+            font.draw(batch, "IN HAND", x, textY, width - PAD, Align.right, false);
+        }
+    }
+
+    /** The weapon in hand: big sprite on the left, name, how it is used, then its rows with bars. */
+    private void drawDetails(Batch batch, WeaponComponent slot, List<DetailRow> rows, float x, float detailTop,
+                             float detailBottom, float rowsTop) {
+        Weapon weapon = slot.equipped;
+        float boxHeight = detailTop - detailBottom;
+        drawSprite(batch, weapon.getRegion(), x + PAD / 2f, detailBottom + boxHeight / 2f,
+            DETAIL_ICON_BOX - PAD, boxHeight - 2 * PAD, DETAIL_ICON_SCALE);
+
+        float textX = x + DETAIL_ICON_BOX + PAD;
+        float y = detailTop - LINE * 0.8f;
+        font.setColor(TITLE);
+        font.draw(batch, weapon.getName(), textX, y);
+        font.setColor(MUTED);
+        font.draw(batch, kind(slot), textX, y - LINE);
+        for (int i = 0; i < rows.size(); i++) {
+            DetailRow row = rows.get(i);
+            float rowY = rowsTop - i * DETAIL_LINE;
+            font.setColor(MUTED);
+            font.draw(batch, row.label(), textX, rowY);
+            font.setColor(TEXT);
+            font.draw(batch, row.value(), textX + VALUE_X, rowY);
+            if (row.note() != null) {
+                font.setColor(MUTED);
+                font.draw(batch, row.note(), textX + BAR_X, rowY);
+            }
+        }
+    }
+
+    /** Draws a weapon sprite at a whole-number scale (crisp pixels), centred in a box at (x, middle). */
+    private static void drawSprite(Batch batch, TextureRegion region, float x, float middle, float boxWidth, float boxHeight, float maxScale) {
+        float fit = Math.min(boxWidth / region.getRegionWidth(), boxHeight / region.getRegionHeight());
+        float scale = Math.max(1f, (float) Math.floor(Math.min(maxScale, fit)));
+        float w = region.getRegionWidth() * scale;
+        float h = region.getRegionHeight() * scale;
+        batch.setColor(Color.WHITE);
+        batch.draw(region, x + (boxWidth - w) / 2f, middle - h / 2f, w, h);
+    }
+
+    /** A bar beside a detail row whose text baseline is at y. */
+    private void bar(float x, float y, float fraction) {
+        shapes.setColor(BAR_BACK);
+        shapes.rect(x, y - BAR_HEIGHT - 4f, BAR_WIDTH, BAR_HEIGHT);
+        shapes.setColor(BAR_FILL);
+        shapes.rect(x, y - BAR_HEIGHT - 4f, BAR_WIDTH * Math.max(0f, Math.min(1f, fraction)), BAR_HEIGHT);
     }
 
     // ---------------------------------------------------------------- helpers
 
-    private float section(Batch batch, float x, float y, String title) {
-        font.setColor(TITLE);
-        font.draw(batch, title, x, y);
-        return y - LINE;
-    }
-
-    private float line(Batch batch, float x, float y, String label, String value) {
-        font.setColor(MUTED);
-        font.draw(batch, label, x, y);
-        font.setColor(TEXT);
-        font.draw(batch, value, x + 120f, y);
-        return y - LINE;
-    }
-
     private static String tiles(float value) {
         return String.format(Locale.ROOT, "%.1f tiles", value);
+    }
+
+    private static float meleeDamage(Entity player) {
+        AttackComponent attack = player.getAttack();
+        return attack != null ? attack.damage : 0f;
     }
 
     /** Length of the knife swing (ATTACK of the default set), seconds. */
@@ -337,7 +430,7 @@ public class StatsPanel implements Disposable {
         return base.animations.containsKey(AnimationType.ATTACK) ? base.animations.get(AnimationType.ATTACK).getAnimationDuration() : 0f;
     }
 
-    /** How far the blade tip is from the hand, world units. */
+    /** How far the blade tip is from the hand, world units (0 for a firearm). */
     private static float reachUnits(WeaponComponent slot) {
         Vector2 tip = slot.equipped.getTipAnchor();
         if (tip == null) return 0f;

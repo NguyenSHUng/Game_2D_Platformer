@@ -10,7 +10,7 @@
 | Công nghệ | Java 21, LibGDX 1.14.2 (+ gdx-freetype), Gradle wrapper |
 | Nền tảng | Desktop (module `lwjgl3`, cửa sổ 1280×720) |
 | Kiến trúc | Component-based kiểu ECS: entity chứa component dữ liệu, system xử lý ([02-ARCHITECTURE.md](02-ARCHITECTURE.md)) |
-| Quy mô code | 135 file Java (~10.800 dòng) trong `core`, 322 test trong 48 file |
+| Quy mô code | 135 file Java (~10.800 dòng) trong `core`, 330 test trong 50 file |
 
 ## Tính năng hiện có
 
