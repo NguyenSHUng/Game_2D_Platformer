@@ -6,6 +6,8 @@ package com.hung.world;
  */
 public class EnemySpawn {
     public String name;
+    /** TMX object id, unique in its map. */
+    public int objectId;
     /** Path of the enemy generator's character.json, e.g. sprites/enemies/small_melee_ghoul/character.json. */
     public String definitionPath;
     public float x;

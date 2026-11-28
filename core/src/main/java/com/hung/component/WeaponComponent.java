@@ -35,6 +35,10 @@ public class WeaponComponent {
 
     /** Rounds in the magazine. */
     public int ammo;
+    /** Rounds carried outside the magazine; a reload moves them in. */
+    public int reserve;
+    /** The reserve never holds more (pickups stop there). */
+    public int maxReserve;
     /** Seconds until the next shot is allowed. */
     public float cooldown;
     /** Seconds left of a reload; 0 = not reloading. */

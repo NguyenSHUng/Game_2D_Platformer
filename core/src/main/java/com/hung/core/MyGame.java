@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.hung.combat.ItemArt;
 import com.hung.save.GameSession;
 import com.hung.save.SaveData;
 import com.hung.save.SaveManager;
@@ -75,9 +76,10 @@ public class MyGame extends Game implements Navigator {
     private void startRun(GameSession session) {
         endRun();
         Gdx.app.log(TAG, (session.loaded != null ? "Continuing" : "New") + " " + session.mode.label + " run");
-        World world = WorldLoader.load(session.mode.mapPath, session.mode.enemySkill, session.mode.tacticPolicy, resources);
+        ItemArt itemArt = ItemArt.load(resources);
+        World world = WorldLoader.load(session.mode.mapPath, session.mode.enemySkill, session.mode.tacticPolicy, itemArt, resources);
         runMapPath = session.mode.mapPath;
-        run = new GameScreen(batch, world, session, saves, settings, theme, this);
+        run = new GameScreen(batch, world, session, saves, settings, theme, itemArt, this);
         setScreen(run);
     }
 

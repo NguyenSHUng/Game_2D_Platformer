@@ -9,7 +9,8 @@ package com.hung.save;
  */
 public class SaveData {
 
-    public static final int CURRENT_VERSION = 1;
+    /** 2: reserve ammunition, score and statistics, scored ids, opened chests, items lying in the world. */
+    public static final int CURRENT_VERSION = 2;
 
     /** Saved at a checkpoint (position = the checkpoint). */
     public static final String REASON_CHECKPOINT = "CHECKPOINT";
@@ -48,10 +49,36 @@ public class SaveData {
     public int weaponSlot;
     public String[] weaponIds;
     public int[] ammo;
+    /** Rounds in each weapon's reserve (same order as weaponIds); null in version 1 saves. */
+    public int[] reserve;
 
     /** Explored rooms (Room.index) for the minimap, the room the player was in and its id (for the menu). */
     public int[] visitedRooms;
     public int[] knownRooms;
     public int roomCount;
     public String roomId;
+
+    /** Score and statistics of the run (RunStats); 0 in version 1 saves. */
+    public int score;
+    public int kills;
+    public int chestsOpened;
+    public int roomsCleared;
+    /**
+     * Ids already scored in this map export: defeated enemy spawns (they still come back, they just score
+     * nothing), opened chests (they stay open) and cleared rooms. Dropped when the map was re-exported.
+     */
+    public String[] defeatedEnemies;
+    public String[] openedChests;
+    public String[] clearedRooms;
+    /** Items lying in the world, where they come to rest. */
+    public PickupData[] pickups;
+
+    /** One item lying in the world. */
+    public static class PickupData {
+        /** PickupType name. */
+        public String type;
+        /** Feet point, world units. */
+        public float x;
+        public float y;
+    }
 }

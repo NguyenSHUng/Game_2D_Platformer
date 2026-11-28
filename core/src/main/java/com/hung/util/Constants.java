@@ -27,6 +27,8 @@ public final class Constants {
      * tools/export-game.mjs). Missing file = unarmed look.
      */
     public static final String DEFAULT_PLAYER_WEAPON = "sprites/weapons/combat_knife/combat_knife.json";
+    /** The loot art manifest: chest openings, items, landing and pickup effects (combat.ItemArt). */
+    public static final String ITEM_ART_PATH = "sprites/items/items.json";
 
     /**
      * Other weapons of that player, in slot order after the knife (keys 2, 3 / Q), each when its file

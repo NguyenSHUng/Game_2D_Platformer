@@ -21,6 +21,7 @@ public class KeyboardController implements Controller {
     private static final int ATTACK_BUTTON = Input.Buttons.LEFT;
     private static final int[] RELOAD_KEYS = {Input.Keys.R};
     private static final int[] NEXT_WEAPON_KEYS = {Input.Keys.Q};
+    private static final int[] INTERACT_KEYS = {Input.Keys.E};
     /** Index = weapon slot. */
     private static final int[] WEAPON_SLOT_KEYS = {Input.Keys.NUM_1, Input.Keys.NUM_2, Input.Keys.NUM_3};
 
@@ -55,6 +56,11 @@ public class KeyboardController implements Controller {
     @Override
     public boolean isReloadPressed() {
         return isAnyKeyJustPressed(RELOAD_KEYS);
+    }
+
+    @Override
+    public boolean isInteractPressed() {
+        return isAnyKeyJustPressed(INTERACT_KEYS);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.hung.component;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -22,4 +23,7 @@ public class SpriteComponent {
     /** Degrees counter-clockwise (art faces right); flipX mirrors it to face left. */
     public float rotation;
     public boolean flipX;
+
+    /** Colour the frame is multiplied by (white = as drawn). */
+    public final Color tint = new Color(Color.WHITE);
 }

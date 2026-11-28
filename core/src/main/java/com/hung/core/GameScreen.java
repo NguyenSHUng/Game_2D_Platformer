@@ -11,9 +11,13 @@ import com.hung.ai.EnemyBrainSystem;
 import com.hung.ai.PatrolSystem;
 import com.hung.animation.system.AnimationSystem;
 import com.hung.animation.system.EffectSystem;
+import com.hung.combat.ItemArt;
+import com.hung.combat.LootTable;
+import com.hung.combat.PickupType;
 import com.hung.combat.system.AttackSystem;
 import com.hung.combat.system.ContactDamageSystem;
 import com.hung.combat.system.HealthSystem;
+import com.hung.combat.system.PickupSystem;
 import com.hung.combat.system.ProjectileSystem;
 import com.hung.combat.system.ShootingSystem;
 import com.hung.combat.system.WeaponSwitchSystem;
@@ -38,6 +42,8 @@ import com.hung.save.SaveData;
 import com.hung.save.SaveManager;
 import com.hung.save.SaveSnapshot;
 import com.hung.save.Settings;
+import com.hung.score.ScoreKeeper;
+import com.hung.score.ScoreRules;
 import com.hung.ui.FpsOverlay;
 import com.hung.ui.Toast;
 import com.hung.ui.UiTheme;
@@ -49,7 +55,10 @@ import com.hung.world.RoomTransition;
 import com.hung.world.World;
 import com.hung.world.event.CheckpointEvent;
 import com.hung.world.event.ExitReachedEvent;
+import com.hung.world.event.PickupCollectedEvent;
+import com.hung.world.event.RoomClearedEvent;
 import com.hung.world.event.RoomTransitionEvent;
+import com.hung.world.system.ChestSystem;
 import com.hung.world.system.DoorSystem;
 
 /**
@@ -91,6 +100,8 @@ public class GameScreen extends ScreenAdapter {
     private final EnemyBrainSystem enemyBrainSystem;
     private final PhysicsSystem physicsSystem;
     private final HazardSystem hazardSystem;
+    private final ChestSystem chestSystem;
+    private final PickupSystem pickupSystem;
     private final ContactDamageSystem contactDamageSystem;
     private final AttackSystem attackSystem;
     private final WeaponSwitchSystem weaponSwitchSystem;
@@ -132,7 +143,7 @@ public class GameScreen extends ScreenAdapter {
     private float time;
 
     public GameScreen(SpriteBatch batch, World world, GameSession session, SaveManager saves, Settings settings,
-                      UiTheme theme, Navigator navigator) {
+                      UiTheme theme, ItemArt itemArt, Navigator navigator) {
         this.batch = batch;
         this.world = world;
         this.session = session;
@@ -144,15 +155,17 @@ public class GameScreen extends ScreenAdapter {
         this.enemyBrainSystem = new EnemyBrainSystem(world);
         this.physicsSystem = new PhysicsSystem(world, new CollisionSystem(world));
         this.hazardSystem = new HazardSystem(world, events);
+        this.chestSystem = new ChestSystem(world, LootTable.DEFAULT, events);
+        this.pickupSystem = new PickupSystem(world, events, itemArt);
         this.contactDamageSystem = new ContactDamageSystem(world);
         this.attackSystem = new AttackSystem(world);
         this.weaponSwitchSystem = new WeaponSwitchSystem(world);
         this.shootingSystem = new ShootingSystem(world);
         this.projectileSystem = new ProjectileSystem(world);
         this.effectSystem = new EffectSystem(world);
-        this.healthSystem = new HealthSystem(world);
+        this.healthSystem = new HealthSystem(world, events);
         this.animationSystem = new AnimationSystem(world);
-        this.renderingSystem = new RenderingSystem(world, batch);
+        this.renderingSystem = new RenderingSystem(world, batch, itemArt);
         this.cameraController = new CameraController();
         this.cameraInput = new CameraInput();
         this.debugRenderer = new DebugRenderer();
@@ -182,16 +195,20 @@ public class GameScreen extends ScreenAdapter {
                 navigator.quit();
             }
         });
+        // First, so the score is up to date when the listeners below save or show it
+        new ScoreKeeper(world, session.stats, ScoreRules.DEFAULT, events).subscribe();
         events.subscribe(RoomTransitionEvent.class, cameraController);
         events.subscribe(RoomTransitionEvent.class, exploration);
         events.subscribe(CheckpointEvent.class, event -> {
             checkpointIndex = event.index;
             if (save(SaveData.REASON_CHECKPOINT)) toast.show("SAVE", "Checkpoint saved");
         });
+        events.subscribe(PickupCollectedEvent.class, event -> toast.show(pickupTag(event), pickupText(event)));
+        events.subscribe(RoomClearedEvent.class, event -> toast.show("ROOM", "Room cleared  +" + event.points));
         events.subscribe(ExitReachedEvent.class, event -> {
             session.isComplete = true;
             save(SaveData.REASON_COMPLETE);
-            pauseMenu.openComplete(modeChip(), SaveManager.formatTime(session.playTime));
+            pauseMenu.openComplete(modeChip(), SaveManager.formatTime(session.playTime), session.stats, chestCount());
         });
         if (session.loaded != null) applySave(session.loaded);
     }
@@ -240,7 +257,7 @@ public class GameScreen extends ScreenAdapter {
             debugRenderer.render(cameraController.getCamera(), world);
         }
         fadeRenderer.render(world.getRoomTransition());
-        hudRenderer.render(batch, world, isCameraFree);
+        hudRenderer.render(batch, world, session.stats.getScore(), isCameraFree);
         minimap.render(batch, player != null ? player.getTransform().position : null, time);
         if (isStatsOpen) statsPanel.render(batch, world);
         toast.render(batch, delta);
@@ -261,8 +278,28 @@ public class GameScreen extends ScreenAdapter {
         hasLeft = true;
     }
 
+    private int chestCount() {
+        int count = 0;
+        for (Entity entity : world.getEntities()) if (entity.getChest() != null) count++;
+        return count;
+    }
+
     private String modeChip() {
         return session.mode.label.toUpperCase();
+    }
+
+    /** Toast tag of a picked item: HP or AMMO. */
+    static String pickupTag(PickupCollectedEvent event) {
+        return event.type == PickupType.HEALTH_PACK ? "HP" : "AMMO";
+    }
+
+    /** Toast text of a picked item: what it actually gave ("+25 HP", "+24 pistol rounds"). */
+    static String pickupText(PickupCollectedEvent event) {
+        return switch (event.type) {
+            case HEALTH_PACK -> "+" + event.amount + " HP";
+            case PISTOL_AMMO -> "+" + event.amount + " pistol rounds";
+            case RIFLE_AMMO -> "+" + event.amount + " rifle rounds";
+        };
     }
 
     // ------------------------------------------------------------------ save / load
@@ -277,7 +314,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void applySave(SaveData data) {
         if (world.getPlayer() == null) return;
-        if (SaveSnapshot.apply(data, world, exploration)) {
+        if (SaveSnapshot.apply(data, world, exploration, session.stats)) {
             checkpointIndex = data.checkpointIndex;
         } else {
             Gdx.app.error(TAG, "The map changed since this run was saved; starting from its spawn");
@@ -349,6 +386,8 @@ public class GameScreen extends ScreenAdapter {
         enemyBrainSystem.update(delta);
         physicsSystem.update(delta);
         hazardSystem.update();
+        chestSystem.update(delta);
+        pickupSystem.update(delta);
         contactDamageSystem.update();
         attackSystem.update();
         shootingSystem.update(delta);

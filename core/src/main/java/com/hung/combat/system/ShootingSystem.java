@@ -24,7 +24,9 @@ import com.hung.world.World;
 /**
  * Firearms, driven by the weapon's "fire" data (weapon generator JSON):
  *  - a trigger pull fires when the cooldown is over and the magazine isn't empty; an empty
- *    magazine starts a reload instead; R reloads early; a reload refills after reloadSeconds;
+ *    magazine starts a reload instead; R reloads early; after reloadSeconds a reload moves rounds
+ *    from the reserve into the magazine (as many as fit and the reserve holds); with an empty
+ *    reserve no reload starts;
  *  - a shot spawns a projectile at the muzzle (world position of the weapon's muzzle anchor,
  *    along the weapon's angle ± spread, kept to the shooter's room), a muzzle flash and a casing from the ejection port,
  *    and keeps the SHOOT pose up for one SHOOT animation.
@@ -67,25 +69,32 @@ public class ShootingSystem {
                 weapon.reloadTime -= delta;
                 if (weapon.reloadTime <= 0f) {
                     weapon.reloadTime = 0f;
-                    weapon.ammo = fire.magazine;
+                    int moved = Math.min(fire.magazine - weapon.ammo, weapon.reserve);
+                    weapon.ammo += moved;
+                    weapon.reserve -= moved;
                 }
             }
 
             boolean canAct = canAct(entity);
             if (weapon.isReloadRequested) {
                 weapon.isReloadRequested = false;
-                if (canAct && weapon.reloadTime <= 0f && weapon.ammo < fire.magazine) weapon.reloadTime = fire.reloadSeconds;
+                if (canAct && weapon.reloadTime <= 0f && canReload(weapon, fire)) weapon.reloadTime = fire.reloadSeconds;
             }
             if (!weapon.isFireRequested) continue;
             weapon.isFireRequested = false;
             if (!canAct || weapon.cooldown > 0f || weapon.reloadTime > 0f) continue;
             if (weapon.ammo <= 0) {
-                weapon.reloadTime = fire.reloadSeconds;
+                if (canReload(weapon, fire)) weapon.reloadTime = fire.reloadSeconds;
                 continue;
             }
             shoot(entity, weapon, fire);
-            if (weapon.ammo == 0) weapon.reloadTime = fire.reloadSeconds;
+            if (weapon.ammo == 0 && canReload(weapon, fire)) weapon.reloadTime = fire.reloadSeconds;
         }
+    }
+
+    /** Room in the magazine and rounds in the reserve to fill it with. */
+    private static boolean canReload(WeaponComponent weapon, FireDefinition fire) {
+        return weapon.ammo < fire.magazine && weapon.reserve > 0;
     }
 
     private static boolean canAct(Entity entity) {

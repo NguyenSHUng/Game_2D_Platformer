@@ -1,10 +1,11 @@
 package com.hung.save;
 
 import com.hung.core.GameMode;
+import com.hung.score.RunStats;
 
 /**
- * The run being played: its mode (which also names its save), the time played so far and, when
- * continuing, the save it started from (null for a new game).
+ * The run being played: its mode (which also names its save), the time played so far, its score and,
+ * when continuing, the save it started from (null for a new game).
  */
 public class GameSession {
 
@@ -14,6 +15,8 @@ public class GameSession {
     /** Seconds played in this run, including the time before the save it continues. */
     public float playTime;
     public boolean isComplete;
+    /** Score and statistics of this run (ScoreKeeper adds to them). */
+    public final RunStats stats = new RunStats();
 
     public GameSession(GameMode mode, SaveData loaded) {
         this.mode = mode;

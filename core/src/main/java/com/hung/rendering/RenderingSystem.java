@@ -1,6 +1,9 @@
 package com.hung.rendering;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,8 +16,12 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntArray;
 import com.hung.animation.AnimationFrames;
 import com.hung.animation.HandAnchor;
+import com.hung.combat.ItemArt;
+import com.hung.combat.PickupType;
+import com.hung.combat.WeaponEffect;
 import com.hung.combat.Weapon;
 import com.hung.component.AnimationComponent;
+import com.hung.component.ColliderComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.SpriteComponent;
 import com.hung.component.TransformComponent;
@@ -38,19 +45,32 @@ public class RenderingSystem implements Disposable {
     private static final float PIXEL_CENTRE = 0.5f;
     /** While invulnerable an entity blinks: hidden every other interval, in seconds. */
     private static final float BLINK_INTERVAL = 0.08f;
+    /** Placeholder colours of items without art yet: health red, pistol rounds brass, rifle rounds olive. */
+    private static final Color HEALTH_PACK_COLOR = new Color(0.85f, 0.2f, 0.2f, 1f);
+    private static final Color PISTOL_AMMO_COLOR = new Color(0.9f, 0.75f, 0.3f, 1f);
+    private static final Color RIFLE_AMMO_COLOR = new Color(0.5f, 0.6f, 0.3f, 1f);
 
     private final World world;
     private final OrthogonalTiledMapRenderer mapRenderer;
     private final int[] backLayers;
     private final int[] frontLayers;
+    /** One white pixel, tinted to draw placeholder boxes. */
+    private final Texture pixel;
+    private final ItemArt itemArt;
 
-    public RenderingSystem(World world, Batch batch) {
+    public RenderingSystem(World world, Batch batch, ItemArt itemArt) {
         this.world = world;
+        this.itemArt = itemArt;
         // Unit scale 1: one map pixel = one world unit; shares the game's batch
         this.mapRenderer = new OrthogonalTiledMapRenderer(world.getLevel().getMap(), 1f, batch);
         MapLayers layers = world.getLevel().getMap().getLayers();
         this.backLayers = layerIndices(layers, BACK_LAYERS);
         this.frontLayers = layerIndices(layers, FRONT_LAYERS);
+        Pixmap white = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        white.setColor(Color.WHITE);
+        white.fill();
+        this.pixel = new Texture(white);
+        white.dispose();
     }
 
     /** Draws everything for this frame; manages batch.begin()/end() itself. */
@@ -67,6 +87,8 @@ public class RenderingSystem implements Disposable {
                 if (!isBlinkedOut(entity)) drawEntity(batch, entity);
             } else if (entity.getSprite() != null) {
                 drawSprite(batch, entity.getSprite(), entity.getTransform().position);
+            } else if (entity.getPickup() != null && entity.getCollider() != null) {
+                drawItem(batch, entity.getPickup().type, entity.getTransform().position, entity.getCollider());
             }
         }
         batch.end();
@@ -78,6 +100,26 @@ public class RenderingSystem implements Disposable {
     public void dispose() {
         // The renderer doesn't own the shared batch, so this only frees its own resources
         mapRenderer.dispose();
+        pixel.dispose();
+    }
+
+    /** A lying item: its picture standing on its position, or without art a box of its body's size in its type's colour. */
+    private void drawItem(Batch batch, PickupType type, Vector2 position, ColliderComponent body) {
+        WeaponEffect art = itemArt.item(type);
+        if (art != null) {
+            TextureRegion frame = art.animation.getKeyFrame(0f);
+            float originX = art.originX + PIXEL_CENTRE;
+            float originY = frame.getRegionHeight() - art.originY - PIXEL_CENTRE;
+            batch.draw(frame, position.x - originX, position.y - originY);
+            return;
+        }
+        batch.setColor(switch (type) {
+            case HEALTH_PACK -> HEALTH_PACK_COLOR;
+            case PISTOL_AMMO -> PISTOL_AMMO_COLOR;
+            case RIFLE_AMMO -> RIFLE_AMMO_COLOR;
+        });
+        batch.draw(pixel, position.x - body.width / 2f, position.y, body.width, body.height);
+        batch.setColor(Color.WHITE);
     }
 
     private static int[] layerIndices(MapLayers layers, String[] names) {
@@ -99,8 +141,10 @@ public class RenderingSystem implements Disposable {
         float height = frame.getRegionHeight() * sprite.scale;
         float originX = (sprite.originX + PIXEL_CENTRE) * sprite.scale;
         float originY = (frame.getRegionHeight() - sprite.originY - PIXEL_CENTRE) * sprite.scale;
+        batch.setColor(sprite.tint);
         batch.draw(frame, position.x - originX, position.y - originY, originX, originY, width, height,
             sprite.flipX ? -1f : 1f, 1f, sprite.rotation);
+        batch.setColor(Color.WHITE);
     }
 
     private static boolean isBlinkedOut(Entity entity) {

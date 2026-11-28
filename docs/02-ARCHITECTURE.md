@@ -40,158 +40,60 @@ Lwjgl3Launcher ─► MyGame.create(): SpriteBatch, ResourceLoader, SaveManager,
 
 ## 3. Thứ tự một khung hình
 
-`GameScreen.render()` chạy theo thứ tự sau. Bước 1–13 nằm trong `GameScreen.update()` và bị bỏ qua khi bảng nhân
+`GameScreen.render()` chạy theo thứ tự sau. Bước 1–15 nằm trong `GameScreen.update()` và bị bỏ qua khi bảng nhân
 vật hoặc menu tạm dừng đang mở, hoặc khi màn hình đang tối dần qua cửa.
 
 | # | Bước | Việc làm |
 |---|------|----------|
-| 1 | `InputSystem` | Ý định của player → vận tốc, nhảy, ngồi, thang; yêu cầu đánh / bắn / nạp / đổi vũ khí |
+| 1 | `InputSystem` | Ý định của player → vận tốc, nhảy, ngồi, thang; yêu cầu đánh / bắn / nạp / đổi vũ khí / tương tác |
 | 2 | `WeaponSwitchSystem` | Thực hiện yêu cầu đổi vũ khí, đổi bộ animation theo tư thế cầm |
 | 3 | `PatrolSystem` | Quái đi tuần |
 | 4 | `EnemyBrainSystem` | Gọi `Enemy.updateBehaviour` của từng quái: mỗi loại tự săn, đánh, bay (ghi đè vận tốc tuần tra) |
 | 5 | `PhysicsSystem` | Trọng lực, di chuyển; entity có hộp va chạm đi qua `CollisionSystem` |
 | 6 | `HazardSystem` | Checkpoint, bẫy, rơi khỏi map, lối ra; phát `CheckpointEvent`, `ExitReachedEvent` |
-| 7 | `ContactDamageSystem` | Chạm quái thì mất máu |
-| 8 | `AttackSystem` | Đòn cận chiến theo attack box của khung hiện tại; phá tile BREAKABLE |
-| 9 | `ShootingSystem` | Bắn, hồi chiêu, nạp đạn, lửa nòng, vỏ đạn |
-| 10 | `ProjectileSystem` | Đạn bay, trúng tile hoặc thân |
-| 11 | `HealthSystem` | Bộ đếm bị thương / bất tử, chết, hồi sinh player |
-| 12 | `AnimationSystem` | Chọn animation cho từng entity, tăng thời gian |
-| 13 | `EffectSystem` | Chạy và xoá entity hiệu ứng |
-| 14 | `DoorSystem.update` | Chuyển phòng; chạy cả khi thế giới đang dừng vì màn hình tối dần |
-| 15 | Vẽ | Map + entity → ánh sáng → lớp debug → lớp tối qua cửa → HUD → minimap → bảng nhân vật → toast → menu tạm dừng → FPS |
+| 7 | `ChestSystem` | Mở rương theo yêu cầu tương tác, ném vật phẩm ra; phát `ChestOpenedEvent` |
+| 8 | `PickupSystem` | Vật phẩm bay / nảy / nằm yên; player chạm thì nhặt; phát `PickupCollectedEvent` |
+| 9 | `ContactDamageSystem` | Chạm quái thì mất máu |
+| 10 | `AttackSystem` | Đòn cận chiến theo attack box của khung hiện tại; phá tile BREAKABLE |
+| 11 | `ShootingSystem` | Bắn, hồi chiêu, nạp đạn từ dự trữ, lửa nòng, vỏ đạn |
+| 12 | `ProjectileSystem` | Đạn bay, trúng tile hoặc thân; biến mất khi rời phòng lúc bắn |
+| 13 | `HealthSystem` | Bộ đếm bị thương / bất tử, chết (phát `EnemyKilledEvent`), hồi sinh player |
+| 14 | `AnimationSystem` | Chọn animation cho từng entity, tăng thời gian |
+| 15 | `EffectSystem` | Chạy và xoá entity hiệu ứng |
+| 16 | `DoorSystem.update` | Chuyển phòng; chạy cả khi thế giới đang dừng vì màn hình tối dần |
+| 17 | Vẽ | Map + entity → ánh sáng → lớp debug → lớp tối qua cửa → HUD → minimap → bảng nhân vật → toast → menu tạm dừng → FPS |
 
 **Các ràng buộc thứ tự mà code dựa vào** (chỉ đổi khi có test chứng minh):
-- Yêu cầu đặt ở bước 1 và 4 được tiêu thụ ở bước 2, 8, 9.
+- Yêu cầu đặt ở bước 1 và 4 được tiêu thụ ở bước 2, 7, 10, 11.
 - `EnemyBrainSystem` chạy sau `PatrolSystem` để ghi đè được vận tốc tuần tra.
+- `ChestSystem` và `PickupSystem` chạy sau `PhysicsSystem`, nên dùng vị trí player của khung này; `ChestSystem` trước
+  `PickupSystem` để vật phẩm vừa ném bắt đầu bay ngay khung đó.
 - `AnimationSystem` chạy sau `HealthSystem` và `AttackSystem` để HIT, DEATH, ATTACK được ưu tiên đúng.
-
-## 4. Entity, component và cây nhân vật
-
-```java
-Enemy crawler = new CrawlerEnemy(attackRange);   // là Entity: đã có TransformComponent
-crawler.setMovement(movement);
-crawler.setHealth(new HealthComponent(20));    // EnemyFactory lắp các component này từ character.json
-```
-
-`Entity` có một field có kiểu cho mỗi loại component (getter + setter, null = không có). Thêm loại component nghĩa là
-thêm một field; cách này được giữ có chủ ý: có kiểu rõ ràng, nhanh, dễ đọc ở quy mô hiện tại.
-
-`Entity` không có constructor riêng. 14 field của nó chia ba nhóm:
-
-| Nhóm | Field |
-|------|-------|
-| Component bắt buộc | `TransformComponent` (`final`, tạo sẵn, không có setter) |
-| Component tuỳ chọn | `MovementComponent`, `ColliderComponent`, `AnimationComponent`, `WeaponComponent`, `PatrolComponent`, `AttackComponent`, `HealthComponent`, `ArsenalComponent`, `SpriteComponent`, `EffectComponent`, `ProjectileComponent`, `DoorComponent` |
-| Tham chiếu không phải component | `Controller`: interface ở `com.hung.input` (strategy nhập lệnh), chỉ player có |
-
-`Weapon` cũng không phải component và `Entity` không giữ nó trực tiếp: đó là đối tượng của `com.hung.combat`, nằm trong `WeaponComponent.equipped`.
-
-Entity nào được lắp component nào (ngoài `TransformComponent`):
-
-| Entity | Component | Nơi lắp |
-|--------|-----------|---------|
-| `Player` | `MovementComponent`, `ColliderComponent`, `AttackComponent`, `HealthComponent`, `AnimationComponent`; có vũ khí thì thêm `ArsenalComponent`, `WeaponComponent`. Kèm tham chiếu `Controller` | `PlayerFactory.createPlayer`, `WeaponFactory.equipArsenal` |
-| `Enemy` | `MovementComponent`, `ColliderComponent`, `PatrolComponent`, `HealthComponent`, `AnimationComponent`, `AttackComponent` | `EnemyFactory.createEnemy` |
-| Cửa | `DoorComponent` | `EntityFactory.createDoor` |
-| Đạn | `ProjectileComponent`; `SpriteComponent` nếu súng có hiệu ứng `tracer` | `ShootingSystem` |
-| Vỏ đạn | `SpriteComponent`, `MovementComponent`, `ColliderComponent`, `EffectComponent` | `ShootingSystem` |
-| Hiệu ứng | `SpriteComponent`, `EffectComponent` | `Effects.spawn` |
-
-**Dữ liệu chung và đối tượng riêng của quái:**
-
-| Class | Vai trò |
-|-------|---------|
-| `EnemyDefinition` | Cấu hình đọc từ `character.json`, dùng chung cho các con cùng loại trong một map. Field public nhưng chỉ đọc: sau khi nạp JSON không code nào ghi vào |
-| `Enemy` (lớp con) | Đối tượng lúc chạy, riêng từng con: vị trí, máu, hồi chiêu, animation. Không giữ tham chiếu tới definition |
-| `EnemyFactory` | Đọc definition + `EnemySpawn`, chọn lớp con, tạo component mới cho từng con. Chỉ ảnh (`Texture`) là dùng chung |
-
-**Cây nhân vật** (`GameCharacter` ở `com.hung.entity`; `Player` và `PlayerFactory` ở `com.hung.entity.player`; các lớp quái và `EnemyFactory` ở `com.hung.entity.enemy`):
-
-```text
-Entity                         túi component (cửa, đạn, hiệu ứng là Entity thường)
- └─ GameCharacter «abstract»   getFaction() «abstract», isHostileTo(), canBreakWalls(), isAlive()
-     ├─ Player                 phe PLAYER, phá được tường
-     └─ Enemy «abstract»       phe ENEMY, getContactDamage(), getKnockbackResistance(), homeRoom
-         │                     updateBehaviour() = template: chết → whileDead · bị thương → whileHurt · còn lại → think()
-         └─ HunterEnemy «abstract» implements TacticActions
-             │                 think() = nhìn / nhớ (trong phòng nhà) → nhảy → tactic.decide() → afterThink
-             │                 aggroRange(), attackCooldown(), chaseSpeedScale() «abstract»; chase(), canBackOff() override được
-             │                 ◇── HuntTactic (một instance mỗi quái, mặc định DirectChaseTactic)
-             ├─ MeleeEnemy     small_melee_*: 120 / 1,2 s / ×2,2, dừng cách một tầm vuốt
-             ├─ CrawlerEnemy   crawler_01: 160 / 0,9 s / ×1,6
-             └─ FlyingEnemy    flyer_wasp_01: bay, không xét mép vực (cả khi lùi), đánh trên không, xác rơi sau DEATH
-```
-
-`EnemyFactory.newEnemy` chọn lớp theo `character.json`:
-`archetype` `SMALL_MELEE` → `MeleeEnemy`; `CRAWLER` → `CrawlerEnemy`; `FLYING` → `FlyingEnemy` (enum `EnemyDefinition.Archetype`; tên khác = lỗi khi nạp).
-
-**Cách đánh là Strategy** (`com.hung.ai.tactic`), tách khỏi cây kế thừa: lớp con quyết định quái *làm được gì* (bay, nhảy, dừng ở
-mép vực), tactic quyết định *làm gì* (đánh, áp sát, lùi, đứng). Hai trục độc lập nên không cần lớp `MediumMeleeEnemy`…
-
-```text
-«interface» HuntTactic      decide(HuntContext, TacticActions), onHurt(), onTargetLost()
-   ├─ DirectChaseTactic     không trạng thái; đúng hành vi cũ
-   └─ HitAndRunTactic       APPROACH → ATTACK → RETREAT → RECOVER
-HuntContext «record»        dx, attackRange, holdDistance, isInReach, canStrikeNow, canMoveTowardTarget, canBackOff, delta
-«interface» TacticActions   face, strike, approach (= chase của lớp con), retreat, hold   ← HunterEnemy cài đặt
-TacticPolicy «record»       hitAndRunFromRegion; create(regionId) → tactic mới      ← GameMode.tacticPolicy
-```
-
-`GameMode` giữ hai thứ riêng: `enemySkill` (con số, `EnemySkill`) và `tacticPolicy` (cách đánh). `WorldLoader` gán tactic sau
-`EnemyFactory`, nên chọn tactic không chạm vào đường tính chỉ số.
-
-**Component được đóng gói** (có quy tắc trải trên nhiều field):
-
-| Component | Quy tắc luôn đúng | API |
-|-----------|-------------------|-----|
-| `HealthComponent` | 0 ≤ health ≤ maxHealth; isDead ⇔ health == 0; maxHealth ≥ 1 | `new HealthComponent(max)`, `applyDamage(n)`, `restoreFull()`, `setHealthClamped(n)`, các getter |
-| `AnimationComponent` | 5 map của tư thế đang dùng (animation, anchor tay, khung gốc, lớp tay trước, attack box) luôn thuộc cùng một tư thế | `useStance(tên)` đổi cả 5 cùng lúc; getter để đọc |
-| `World` | Điểm hồi sinh chỉ đổi ở một chỗ | `setRespawnPoint(x, y)`; `getRespawnPoint()` chỉ để đọc |
-| `HunterEnemy` (và lớp con) | Hồi chiêu, số đòn đã đánh, trạng thái đang săn chỉ do chính quái cập nhật; vận tốc khi săn chỉ đổi qua `TacticActions` (giới hạn 84, kiểm tra an toàn khi lùi) | private; `isEngaged()` để đọc; `setTactic()` |
-
-Các field còn lại (bộ đếm, vận tốc, cờ) để public: system cập nhật mỗi khung hình và không có quy tắc nào trải trên chúng.
-
-## 5. Input
-
-- `com.hung.input.Controller` là ý định của player: hướng di chuyển, nhảy, đánh (nhấn / giữ), nạp đạn, ô vũ khí, vũ
-  khí kế tiếp. `KeyboardController` cài đặt bằng cách hỏi bàn phím và chuột ngay lúc được gọi, không giữ trạng thái
-  giữa các khung hình. `InputSystem` chỉ làm việc qua interface.
-- Mọi lần đọc ý định của player đều đi qua controller.
-- Quái không có controller: `PatrolSystem` và các class quái (qua `EnemyBrainSystem`) ghi thẳng vào component của quái.
-
-**Phím chọn vũ khí khi bảng nhân vật mở.** Lúc đó bước update (gồm `InputSystem`) không chạy, nên
-`GameScreen.handleToggles()` tự đọc `controller.getWeaponSlotPressed()`, đặt `ArsenalComponent.requestedSlot` rồi chạy
-`WeaponSwitchSystem`.
-- Thường chỉ một trong hai đường đọc phím trong một khung hình. Ngoại lệ: Esc được xử lý **sau** `handleToggles()`.
-  Nếu bấm Esc cùng một phím số trong cùng khung khi bảng đang mở, bảng đọc phím và đổi vũ khí, Esc đóng bảng, update
-  chạy và `InputSystem` đọc lại phím đó. Lần đọc thứ hai yêu cầu đúng ô đang cầm, và `WeaponSwitchSystem` bỏ qua yêu
-  cầu trùng (`requestedSlot != current`), nên không có gì thay đổi.
-- Bấm nhiều phím số trong cùng một khung: `KeyboardController` trả về ô có số nhỏ nhất, ở cả lúc chơi lẫn khi bảng
-  nhân vật mở.
 
 ## 6. Bảng system
 
 | System | Package | Đọc | Ghi |
 |--------|---------|-----|-----|
-| InputSystem | input | Controller, Movement, Collider, Health, lưới tile | Transform, Movement, yêu cầu Attack / Weapon / Arsenal |
+| InputSystem | input | Controller, Movement, Collider, Health, lưới tile | Transform, Movement, yêu cầu Attack / Weapon / Arsenal / Interact |
 | WeaponSwitchSystem | combat.system | Arsenal, Attack, Health | Weapon, Arsenal, tư thế animation |
 | PatrolSystem | ai | Patrol, Movement, Collider, Health, lưới tile | Transform, Patrol |
 | EnemyBrainSystem | ai | Health của player; mỗi `Enemy` tự đọc Movement, Collider, Attack, lưới tile | Transform, yêu cầu Attack (do từng `Enemy` ghi) |
 | PhysicsSystem | physics | Movement, thông số vật lý của level | Transform (qua CollisionSystem) |
 | CollisionSystem | physics | Collider, lưới tile | Transform, Movement (chạm đất, bị chặn) |
 | HazardSystem | physics | Collider, lưới tile, checkpoint, lối ra | Điểm hồi sinh, vị trí player; phát sự kiện |
+| ChestSystem | world.system | Interact, Health / Collider của player, Chest, lưới tile | Chest, Sprite, Interact; thêm entity vật phẩm; phát sự kiện |
+| PickupSystem | combat.system | Pickup, Collider | Pickup, Transform, Health / dự trữ của player (qua `Pickups`); xoá vật phẩm đã nhặt, thêm hiệu ứng; phát sự kiện |
 | ContactDamageSystem | combat.system | Collider, Health, `Enemy.getContactDamage()` | Health (qua Damage) |
 | AttackSystem | combat.system | Attack, Animation, Health (attack box qua Hitboxes), phe (`GameCharacter.areHostile`), `canBreakWalls()` | Health (qua Damage), lưới tile + map |
 | ShootingSystem | combat.system | Weapon, Movement, Health | Weapon; thêm entity đạn và hiệu ứng |
 | ProjectileSystem | combat.system | Projectile, Collider, lưới tile, phe | Health (qua Damage); xoá đạn |
-| HealthSystem | combat.system | Health, Animation | Bộ đếm của Health, Transform; xoá quái chết, hồi sinh player |
+| HealthSystem | combat.system | Health, Animation | Bộ đếm của Health, Transform; xoá quái chết, hồi sinh player; phát `EnemyKilledEvent` |
 | AnimationSystem | animation.system | Transform, Movement, Health, Attack, Weapon | Animation (loại, thời gian) |
 | EffectSystem | animation.system | Sprite, Effect | xoá hiệu ứng đã xong |
 | DoorSystem | world.system | Door, thân player | RoomTransition; phát `RoomTransitionEvent` |
-| RenderingSystem | rendering | map, Transform, Animation, Weapon, Sprite | màn hình |
+| RenderingSystem | rendering | map, Transform, Animation, Weapon, Sprite, Pickup (+ `ItemArt`) | màn hình |
 
-System không gọi nhau. Chúng dùng chung vài tiện ích tĩnh: `Damage.apply` (một đòn đánh), `PlayerRespawn.respawn`,
+System không gọi nhau. Chúng dùng chung vài tiện ích tĩnh: `Damage.apply` (một đòn đánh), `Pickups.apply` (một vật phẩm), `LootDrop`, `PlayerRespawn.respawn`,
 `Effects.spawn`, `Hitboxes` (hộp va chạm trong toạ độ thế giới), `AnimationFrames` (khung hiện tại).
 `PhysicsSystem` sở hữu `CollisionSystem`.
 
@@ -207,9 +109,14 @@ System không gọi nhau. Chúng dùng chung vài tiện ích tĩnh: `Damage.app
 |----------------------------------|----------|----------|
 | `RoomTransitionEvent` | `DoorSystem` | `CameraController` (giới hạn trong phòng), `MinimapState` (đánh dấu phòng) |
 | `CheckpointEvent` | `HazardSystem` | `GameScreen` (lưu game, hiện toast) |
-| `ExitReachedEvent` | `HazardSystem` | `GameScreen` (đánh dấu ván hoàn thành, mở màn kết thúc) |
+| `ExitReachedEvent` | `HazardSystem` | `ScoreKeeper` (điểm hoàn thành), rồi `GameScreen` (đánh dấu ván hoàn thành, lưu, mở màn kết thúc) |
+| `EnemyKilledEvent` | `HealthSystem` | `ScoreKeeper` (điểm hạ quái, kiểm tra dọn phòng) |
+| `ChestOpenedEvent` | `ChestSystem` | `ScoreKeeper` (điểm rương) |
+| `RoomClearedEvent` | `ScoreKeeper` | `GameScreen` (toast) |
+| `PickupCollectedEvent` | `PickupSystem` | `GameScreen` (toast "+25 HP"…) |
 
 - Nơi phát dùng lại một đối tượng sự kiện, nên nơi nghe phải chép những gì cần giữ.
+- Listener được gọi theo thứ tự đăng ký: `ScoreKeeper` đăng ký trước các listener lưu game / mở màn kết thúc.
 - Mỗi `GameScreen` tạo `EventBus` riêng và đăng ký mọi listener trong constructor; bus và listener bị huỷ cùng màn
   hình, nên không cần gỡ đăng ký.
 - `DoorSystem.start()` thông báo phòng đầu tiên và phải chạy sau khi đăng ký listener (`GameScreen.show()`).
@@ -218,10 +125,11 @@ System không gọi nhau. Chúng dùng chung vài tiện ích tĩnh: `Damage.app
 
 | Class | Trách nhiệm |
 |-------|-------------|
-| `SaveData` | Cấu trúc JSON ghi vào file lưu của chế độ (schema phiên bản 1), chỉ có field dữ liệu |
+| `SaveData` | Cấu trúc JSON ghi vào file lưu của chế độ (schema phiên bản 2; đọc được phiên bản 1), chỉ có field dữ liệu |
 | `SaveSnapshot` | `capture(...)` chụp thế giới thành `SaveData`; `apply(...)` đặt `SaveData` vào thế giới vừa nạp. Không đọc ghi file, không cần LibGDX nên test được |
 | `SaveManager` | Mỗi chế độ một file trong `~/.mygame/saves/`: đọc (EMPTY / OK / CORRUPT / INCOMPATIBLE, không bao giờ ném lỗi), ghi qua file tạm, nhập save từ ô lưu cũ |
-| `GameSession` | Ván đang chơi: chế độ, thời gian chơi, file lưu đang tiếp tục |
+| `GameSession` | Ván đang chơi: chế độ, thời gian chơi, điểm (`RunStats`), file lưu đang tiếp tục |
+| `RunStats` / `ScoreKeeper` / `ScoreRules` (`com.hung.score`) | Điểm, thống kê và id đã tính điểm của ván; biến sự kiện thành điểm, mỗi id một lần; bảng điểm |
 | `Settings` | Cài đặt trong `~/.mygame/settings.json` |
 
 `GameScreen` lưu khi có `CheckpointEvent`, khi tới lối ra và khi người chơi rời ván (về menu, thoát, đóng hoặc thu nhỏ
@@ -233,31 +141,35 @@ cửa sổ). Chi tiết dữ liệu được lưu: [05-SYSTEMS-GUIDE.md → 10](
 core/                MyGame, GameScreen, GameMode, Navigator
   event/             EventBus, EventListener (hạ tầng, không phụ thuộc gì)
 world/               World, Level, Room, RoomTransition, TileGrid, TileType, PhysicsSettings, EnemySpawn, LightSource
-  event/             RoomTransitionEvent, CheckpointEvent, ExitReachedEvent
+  event/             RoomTransitionEvent, CheckpointEvent, ExitReachedEvent, EnemyKilledEvent, ChestOpenedEvent,
+                     RoomClearedEvent, PickupCollectedEvent
   loader/            WorldLoader, RoomLoader (chạy lúc nạp map)
-  system/            DoorSystem, PlayerRespawn (hành vi theo khung hình)
+  system/            DoorSystem, ChestSystem, PlayerRespawn (hành vi theo khung hình)
 entity/              Entity, GameCharacter, EntityFactory (cửa)
   player/            Player, PlayerFactory, CharacterDefinition
   enemy/             Enemy, HunterEnemy, MeleeEnemy, CrawlerEnemy, FlyingEnemy, EnemyFactory, EnemyDefinition,
                      EnemySkill, JumpPlanner
 component/           Transform, Movement, Collider, Animation, Health, Attack, Weapon, Arsenal, Patrol,
-                     Sprite, Effect, Projectile, Door
+                     Sprite, Effect, Projectile, Door, Pickup, Interact, Chest
 input/               Controller, KeyboardController, InputSystem, CameraInput
 ai/                  PatrolSystem, EnemyBrainSystem
   tactic/            HuntTactic, HuntContext, TacticActions, DirectChaseTactic, HitAndRunTactic, TacticPolicy
                      (lá: không phụ thuộc package nào khác của game)
 physics/             PhysicsSystem, CollisionSystem, HazardSystem, Hitboxes
-combat/              Damage, Effects, Weapon, WeaponEffect, WeaponFactory (dùng chung)
-  definition/        WeaponDefinition, FireDefinition, EffectDefinition, AttachmentProfile (JSON)
-  system/            AttackSystem, ContactDamageSystem, ShootingSystem, ProjectileSystem, HealthSystem, WeaponSwitchSystem
+combat/              Damage, Effects, Weapon, WeaponEffect, WeaponFactory (dùng chung);
+                     AmmoType, PickupType, Pickups, ChestTier, LootTable, LootDrop, ItemArt (vật phẩm và rương)
+  definition/        WeaponDefinition, FireDefinition, EffectDefinition, AttachmentProfile, ItemArtDefinition (JSON)
+  system/            AttackSystem, ContactDamageSystem, ShootingSystem, ProjectileSystem, HealthSystem, WeaponSwitchSystem,
+                     PickupSystem
 animation/           AnimationType, AnimationSet, AnimationFrames, HandAnchor (kiểu dùng chung)
   definition/        AnimationDefinition, FrameDefinition (JSON của player)
   system/            AnimationSystem, EffectSystem
-rendering/           RenderingSystem, CameraController, LightingRenderer, HudRenderer, StatsPanel, DebugRenderer, FadeRenderer
+rendering/           RenderingSystem, CameraController, LightingRenderer, HudRenderer, InteractionPrompt, StatsPanel, DebugRenderer, FadeRenderer
 ui/                  UiTheme, Toast, FpsOverlay
   menu/              Menu, MenuView, MenuScreen, PauseMenu, SettingsMenu
   minimap/           MinimapState, MinimapRenderer
 save/                SaveData, SaveSnapshot, SaveManager, Settings, GameSession
+score/               ScoreRules, RunStats, ScoreKeeper (điểm của ván)
 util/                Constants, ResourceLoader, SmoothDamp
 ```
 
@@ -293,7 +205,7 @@ mỗi package.
 | `HunterEnemy.approach()` / `retreat()` | Cần world của `think()` đang chạy (`thinkingWorld`); gọi ngoài `think()` là lỗi. Là method public vì thuộc interface |
 | `World.getPlayer()` | Trả về `Entity`, không phải `Player`, để các test dựng thế giới bằng entity thường |
 | Bảng màu UI | Có ở 2 nơi: file thiết kế `build_asset/build_ui/menu-preview.template.html` và `UiTheme.java`; đổi phải chép tay |
-| Class lớn | `MenuView` (518 dòng), `HunterEnemy` (378, gần mức 400), `StatsPanel` (340), `MenuScreen` (337), `WorldLoader` (310) |
+| Class lớn | `MenuView` (518 dòng), `HunterEnemy` (378, gần mức 400), `StatsPanel` (355), `MenuScreen` (337), `WorldLoader` (310) |
 
 ## 12. Bốn tính chất OOP
 

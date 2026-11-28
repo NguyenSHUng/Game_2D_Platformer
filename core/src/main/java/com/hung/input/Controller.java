@@ -32,4 +32,7 @@ public interface Controller {
 
     /** True only on the frame the next weapon is requested. */
     boolean isNextWeaponPressed();
+
+    /** True only on the frame an interaction is requested (open a chest). */
+    boolean isInteractPressed();
 }

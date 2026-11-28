@@ -23,10 +23,11 @@ import com.hung.world.World;
  *    ladder up/down climbs, left/right steps off, jump jumps off; climbing past the top
  *    rung stands on it.
  *  - Attack: a melee swing, or pulling the trigger when the weapon in hand is a firearm (held = full-auto
- *    for AUTO weapons); R reloads; 1 / 2 / 3 / Q ask the arsenal for another weapon (WeaponSwitchSystem switches).
+ *    for AUTO weapons); R reloads; 1 / 2 / 3 / Q ask the arsenal for another weapon (WeaponSwitchSystem switches);
+ *    E asks to interact (InteractComponent, ChestSystem opens a chest).
  *  - Hurt or dead entities get no control; neither does anything while disabled (free camera).
  * Reads: Controller, MovementComponent, ColliderComponent, HealthComponent, TileGrid.
- * Writes: TransformComponent, MovementComponent, AttackComponent.
+ * Writes: TransformComponent, MovementComponent, AttackComponent, WeaponComponent requests, InteractComponent.
  */
 public class InputSystem {
 
@@ -101,6 +102,7 @@ public class InputSystem {
             }
         }
         if (isFirearm && controller.isReloadPressed()) weapon.isReloadRequested = true;
+        if (entity.getInteract() != null && controller.isInteractPressed()) entity.getInteract().isRequested = true;
         ArsenalComponent arsenal = entity.getArsenal();
         if (arsenal != null) {
             int slot = controller.getWeaponSlotPressed();
@@ -116,6 +118,7 @@ public class InputSystem {
         movement.jumpBufferTime = 0f;
         if (entity.getAttack() != null) entity.getAttack().isRequested = false;
         if (entity.getWeapon() != null) entity.getWeapon().isFireRequested = false;
+        if (entity.getInteract() != null) entity.getInteract().isRequested = false;
         if (isIncapacitated) {
             movement.isCrouching = false;
             return;

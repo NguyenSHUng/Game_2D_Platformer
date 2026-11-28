@@ -138,7 +138,8 @@ Cách nhân vật cầm vũ khí (anchor tay, profile `assets/attachments/<nhân
 | Xuống bệ | Ngồi + nhảy trên bệ một chiều: dời chân xuống 2 đơn vị dưới mặt bệ |
 | Thang | Lên / xuống tại thang → `isClimbing`, căn x vào cột thang; sau đó lên / xuống với `climbSpeed`; trái / phải rời; nhảy để nhảy khỏi; quá bậc trên cùng → đứng lên; chạm sàn → buông |
 | Đánh / bắn / nạp / đổi vũ khí | Đặt cờ yêu cầu: `AttackComponent.isRequested`, `WeaponComponent.isFireRequested` (giữ nút: tiếp tục với súng `AUTO`), `isReloadRequested`, `ArsenalComponent.requestedSlot` / `isNextRequested` |
-| Không điều khiển | Đang bị thương hoặc đã chết: giữ knockback; `setEnabled(false)` (camera tự do) dừng player |
+| Tương tác (`E`) | `InteractComponent.isRequested` (chỉ player có); `ChestSystem` dùng hết yêu cầu ngay khung đó |
+| Không điều khiển | Đang bị thương hoặc đã chết: giữ knockback; `setEnabled(false)` (camera tự do) dừng player. Mọi cờ yêu cầu (đánh, bắn, tương tác) bị xoá, nên `E` để zoom ở camera tự do không mở rương |
 
 Phím đặt thành mảng ở đầu `KeyboardController` (player) và `CameraInput` (camera tự do). Khi bảng nhân vật mở, phím
 chọn vũ khí được đọc ở `GameScreen` ([02 → mục 5](02-ARCHITECTURE.md#5-input)).
@@ -190,14 +191,14 @@ Va chạm thân với thân: `ContactDamageSystem` (quái còn sống chạm pla
 |------|------|
 | `ArsenalComponent` | Danh sách vũ khí mang theo (mỗi vũ khí một `WeaponComponent`, nên băng đạn giữ nguyên khi đổi) và ô đang cầm |
 | `WeaponSwitchSystem` | Đổi `Entity.weapon` sang ô được yêu cầu và gọi `AnimationComponent.useStance` theo tư thế của vũ khí; bỏ qua yêu cầu trùng ô đang cầm; không đổi khi đang vung / bị thương / chết; huỷ lượt nạp |
-| `WeaponComponent` (trạng thái súng) | `ammo`, `cooldown`, `reloadTime`, `shootTime`, `isFireRequested`, `isReloadRequested` |
-| `ShootingSystem` | Bóp cò → bắn khi hết hồi chiêu (1 / roundsPerSecond) và còn đạn (hết thì nạp); đạn sinh ở `Hitboxes.weaponPoint(muzzleAnchor)` theo `Hitboxes.weaponAngle` ± độ lệch; lửa nòng (`Effects.spawn`) và vỏ đạn (có trọng lực, va tile); `shootTime` giữ tư thế bắn trong một lượt animation SHOOT |
+| `WeaponComponent` (trạng thái súng) | `ammo` (trong băng), `reserve` / `maxReserve` (dự trữ, từ `AmmoType` theo tư thế cầm; `WeaponFactory` phát súng đầy băng + dự trữ ban đầu), `cooldown`, `reloadTime`, `shootTime`, `isFireRequested`, `isReloadRequested` |
+| `ShootingSystem` | Bóp cò → bắn khi hết hồi chiêu (1 / roundsPerSecond) và còn đạn (hết thì nạp nếu còn dự trữ); nạp xong chuyển `min(chỗ trống trong băng, dự trữ)` từ dự trữ vào băng; dự trữ rỗng thì không bắt đầu nạp (R, bóp cò khi băng rỗng hay viên cuối); đạn sinh ở `Hitboxes.weaponPoint(muzzleAnchor)` theo `Hitboxes.weaponAngle` ± độ lệch; lửa nòng (`Effects.spawn`) và vỏ đạn (có trọng lực, va tile); `shootTime` giữ tư thế bắn trong một lượt animation SHOOT |
 | `ProjectileSystem` | Đạn di chuyển từng bước ≤ 2 đơn vị; dừng ở tile `SOLID` / `BREAKABLE` hoặc thân sống đầu tiên của phe kia (`Damage.apply`, hiệu ứng trúng); hết tầm thì xoá; ra khỏi phòng lúc bắn (`ProjectileComponent.room`: phòng đang hiện trên màn hình của player, shooter khác thì phòng chứa nòng súng) thì xoá ngay, không hiệu ứng, trước khi kịp trúng gì ở phòng bên |
 
 ## 5. Máu và sát thương
 
 `HealthComponent` (đóng gói): `getHealth()`, `getMaxHealth()`, `isDead()`; thay đổi qua `applyDamage(n)`,
-`restoreFull()`, `setHealthClamped(n)`. Các bộ đếm để public: `hurtTime` (thời gian phản ứng HIT, không điều khiển được),
+`restoreFull()`, `setHealthClamped(n)`, `heal(n)` (tối đa max, trả về lượng thật sự hồi; đã chết thì 0). Các bộ đếm để public: `hurtTime` (thời gian phản ứng HIT, không điều khiển được),
 `invulnerability` (số giây bất tử mỗi đòn), `invulnerableTime` (còn lại; sprite nhấp nháy), `knockbackResistance`, `deadTime`.
 
 `Damage.apply(target, amount, sourceX)` (dùng chung cho mọi system gây sát thương): bỏ qua nếu mục tiêu đã chết hoặc
@@ -206,7 +207,7 @@ khỏi `sourceX` (90 đơn vị/s × (1 − kháng)); huỷ đòn đánh, leo th
 
 `HealthSystem` (sau các system gây sát thương):
 - Đếm lùi các bộ đếm, giảm dần knockback (400 đơn vị/s²).
-- Quái chết: chạy DEATH, nằm lại 1,5 s, rồi `World.removeEntity`.
+- Quái chết: phát `EnemyKilledEvent` đúng một lần ở khung chết đầu tiên, chạy DEATH, nằm lại 1,5 s, rồi `World.removeEntity`.
 - Player chết: chạy DEATH, chờ 1 s, hồi sinh ở điểm hồi sinh với đầy máu (`PlayerRespawn`, bất tử 1,5 s).
 
 ## 6. AI của quái
@@ -292,8 +293,8 @@ chơi bằng cách lặp khung trên nhịp 10 ms; `keyFrameSources` đổi khun
 | `CameraInput` | Camera tự do (F2): bỏ qua phòng, zoom 0,25–6 |
 | `LightingRenderer` | Sau cảnh: light map ¼ độ phân giải (nền màu tối, cộng mọi đèn nhìn thấy của level, đèn player bán kính 56, ánh sáng của hiệu ứng) nhân lên màn hình, rồi một lớp glow cộng thêm. Công thức nhấp nháy khớp map generator. `L` bật tắt |
 | `FadeRenderer` | Lớp đen khi qua cửa (độ mờ = `RoomTransition.fade`) |
-| `HudRenderer` | Thanh máu và số máu, vũ khí và đạn; phím điều khiển xem ở Settings → Controls (chỉ camera tự do có dòng gợi ý) |
-| `StatsPanel` | Bảng nhân vật (I / F1): máu, di chuyển tính bằng tile, hộp thân, phòng thủ, vị trí, điểm hồi sinh, tư thế; mỗi ô vũ khí một thẻ (hình ×4, sát thương, DPS, tầm, băng đạn, kiểu bắn, nạp, tốc độ đạn, độ lệch, thanh so sánh) |
+| `HudRenderer` | Thanh máu và số máu, vũ khí và đạn (`HudRenderer.appendAmmo` = băng / dự trữ, `StatsPanel` dùng lại); điểm; gợi ý `E - Open Chest` khi `InteractionPrompt.chestInReach` tìm thấy rương đóng gần nhất trong tầm (cùng phép thử `ChestSystem.REACH`, có test so khớp); phím điều khiển xem ở Settings → Controls (chỉ camera tự do có dòng gợi ý) |
+| `StatsPanel` | Bảng nhân vật (I / F1): máu, di chuyển tính bằng tile, hộp thân, phòng thủ, vị trí, điểm hồi sinh, tư thế; mỗi ô vũ khí một thẻ (hình ×4, sát thương, DPS, tầm, `Mag / Res` băng / dự trữ và sức chứa, kiểu bắn, nạp, tốc độ đạn, độ lệch, thanh so sánh) |
 | `DebugRenderer` | F3: tile va chạm (đỏ tường, xanh lơ bệ, xanh lá thang, hồng bẫy, vàng tường phá được), hộp entity, attack box, đoạn tuần tra, checkpoint, điểm xuất phát, lối ra, giới hạn phòng, cửa |
 | `MinimapRenderer` | Minimap góc phải trên (2 px mỗi tile, cuộn theo player; `M` = toàn map), vẽ theo `MinimapState` |
 
@@ -304,7 +305,7 @@ chơi bằng cách lặp khung trên nhịp 10 ms; `keyFrameSources` đổi khun
 **`World`** chứa `Level` (TiledMap + `TileGrid` + `PhysicsSettings` + điểm xuất phát / lối ra + checkpoint + đèn + phòng),
 danh sách entity, player, điểm hồi sinh, `RoomTransition`. Không có logic.
 
-**`WorldLoader.load(mapPath, enemySkill, tacticPolicy, resources)`:** nạp `.tmx` và tileset, dựng lưới va chạm từ layer `terrain`, đọc spawn / lối ra,
+**`WorldLoader.load(mapPath, enemySkill, tacticPolicy, itemArt, resources)`:** nạp `.tmx` và tileset, dựng lưới va chạm từ layer `terrain`, đọc spawn / lối ra,
 layer `enemies`, checkpoint, đèn; xếp hàng nạp mọi định nghĩa và texture (player, vũ khí, quái) rồi
 `finishLoading()` một lần; tạo `Level`, quái, player kèm vũ khí, `World`.
 `RoomLoader` thêm phòng (layer `rooms`) và một entity cửa cho mỗi object `doors`. Sau khi `EnemyFactory` tạo một quái, loader gán
@@ -342,20 +343,50 @@ font FreeType dựng theo tỉ lệ cửa sổ (`assets/ui/fonts/`: Silkscreen, 
 
 **Chế độ:** `GameMode` = `EASY` (`Constants.EASY_MAP_PATH`), `MEDIUM` (`MEDIUM_MAP_PATH`), `HARD` (`HARD_MAP_PATH`); mỗi chế độ một map riêng. `GameMode.enemySkill` quyết định con số của quái, `GameMode.tacticPolicy` quyết định cách quái đánh theo vùng.
 
-**File lưu** (`SaveData`, JSON, `~/.mygame/saves/<chế độ>.json`, schema phiên bản 1):
+**File lưu** (`SaveData`, JSON, `~/.mygame/saves/<chế độ>.json`, schema phiên bản 2):
 
 | Nhóm | Trường |
 |------|--------|
 | Nhận dạng | `version`, `mode`, `mapPath`, `mapSignature` (kích thước lưới / số phòng / số checkpoint), `savedAt`, `playTime`, `reason` (`CHECKPOINT` / `QUIT` / `COMPLETE`), `isComplete` |
 | Vị trí | `x`, `y` (chân), `respawnX`, `respawnY`, `checkpointIndex`, `checkpointCount` |
-| Player | `health`, `maxHealth`, `weaponSlot`, `weaponIds[]`, `ammo[]` (cùng thứ tự) |
+| Player | `health`, `maxHealth`, `weaponSlot`, `weaponIds[]`, `ammo[]`, `reserve[]` (cùng thứ tự; `reserve` từ phiên bản 2) |
 | Khám phá | `visitedRooms[]`, `knownRooms[]`, `roomCount`, `roomId` |
+| Điểm (v2) | `score`, `kills`, `chestsOpened`, `roomsCleared`; id đã tính điểm: `defeatedEnemies[]`, `openedChests[]`, `clearedRooms[]` |
+| Vật phẩm (v2) | `pickups[]`: `type` (tên `PickupType`), `x`, `y` (chỗ nằm; vật đang bay thì chỗ sẽ rơi) |
 
 - **Chụp** (`SaveSnapshot.capture`): lưu ở checkpoint, hoặc khi player đang chết / đang qua cửa → vị trí = điểm hồi sinh;
   ngược lại vị trí = chỗ đang đứng. Player đang chết thì lưu đầy máu.
 - **Áp** (`SaveSnapshot.apply`): chữ ký map khớp → đặt lại vị trí, điểm hồi sinh, minimap; luôn đặt máu
-  (`setHealthClamped`), đạn theo id vũ khí, yêu cầu ô vũ khí (đổi ở update đầu tiên). Chữ ký khác → chỉ giữ máu và vũ khí.
+  (`setHealthClamped`), đạn trong băng và dự trữ (kẹp 0…`maxReserve`) theo id vũ khí, yêu cầu ô vũ khí (đổi ở update đầu
+  tiên), tổng điểm và thống kê (`RunStats.restore`). Chữ ký khớp còn đặt lại các id đã tính điểm, mở sẵn rương đã mở
+  (`ChestSystem.markOpened`), đặt lại vật phẩm trên sàn (loại lạ bỏ qua). Chữ ký khác → chỉ giữ máu, vũ khí và tổng
+  điểm / thống kê. Save phiên bản 1 thiếu trường nào thì giữ giá trị của world mới (dự trữ ban đầu, điểm 0, rương đóng).
 - **Ô lưu** (`SaveManager`): đọc không bao giờ ném lỗi; `EMPTY` (không có file), `OK`, `CORRUPT` (không đọc được),
   `INCOMPATIBLE` (phiên bản mới hơn, chế độ lạ, map không còn). Ghi vào file tạm rồi đổi tên, nên lỗi giữa chừng
   không làm mất file cũ. `latestContinuable()` = ô OK chưa hoàn thành, lưu gần nhất.
 - **Cài đặt** (`Settings`, `~/.mygame/settings.json`): `isFullscreen`, `isVsync`, `isFpsVisible`; file hỏng thì dùng mặc định.
+
+## 11. Vật phẩm, rương và điểm
+
+`com.hung.combat` (luật), `world.system.ChestSystem`, `combat.system.PickupSystem`, `com.hung.score`
+
+**Rương** (`WorldLoader.createChests`): mỗi object `CHEST` của layer `pois` thành một entity `ChestComponent` (id
+`mapPath#objectId`, `ChestTier` từ `tier`, phòng = `Level.findRoomAt`). Hình là tile rương mà map vẽ dưới object trong
+layer `props` (id tile khác nhau giữa các map): tile rời layer và thành khung đóng của sprite; rương không có tile bên
+dưới thì bỏ qua.
+
+| Phần | Việc |
+|------|------|
+| `ChestSystem` | `InteractComponent.isRequested` + player còn sống + thân player chạm thân rương nới `REACH` (12) mỗi bên → CLOSED → OPENING (chạy dải mở của tier, `OPEN_SECONDS` 0,4) → OPENED: `markOpened` (giữ khung cuối; không có hình thì tô tối), `LootTable.pick(id, tier)`, `LootDrop.throwFromChest`, phát `ChestOpenedEvent`. Mỗi lần bấm mở một rương |
+| `LootTable` | Trọng số theo tier (gỗ 40/40/20, vàng 30/20/50: cứu thương / đạn súng lục / đạn súng trường); roll = SplitMix64 của `id.hashCode()`, nên tất định và id liền nhau không ra roll gần nhau |
+| `LootDrop` | Chỗ rơi: thử lệch +20, −20, +12, −12, +28, −28 so với rương; nhận chỗ đầu tiên có sàn đỡ cả thân vật phẩm, không tile cứng / gai / độc trong thân, nằm trong phòng, và cung bay (12 điểm mẫu) không va tile cứng; không có thì rơi ngay chỗ rương. Ném từ nắp (cao 12) để chạm sàn sau `FLIGHT_SECONDS` 0,45 với `GRAVITY` 520 |
+| `PickupComponent` | `type`, `isFlying`, `hasBounced`, `landingX` / `landingY`; thân = `ColliderComponent` 10 × 10 (`EntityFactory.createPickup`) |
+| `PickupSystem` | Vật đang bay tự di chuyển (như đạn): chạm điểm rơi lần đầu → bụi (`ItemArt.landing`) và nảy thẳng lên với 0,35 tốc độ; lần hai → nằm yên. Vật nằm yên chạm thân player → `Pickups.apply`; > 0 thì xoá, lấp lánh (`ItemArt.pickup`), phát `PickupCollectedEvent` (toast); = 0 (đầy máu / đầy dự trữ / chết) thì nằm lại |
+| `Pickups` | `applyHealthPack` = `HealthComponent.heal(25)`; `applyAmmo(type)` cộng `AmmoType.pickupAmount` vào dự trữ của súng cùng loại, tối đa `maxReserve` |
+| `ItemArt` | Nạp manifest `assets/sprites/items/items.json` (định dạng `EffectDefinition`): hình 3 vật phẩm, dải mở 2 tier (khung 0 = tile rương của map), bụi, lấp lánh. Không có manifest → `ItemArt.NONE`: ô màu cho vật phẩm, rương mở tô tối |
+
+**Điểm** (`ScoreKeeper`, đăng ký trước các listener lưu / hiện điểm): `EnemyKilledEvent` (`HealthSystem`, khung chết đầu
+tiên của quái) → điểm hạ quái theo `Enemy.getSpawnId()` (`mapPath#objectId`; quái không từ map thì không có điểm), rồi nếu
+đó là quái còn sống cuối cùng của phòng nhà → điểm dọn phòng và `RoomClearedEvent` (toast); `ChestOpenedEvent` → điểm
+rương theo tier; `ExitReachedEvent` → điểm hoàn thành map. `RunStats` (trong `GameSession`) giữ tổng, các bộ đếm và các
+tập id đã tính; mỗi id chỉ tính một lần. Giá trị trong `ScoreRules.DEFAULT` (100 / 150 / 300 / 250 / 1000).

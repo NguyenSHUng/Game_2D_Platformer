@@ -32,6 +32,7 @@ import java.util.Locale;
  * Character sheet (I / F1, the game pauses meanwhile): the player's stats on the left — health,
  * movement in tiles, body box, defence, position — and one card per carried weapon on the right
  * with its sprite (pixel-scaled), its numbers and comparison bars. The weapon in hand is highlighted.
+ * A firearm's "Mag / Res" line is magazine / reserve, read from its WeaponComponent like the HUD.
  * Screen-space, drawn after the HUD.
  */
 public class StatsPanel implements Disposable {
@@ -264,7 +265,9 @@ public class StatsPanel implements Disposable {
         y = statLine(batch, tx, y, weapon.isFirearm() ? "Range" : "Reach", tiles(n.rangeTiles));
         if (weapon.isFirearm()) {
             FireDefinition fire = weapon.getFire();
-            statLine(batch, tx, y, "Magazine", slot.ammo + " / " + fire.magazine);
+            y = statLine(batch, tx, y, "Mag / Res", ammoText(slot));
+            font.setColor(MUTED);
+            font.draw(batch, capacityText(slot, fire), tx + VALUE_X, y);
             float side = tx + SIDE_X;
             float sy = cardTop - LINE * 1.8f;
             font.setColor(TEXT);
@@ -277,6 +280,18 @@ public class StatsPanel implements Disposable {
             font.draw(batch, String.format(Locale.ROOT, "Swing %.2f s", swingSeconds(player)), tx + SIDE_X, cardTop - LINE * 1.8f);
             font.draw(batch, "Breaks cracked walls", tx + SIDE_X, cardTop - LINE * 2.8f);
         }
+    }
+
+    /** "8 / 36": rounds in the magazine / reserve rounds, the same text as the HUD's (HudRenderer.appendAmmo). */
+    static String ammoText(WeaponComponent slot) {
+        StringBuilder out = new StringBuilder();
+        HudRenderer.appendAmmo(out, slot);
+        return out.toString();
+    }
+
+    /** "max 12 / 72": what the magazine and the reserve can hold. */
+    static String capacityText(WeaponComponent slot, FireDefinition fire) {
+        return "max " + fire.magazine + " / " + slot.maxReserve;
     }
 
     private static String describe(Weapon weapon, WeaponComponent slot) {

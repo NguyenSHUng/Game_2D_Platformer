@@ -2,6 +2,7 @@ package com.hung.ui.menu;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.hung.save.Settings;
+import com.hung.score.RunStats;
 import com.hung.ui.UiTheme;
 
 /**
@@ -42,13 +43,24 @@ public class PauseMenu {
         isOpen = true;
     }
 
-    /** Opens the end-of-run page (the exit was reached; the save is already marked complete). */
-    public void openComplete(String mode, String time) {
-        view.reset(new Menu("Mission complete")
-            .chip(mode, Menu.Tone.OK).chip(time, Menu.Tone.PLAIN)
+    /** Opens the end-of-run page (the exit was reached; the save is already marked complete): the run's score and statistics. */
+    public void openComplete(String mode, String time, RunStats stats, int chestCount) {
+        Menu menu = new Menu("Mission complete").chip(mode, Menu.Tone.OK).chip(time, Menu.Tone.PLAIN);
+        for (String line : summary(stats, chestCount)) menu.line(line);
+        view.reset(menu
             .item("Main menu", actions::toMainMenu)
             .item("Keep exploring", actions::resume));
         isOpen = true;
+    }
+
+    /** The end-of-run summary lines. */
+    static String[] summary(RunStats stats, int chestCount) {
+        return new String[] {
+            "Score  " + stats.getScore(),
+            "Enemies defeated  " + stats.getKills(),
+            "Chests opened  " + stats.getChestsOpened() + " / " + chestCount,
+            "Rooms cleared  " + stats.getRoomsCleared(),
+        };
     }
 
     public void close() {

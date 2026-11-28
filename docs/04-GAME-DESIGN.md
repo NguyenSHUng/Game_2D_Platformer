@@ -44,7 +44,8 @@ Màn hình chính ─► chọn chế độ ─► vào boong-ke
 | Xuống khỏi bệ một chiều | `S` + `Space` |
 | Đánh dao / bắn | `J` hoặc chuột trái |
 | Bắn liên thanh (súng trường) | Giữ `J` / chuột trái |
-| Nạp đạn | `R` (tự nạp khi hết đạn) |
+| Nạp đạn | `R` (tự nạp khi hết đạn trong băng, nếu còn đạn dự trữ) |
+| Mở rương (đứng sát rương) | `E` |
 | Chọn dao / súng lục / súng trường; vũ khí kế tiếp | `1` / `2` / `3`; `Q` |
 | Bảng nhân vật (tạm dừng; `1` `2` `3` vẫn chọn vũ khí) | `I` hoặc `F1` |
 | Bản đồ toàn màn hình | `M` |
@@ -100,11 +101,17 @@ không đổi được khi đang vung dao, đang bị thương hay đã chết; 
 | Sát thương | 10 | 12 | 11 |
 | Tốc độ bắn | — | 5 viên/s | 9 viên/s |
 | Băng đạn / nạp | — | 12 viên / 1,1 s | 30 viên / 1,8 s |
+| Đạn dự trữ: lúc đầu / tối đa | — | 36 / 72 | 60 / 150 |
+| Một hộp đạn nhặt được | — | +24 | +30 |
 | Tốc độ đạn / tầm | — | 30 tile/s / 22 tile | 40 tile/s / 32 tile |
 | Độ lệch | — | ±1,5° | ±2,5° |
 | Tư thế cầm | Một tay | Hai tay (`*_PISTOL`) | Báng tì vai (`*_RIFLE`) |
 
-Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `fire` của JSON vũ khí.
+Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `fire` của JSON vũ khí; đạn dự trữ trong
+`AmmoType` (theo tư thế cầm `PISTOL` / `RIFLE`; JSON vũ khí chỉ biết cỡ băng).
+
+- **Đạn dự trữ:** nạp đạn chuyển đạn từ dự trữ vào băng (tối đa cỡ băng, thời gian nạp không đổi). Hết dự trữ thì không
+  nạp được: bắn hết băng là hết đạn, phải nhặt hộp đạn hoặc dùng dao. Mỗi súng giữ dự trữ riêng, đổi súng không mất.
 
 - **Dao:** khung "HIT" của animation ATTACK có attack box (kéo dài tới mũi dao). Trong khung đó hộp gây sát thương mọi
   quái chạm vào, tối đa một lần mỗi cú vung, và phá tile BREAKABLE. Đứng trên đất thì dừng lại khi vung; không đánh
@@ -112,7 +119,11 @@ Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `
 - **Súng:** đạn ra từ đầu nòng đúng chỗ súng đang vẽ, kèm lửa nòng và vỏ đạn văng ra; đứng yên thì hiện tư thế bắn.
   Đạn được kiểm tra mỗi 2 đơn vị: dừng ở tường hoặc tile BREAKABLE (xuyên qua bệ một chiều và thang), hoặc ở thân sống
   đầu tiên của phe kia; không bao giờ trúng người bắn; hết tầm thì biến mất; không bay sang phòng khác (qua khe cửa hay giếng thang thì biến mất ở biên phòng).
-- **HUD:** thanh máu, tên vũ khí, số đạn (`Service Pistol 9 / 12`), chữ `RELOADING` khi nạp.
+- **HUD:** thanh máu, tên vũ khí, đạn trong băng / đạn dự trữ (`Service Pistol 9 / 36`), chữ `RELOADING` khi nạp,
+  `NO AMMO` khi cả hai đều hết; điểm ở góc trên phải (`SCORE 1250`); dòng `E - Open Chest` giữa phía dưới khi đứng
+  trong tầm mở một rương còn đóng (ẩn khi rời tầm, khi rương đã mở, khi chết hoặc ở camera tự do).
+- **Bảng nhân vật (I / F1):** thẻ súng có dòng `Mag / Res` (đạn trong băng / dự trữ, cùng số với HUD) và dưới nó
+  sức chứa `max 12 / 72`.
 
 ## 5. Máu, sát thương, hồi sinh
 
@@ -128,6 +139,7 @@ Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `
 - **Gai, chất độc** (chạm vào 80% phía dưới của tile) và **rơi khỏi map** (64 đơn vị dưới đáy): đưa player về
   checkpoint cuối, không trừ máu.
 - **Checkpoint:** chạm vào là thành điểm hồi sinh và game tự lưu (hiện thông báo "SAVE Checkpoint n of 7 - saved").
+- **Hộp cứu thương** (nhặt từ rương): hồi 25 máu, không quá 100; đầy máu hoặc đã chết thì không nhặt (hộp nằm lại).
 
 ## 6. Quái
 
@@ -200,7 +212,38 @@ bảng trên: đổi cách đánh không đổi máu, sát thương, tốc độ
 - **Tường phá được** (tile BREAKABLE): dao phá được; đạn dừng lại ở đó.
 - **Lối ra:** tới lối ra thì mở màn "Mission complete" và đánh dấu ván hoàn thành; có thể chơi tiếp hoặc về menu.
 
-## 8. Màn hình, lưu game, cài đặt
+## 8. Rương, vật phẩm và điểm
+
+**Rương** (object `CHEST` của map, vẽ bằng tile rương có sẵn): Easy 4, Medium 10, Hard 10; gỗ (`wood`) hoặc vàng (`gold`).
+Đứng sát rương (12 đơn vị mỗi bên, cùng tầng) và bấm `E`: rương mở trong 0,4 s rồi ném ra **một** vật phẩm. Mỗi rương mở một
+lần, kể cả sau Continue.
+
+| | Hộp cứu thương | Hộp đạn súng lục | Hộp đạn súng trường |
+|---|---|---|---|
+| Rương gỗ | 40% | 40% | 20% |
+| Rương vàng | 30% | 20% | 50% |
+
+- Vật phẩm của một rương chỉ phụ thuộc id của rương (`map#objectId`), nên lần nào chơi cũng như nhau (`LootTable`).
+- Vật phẩm bay vòng cung ra khỏi nắp, chạm sàn (bụi), nảy nhẹ một lần rồi nằm yên; chỉ nhặt được khi đã nằm yên. Chỗ rơi
+  luôn trên sàn, không có gai / chất độc / tường, trong phòng của rương (`LootDrop`).
+- **Nhặt:** chạm vào là nhặt (lấp lánh và thông báo "+25 HP", "+24 pistol rounds"…), trừ khi vô dụng lúc đó (đầy máu, đầy
+  dự trữ): khi ấy vật phẩm nằm lại.
+- Playtest tự động (`LootPlaytestTest`): Easy cho 1 hộp đạn súng lục, 3 hộp đạn súng trường, không hộp cứu thương nào;
+  Medium 3 / 4 / 3 (cứu thương / súng lục / súng trường); Hard 2 / 4 / 4.
+
+**Điểm** (`ScoreRules`, mỗi sự kiện chỉ tính một lần, kể cả sau Continue):
+
+| Sự kiện | Điểm |
+|---|---|
+| Hạ một quái (mỗi quái của map một lần) | 100 |
+| Mở rương gỗ / vàng | 150 / 300 |
+| Dọn sạch quái một phòng | 250 |
+| Tới lối ra | 1000 |
+
+Không có điểm theo sát thương. Điểm tối đa: Easy 6 500, Medium 13 400, Hard 19 000. Màn "Mission complete" hiện điểm, số
+quái đã hạ, số rương đã mở / tổng số, số phòng đã dọn.
+
+## 9. Màn hình, lưu game, cài đặt
 
 | Màn | Nội dung |
 |-----|----------|
@@ -212,11 +255,13 @@ bảng trên: đổi cách đánh không đổi máu, sát thương, tốc độ
   file cũ chuyển vào `old_slots/`; cài đặt trong `~/.mygame/settings.json` (ngoài repo).
 - Tự lưu khi chạm checkpoint mới, khi tới lối ra, và khi rời ván (về menu, thoát, đóng hoặc thu nhỏ cửa sổ). Nếu lúc
   rời ván đang chết hoặc đang qua cửa thì lưu ở checkpoint thay vì chỗ đứng.
-- **Lưu những gì:** vị trí, điểm hồi sinh, checkpoint cuối, máu, vũ khí đang cầm, đạn của từng súng, phòng đã khám phá,
-  thời gian chơi, trạng thái hoàn thành. **Không lưu:** quái đã giết, tường đã phá (hồi lại khi Continue).
-- File lưu hỏng hoặc của phiên bản mới hơn: game không crash, trang của chế độ ghi lý do và cho chơi lại từ đầu. Map đã xuất lại khác kích thước: Continue chạy lại từ điểm xuất phát nhưng giữ máu và vũ khí.
+- **Lưu những gì** (phiên bản 2): vị trí, điểm hồi sinh, checkpoint cuối, máu, vũ khí đang cầm, đạn trong băng và đạn dự
+  trữ của từng súng, phòng đã khám phá, thời gian chơi, trạng thái hoàn thành, điểm và thống kê, quái / rương / phòng đã
+  tính điểm, rương đã mở, vật phẩm còn nằm trên sàn. **Không lưu:** tường đã phá; quái hồi lại khi Continue (quái đã tính
+  điểm thì hạ lại không có điểm). Save phiên bản 1 vẫn đọc được (đạn dự trữ lấy mức ban đầu, điểm 0).
+- File lưu hỏng hoặc của phiên bản mới hơn: game không crash, trang của chế độ ghi lý do và cho chơi lại từ đầu. Map đã xuất lại khác kích thước: Continue chạy lại từ điểm xuất phát nhưng giữ máu, vũ khí và tổng điểm (rương và vật phẩm về như mới).
 
-## 9. Chưa có
+## 10. Chưa có
 
-Âm thanh, vật phẩm nhặt được, ngắm bằng chuột, chuyển sang màn tiếp theo, mini boss,
+Âm thanh, ngắm bằng chuột, chuyển sang màn tiếp theo, mini boss,
 sát thương của bẫy.

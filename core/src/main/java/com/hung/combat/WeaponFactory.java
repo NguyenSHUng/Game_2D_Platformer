@@ -27,6 +27,9 @@ public final class WeaponFactory {
     private static final float FRAME_TICK_SECONDS = 0.01f;
     private static final float MILLIS_PER_SECOND = 1000f;
     private static final int DEFAULT_EFFECT_FRAME_MILLIS = 100;
+    /** Reserve of a firearm whose stance has no {@link AmmoType}, in magazines (start / most). */
+    private static final int FALLBACK_INITIAL_MAGAZINES = 3;
+    private static final int FALLBACK_MAX_MAGAZINES = 6;
 
     private WeaponFactory() {
     }
@@ -62,7 +65,8 @@ public final class WeaponFactory {
         for (EffectDefinition effect : definition.effects.values()) resources.queueTexture(effect.texture);
     }
 
-    private static WeaponEffect createEffect(EffectDefinition definition, Texture sheet) {
+    /** An effect strip's animation (one tick per 10 ms, as character animations) with its origin. */
+    public static WeaponEffect createEffect(EffectDefinition definition, Texture sheet) {
         TextureRegion[] row = TextureRegion.split(sheet, definition.frameWidth, definition.frameHeight)[0];
         int count = Math.min(definition.frameCount, row.length);
         Array<TextureRegion> keyFrames = new Array<>(true, count, TextureRegion[]::new);
@@ -80,7 +84,7 @@ public final class WeaponFactory {
     /**
      * How an animated entity holds one weapon. The profile (nullable) customizes size, pivot and
      * hand anchors for this character/weapon pair; see docs/character-weapon-system.md, section 6.
-     * Firearms start with a full magazine.
+     * Firearms start with a full magazine and their {@link AmmoType}'s reserve.
      */
     public static WeaponComponent createWeaponSlot(Entity entity, Weapon weapon, AttachmentProfile profile) {
         AnimationComponent animation = entity.getAnimation();
@@ -108,7 +112,13 @@ public final class WeaponFactory {
                 component.handAnchors.put(type, resolveHandAnchors(type, entry.value, animation));
             }
         }
-        if (weapon.isFirearm()) component.ammo = weapon.getFire().magazine;
+        if (weapon.isFirearm()) {
+            int magazine = weapon.getFire().magazine;
+            AmmoType ammo = AmmoType.forStance(weapon.getStance());
+            component.ammo = magazine;
+            component.reserve = ammo != null ? ammo.initialReserve : magazine * FALLBACK_INITIAL_MAGAZINES;
+            component.maxReserve = ammo != null ? ammo.maxReserve : magazine * FALLBACK_MAX_MAGAZINES;
+        }
         return component;
     }
 

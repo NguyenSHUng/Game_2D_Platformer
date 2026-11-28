@@ -8,8 +8,11 @@ import com.hung.component.AnimationComponent;
 import com.hung.component.HealthComponent;
 import com.hung.component.MovementComponent;
 import com.hung.component.TransformComponent;
+import com.hung.core.event.EventBus;
 import com.hung.entity.Entity;
+import com.hung.entity.enemy.Enemy;
 import com.hung.world.World;
+import com.hung.world.event.EnemyKilledEvent;
 import com.hung.world.system.PlayerRespawn;
 
 /**
@@ -17,7 +20,8 @@ import com.hung.world.system.PlayerRespawn;
  *  - counts down hurt and invulnerability timers and slows knockback to a stop;
  *  - a dead enemy plays DEATH, lies there a moment, then is removed;
  *  - a dead player plays DEATH, then comes back at the respawn point with full health.
- * Reads/Writes: HealthComponent, TransformComponent. Removes entities from the World.
+ * Reads/Writes: HealthComponent, TransformComponent. Removes entities from the World. Publishes EnemyKilledEvent
+ * once per enemy, on the frame it dies.
  */
 public class HealthSystem {
 
@@ -30,9 +34,17 @@ public class HealthSystem {
     private static final float PLAYER_RESPAWN_DELAY = 1f;
 
     private final World world;
+    private final EventBus events;
+    private final EnemyKilledEvent killed = new EnemyKilledEvent();
 
+    /** Without anyone listening to deaths (tests). */
     public HealthSystem(World world) {
+        this(world, new EventBus());
+    }
+
+    public HealthSystem(World world, EventBus events) {
         this.world = world;
+        this.events = events;
     }
 
     public void update(float delta) {
@@ -54,6 +66,8 @@ public class HealthSystem {
     }
 
     private void updateDead(Entity entity, HealthComponent health, float delta) {
+        // Damage.apply sets deadTime to 0 on the killing blow: this is the enemy's first frame dead
+        if (health.deadTime == 0f && entity instanceof Enemy enemy) events.publish(killed.set(enemy));
         health.deadTime += delta;
         MovementComponent movement = entity.getMovement();
         if (movement == null || movement.isGrounded) slowDown(entity, delta);

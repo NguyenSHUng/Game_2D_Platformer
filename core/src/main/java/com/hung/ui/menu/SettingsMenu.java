@@ -38,6 +38,7 @@ public final class SettingsMenu {
             .key("J MOUSE", "Attack / shoot")
             .key("R", "Reload")
             .key("1 2 3 Q", "Change weapon")
+            .key("E", "Open chest")
             .key("I", "Character sheet")
             .key("M", "Whole map")
             .key("ESC", "Pause menu")

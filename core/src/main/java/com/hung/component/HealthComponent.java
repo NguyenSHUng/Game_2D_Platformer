@@ -46,6 +46,17 @@ public class HealthComponent {
         return isDead;
     }
 
+    /**
+     * Adds hit points up to maxHealth; the dead stay dead. Returns how many were actually added
+     * (0 when dead, already full or the amount isn't positive).
+     */
+    public int heal(int amount) {
+        if (isDead || amount <= 0) return 0;
+        int healed = Math.min(amount, maxHealth - health);
+        health += healed;
+        return healed;
+    }
+
     /** Back to full health and alive (respawn). */
     public void restoreFull() {
         health = maxHealth;

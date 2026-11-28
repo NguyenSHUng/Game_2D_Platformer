@@ -158,14 +158,32 @@ class SaveManagerTest {
         assertNotNull(save.data.knownRooms);
     }
 
+    /** Version 2 writes every field of version 1 (none dropped or renamed) plus its own, as in its fixture. */
     @Test
-    void writesTheSameTopLevelFieldsAsEarlierReleases() throws IOException {
+    void writesEveryEarlierFieldPlusTheVersion2Ones() throws IOException {
         SaveData data = data(GameMode.HARD, 1L, false);
         data.knownRooms = new int[] {0};
         data.roomId = "room_1";
         data.mapSignature = "1000x100/42r/7c";
         data.reason = SaveData.REASON_QUIT;
+        data.reserve = new int[] {0, 36};
+        data.score = 100;
+        data.kills = 1;
+        data.chestsOpened = 1;
+        data.roomsCleared = 1;
+        data.defeatedEnemies = new String[] {"map#3"};
+        data.openedChests = new String[] {"map#57"};
+        data.clearedRooms = new String[] {"room_2"};
+        data.pickups = new SaveData.PickupData[] {new SaveData.PickupData()};
         saves.write(GameMode.HARD, data);
-        assertEquals(keys(fixture()), keys(folder.child("hard.json").readString()));
+        Set<String> written = keys(folder.child("hard.json").readString());
+        assertTrue(written.containsAll(keys(fixture())));
+        assertEquals(keys(resource("/saves/medium_v2_quit.json")), written);
+    }
+
+    private static String resource(String path) throws IOException {
+        try (InputStream in = SaveManagerTest.class.getResourceAsStream(path)) {
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 }

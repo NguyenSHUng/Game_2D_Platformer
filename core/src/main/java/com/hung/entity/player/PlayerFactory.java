@@ -15,6 +15,7 @@ import com.hung.component.AnimationComponent;
 import com.hung.component.AttackComponent;
 import com.hung.component.ColliderComponent;
 import com.hung.component.HealthComponent;
+import com.hung.component.InteractComponent;
 import com.hung.component.MovementComponent;
 import com.hung.input.Controller;
 import com.hung.util.ResourceLoader;
@@ -87,6 +88,7 @@ public final class PlayerFactory {
 
         entity.setAnimation(createAnimation(definition, definitionPath, resources));
         entity.setController(controller);
+        entity.setInteract(new InteractComponent());
         return entity;
     }
 

@@ -10,7 +10,7 @@
 | Công nghệ | Java 21, LibGDX 1.14.2 (+ gdx-freetype), Gradle wrapper |
 | Nền tảng | Desktop (module `lwjgl3`, cửa sổ 1280×720) |
 | Kiến trúc | Component-based kiểu ECS: entity chứa component dữ liệu, system xử lý ([02-ARCHITECTURE.md](02-ARCHITECTURE.md)) |
-| Quy mô code | 109 file Java (~9.100 dòng) trong `core`, 63 unit test |
+| Quy mô code | 135 file Java (~10.800 dòng) trong `core`, 322 test trong 48 file |
 
 ## Tính năng hiện có
 
@@ -18,14 +18,16 @@
 |------|-------|
 | Màn hình | Màn hình chính (Continue, New Game, Settings, Quit), menu tạm dừng, màn "Mission complete" |
 | Chế độ chơi | Easy, Medium, Hard: ba map boong-ke riêng, dài dần, quái đông dần và mạnh dần (`EnemySkill`). Medium: nửa sau map quái đánh rồi lùi (`TacticPolicy`). Quái chỉ săn trong phòng của nó. Hard đang tạm khoá |
-| Lưu game | Mỗi chế độ một file lưu; tự lưu ở checkpoint và khi rời ván (về menu, thoát, đóng cửa sổ) |
+| Lưu game | Mỗi chế độ một file lưu (phiên bản 2, đọc được bản 1); tự lưu ở checkpoint và khi rời ván (về menu, thoát, đóng cửa sổ); nhớ cả điểm, đạn dự trữ, rương đã mở, vật phẩm trên sàn |
 | Di chuyển | Đi, nhảy (coyote time, jump buffer), ngồi, leo thang, xuống bệ một chiều |
-| Chiến đấu | Dao (cận chiến theo khung animation), súng lục bán tự động, súng trường liên thanh, nạp đạn, đạn bay có va chạm |
+| Chiến đấu | Dao (cận chiến theo khung animation), súng lục bán tự động, súng trường liên thanh, đạn dự trữ có giới hạn, nạp đạn, đạn bay có va chạm (không bay sang phòng khác) |
+| Rương và vật phẩm | 24 rương gỗ / vàng trên 3 map, mở bằng `E`; mỗi rương ném ra một hộp cứu thương hoặc hộp đạn (tất định theo rương), chạm để nhặt |
+| Điểm | Hạ quái, mở rương, dọn phòng, tới lối ra; mỗi sự kiện tính một lần; điểm trên HUD và tổng kết ở màn kết thúc |
 | Quái | 3 loại melee, crawler, quái bay: biết tuần tra, phát hiện, nhớ, đuổi, tấn công; từ Medium còn gọi bầy, nhảy, đón đầu |
 | Thế giới | 13 / 25 / 43 phòng (Easy / Medium / Hard) nối bằng cửa, thang, hố rơi; camera bám phòng; minimap; checkpoint; bẫy gai, chất độc; tường phá được |
 | Hình ảnh | Ánh sáng theo đèn của map, hiệu ứng súng, bảng nhân vật, lớp debug |
 
-Chưa có: âm thanh, vật phẩm nhặt được, chuyển màn khi tới lối ra, ngắm bằng chuột.
+Chưa có: âm thanh, chuyển màn khi tới lối ra, ngắm bằng chuột.
 
 ## Cấu trúc dự án
 

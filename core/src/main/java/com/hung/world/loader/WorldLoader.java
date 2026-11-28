@@ -1,6 +1,7 @@
 package com.hung.world.loader;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -11,12 +12,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.hung.ai.tactic.TacticPolicy;
+import com.hung.combat.ChestTier;
+import com.hung.combat.ItemArt;
 import com.hung.combat.Weapon;
+import com.hung.combat.WeaponEffect;
 import com.hung.combat.WeaponFactory;
 import com.hung.combat.definition.AttachmentProfile;
 import com.hung.combat.definition.WeaponDefinition;
 import com.hung.component.WeaponComponent;
-import com.hung.ai.tactic.TacticPolicy;
+import com.hung.entity.Entity;
+import com.hung.entity.EntityFactory;
 import com.hung.entity.enemy.Enemy;
 import com.hung.entity.enemy.EnemyDefinition;
 import com.hung.entity.enemy.EnemyFactory;
@@ -24,7 +30,6 @@ import com.hung.entity.enemy.EnemySkill;
 import com.hung.entity.enemy.HunterEnemy;
 import com.hung.entity.player.CharacterDefinition;
 import com.hung.entity.player.PlayerFactory;
-import com.hung.entity.Entity;
 import com.hung.input.KeyboardController;
 import com.hung.util.Constants;
 import com.hung.util.ResourceLoader;
@@ -43,7 +48,8 @@ import com.hung.world.World;
  *   - "terrain" tile layer -> collision grid (each tile's "type" property)
  *   - "spawns" objects     -> player spawn and exit
  *   - "enemies" objects    -> enemies from the enemy generator's character.json
- *   - "pois" objects       -> checkpoints (type CHECKPOINT)
+ *   - "pois" objects       -> checkpoints (type CHECKPOINT) and treasure chests (type CHEST: id, tier;
+ *                            drawn by the chest tile under them in "props", which moves onto the chest entity)
  *   - "rooms" / "doors"    -> rooms with camera bounds and door entities (RoomLoader)
  *   - map properties       -> movement physics ("physics.*", in tiles) and, optionally,
  *                            "playerCharacter" / "playerWeapon" JSON paths (a player whose strips leave
@@ -61,12 +67,16 @@ public final class WorldLoader {
     /** Light radius when a light object has none, world units. */
     private static final float DEFAULT_LIGHT_RADIUS = 64f;
     private static final String CHECKPOINT_TYPE = "CHECKPOINT";
+    private static final String CHEST_TYPE = "CHEST";
+    /** Tile layer where the map generator draws the closed chests. */
+    private static final String PROPS_LAYER = "props";
     private static final String TILE_TYPE_PROPERTY = "type";
 
     private WorldLoader() {
     }
 
-    public static World load(String mapPath, EnemySkill enemySkill, TacticPolicy tacticPolicy, ResourceLoader resources) {
+    public static World load(String mapPath, EnemySkill enemySkill, TacticPolicy tacticPolicy, ItemArt itemArt,
+                             ResourceLoader resources) {
         resources.queueMap(mapPath);
         resources.finishLoading();
         TiledMap map = resources.getMap(mapPath);
@@ -102,11 +112,13 @@ public final class WorldLoader {
         readLights(map, level.getLights());
         World world = new World(level);
         RoomLoader.load(map, world);
+        createChests(map, mapPath, world, itemArt);
         for (EnemySpawn enemySpawn : enemySpawns) {
             Enemy enemy = EnemyFactory.createEnemy(enemyDefinitions.get(enemySpawn.definitionPath),
                 enemySpawn.definitionPath, resources, enemySpawn, enemySkill);
             Room home = level.findRoom(enemySpawn.roomId, enemySpawn.x, enemySpawn.y);
             enemy.setHomeRoom(home);
+            enemy.setSpawnId(mapPath + "#" + enemySpawn.objectId);
             if (enemy instanceof HunterEnemy hunter) hunter.setTactic(tacticPolicy.create(home != null ? home.regionId : null));
             world.addEntity(enemy);
         }
@@ -170,6 +182,40 @@ public final class WorldLoader {
         }
     }
 
+    /**
+     * A chest entity for every CHEST object, id = map path + "#" + TMX object id. Its picture is the chest
+     * tile the generator drew under it in "props" (tile ids differ between maps): the tile leaves the
+     * layer and becomes the chest's closed frame. A chest without a tile under it is skipped.
+     */
+    private static void createChests(TiledMap map, String mapPath, World world, ItemArt itemArt) {
+        MapLayer pois = map.getLayers().get(POIS_LAYER);
+        MapLayer layer = map.getLayers().get(PROPS_LAYER);
+        if (pois == null || !(layer instanceof TiledMapTileLayer props)) return;
+        int count = 0;
+        for (MapObject object : pois.getObjects()) {
+            if (!(object instanceof RectangleMapObject) || !CHEST_TYPE.equals(object.getProperties().get("type", String.class))) continue;
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            int column = (int) ((rect.x + rect.width / 2f) / props.getTileWidth());
+            int row = (int) ((rect.y + 1f) / props.getTileHeight());
+            TiledMapTileLayer.Cell cell = props.getCell(column, row);
+            if (cell == null || cell.getTile() == null) {
+                Gdx.app.log(TAG, "Chest '" + object.getName() + "' has no chest tile under it; skipped");
+                continue;
+            }
+            TextureRegion closed = cell.getTile().getTextureRegion();
+            props.setCell(column, row, null);
+            float x = column * props.getTileWidth() + props.getTileWidth() / 2f;
+            float y = row * props.getTileHeight();
+            Integer id = object.getProperties().get("id", Integer.class);
+            ChestTier tier = ChestTier.fromName(object.getProperties().get("tier", String.class));
+            WeaponEffect opening = itemArt.chestOpening(tier);
+            world.addEntity(EntityFactory.createChest(mapPath + "#" + id, tier, world.getLevel().findRoomAt(x, y + 1f), closed,
+                opening != null ? opening.animation : null, x, y));
+            count++;
+        }
+        Gdx.app.log(TAG, count + " chests");
+    }
+
     /** Every rectangle object of the given type in a layer (world units, y up). */
     private static Array<Rectangle> readRectangles(TiledMap map, String layerName, String type) {
         Array<Rectangle> rectangles = new Array<>();
@@ -198,6 +244,7 @@ public final class WorldLoader {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             EnemySpawn spawn = new EnemySpawn();
             spawn.name = object.getName();
+            spawn.objectId = properties.get("id", 0, Integer.class);
             spawn.definitionPath = definition;
             spawn.x = rect.x + rect.width / 2f;
             spawn.y = rect.y;

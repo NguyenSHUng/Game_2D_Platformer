@@ -1,0 +1,112 @@
+{
+  "chestWoodOpening": {
+    "texture": "sprites/items/chest_wood_open.png",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "frameCount": 4,
+    "durations": [
+      60,
+      100,
+      100,
+      140
+    ],
+    "origin": {
+      "x": 7.5,
+      "y": 15.5
+    },
+    "loop": false
+  },
+  "chestGoldOpening": {
+    "texture": "sprites/items/chest_gold_open.png",
+    "frameWidth": 16,
+    "frameHeight": 16,
+    "frameCount": 4,
+    "durations": [
+      60,
+      100,
+      100,
+      140
+    ],
+    "origin": {
+      "x": 7.5,
+      "y": 15.5
+    },
+    "loop": false
+  },
+  "healthPack": {
+    "texture": "sprites/items/health_pack.png",
+    "frameWidth": 12,
+    "frameHeight": 12,
+    "frameCount": 1,
+    "durations": [
+      100
+    ],
+    "origin": {
+      "x": 5.5,
+      "y": 11.5
+    },
+    "loop": true
+  },
+  "pistolAmmo": {
+    "texture": "sprites/items/ammo_pistol.png",
+    "frameWidth": 12,
+    "frameHeight": 12,
+    "frameCount": 1,
+    "durations": [
+      100
+    ],
+    "origin": {
+      "x": 5.5,
+      "y": 11.5
+    },
+    "loop": true
+  },
+  "rifleAmmo": {
+    "texture": "sprites/items/ammo_rifle.png",
+    "frameWidth": 12,
+    "frameHeight": 12,
+    "frameCount": 1,
+    "durations": [
+      100
+    ],
+    "origin": {
+      "x": 5.5,
+      "y": 11.5
+    },
+    "loop": true
+  },
+  "lootLand": {
+    "texture": "sprites/items/fx/loot_land.png",
+    "frameWidth": 9,
+    "frameHeight": 9,
+    "frameCount": 4,
+    "durations": [
+      60,
+      70,
+      80,
+      90
+    ],
+    "origin": {
+      "x": 4,
+      "y": 8
+    },
+    "loop": false
+  },
+  "pickup": {
+    "texture": "sprites/items/fx/pickup.png",
+    "frameWidth": 11,
+    "frameHeight": 11,
+    "frameCount": 4,
+    "durations": [
+      40,
+      50,
+      60,
+      80
+    ],
+    "origin": {
+      "x": 5,
+      "y": 5
+    },
+    "loop": false
+  }
+}

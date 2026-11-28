@@ -19,6 +19,8 @@ public abstract class Enemy extends GameCharacter {
     private EnemySkill skill = EnemySkill.EASY;
     /** The room it was placed in; it only hunts there. Null = no rooms, no limit. */
     private Room homeRoom;
+    /** Stable id of its map placement (map path + "#" + TMX object id); null for enemies not from a map. */
+    private String spawnId;
 
     @Override
     public final Faction getFaction() {
@@ -31,6 +33,14 @@ public abstract class Enemy extends GameCharacter {
 
     public void setSkill(EnemySkill skill) {
         this.skill = skill;
+    }
+
+    public String getSpawnId() {
+        return spawnId;
+    }
+
+    public void setSpawnId(String spawnId) {
+        this.spawnId = spawnId;
     }
 
     public Room getHomeRoom() {
