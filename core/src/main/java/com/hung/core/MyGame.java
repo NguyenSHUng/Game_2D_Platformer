@@ -75,7 +75,7 @@ public class MyGame extends Game implements Navigator {
     private void startRun(GameSession session) {
         endRun();
         Gdx.app.log(TAG, (session.loaded != null ? "Continuing" : "New") + " " + session.mode.label + " run");
-        World world = WorldLoader.load(session.mode.mapPath, session.mode.enemySkill, resources);
+        World world = WorldLoader.load(session.mode.mapPath, session.mode.enemySkill, session.mode.tacticPolicy, resources);
         runMapPath = session.mode.mapPath;
         run = new GameScreen(batch, world, session, saves, settings, theme, this);
         setScreen(run);

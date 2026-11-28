@@ -111,7 +111,7 @@ Nguồn: dao trong `PlayerFactory` (`PLAYER_KNIFE_DAMAGE`), súng trong khối `
   được khi đang leo.
 - **Súng:** đạn ra từ đầu nòng đúng chỗ súng đang vẽ, kèm lửa nòng và vỏ đạn văng ra; đứng yên thì hiện tư thế bắn.
   Đạn được kiểm tra mỗi 2 đơn vị: dừng ở tường hoặc tile BREAKABLE (xuyên qua bệ một chiều và thang), hoặc ở thân sống
-  đầu tiên của phe kia; không bao giờ trúng người bắn; hết tầm thì biến mất.
+  đầu tiên của phe kia; không bao giờ trúng người bắn; hết tầm thì biến mất; không bay sang phòng khác (qua khe cửa hay giếng thang thì biến mất ở biên phòng).
 - **HUD:** thanh máu, tên vũ khí, số đạn (`Service Pistol 9 / 12`), chữ `RELOADING` khi nạp.
 
 ## 5. Máu, sát thương, hồi sinh
@@ -162,8 +162,24 @@ cũng gây −10 máu khi chạm (`Enemy.CONTACT_DAMAGE`). Quái to hơn file 1,
 | Đón đầu player đang lao tới | – | 0,12 s | 0,2 s |
 | Nhảy qua hố, gai, bậc và lên bệ thấp | không | có | có |
 
-Ở mọi chế độ: bị bắn từ xa thì lao tới kẻ bắn; không vung đòn khi player ở quá cao hoặc quá thấp; không đuổi qua gai hay
-chất độc nếu không nhảy được; bỏ cuộc khi player xa hơn 2,5 lần tầm phát hiện.
+Ở mọi chế độ: bị bắn từ xa (trong cùng phòng) thì lao tới kẻ bắn; không vung đòn khi player ở quá cao hoặc quá thấp; không đuổi qua gai hay
+chất độc nếu không nhảy được; bỏ cuộc khi player xa hơn 2,5 lần tầm phát hiện. Quái chỉ săn trong **phòng của nó**: không thấy
+player ở phòng khác, không đuổi qua cửa, chỉ gọi đồng đội cùng phòng. Crawler dừng ngoài vùng chạm thân thay vì đứng đè lên player.
+
+**Cách đánh theo vùng** (`GameMode.tacticPolicy`; vùng = `region_1`…`region_4` của map, từ đầu tới lối ra). Tách hẳn với con số ở
+bảng trên: đổi cách đánh không đổi máu, sát thương, tốc độ hay hồi chiêu.
+
+| | Vùng 1 | Vùng 2 | Vùng 3 | Vùng 4 |
+|---|---|---|---|---|
+| Easy | Đuổi thẳng | Đuổi thẳng | Đuổi thẳng | Đuổi thẳng |
+| Medium | Đuổi thẳng | Đuổi thẳng | Đánh rồi lùi | Đánh rồi lùi |
+| Hard (tạm giữ như cũ) | Đuổi thẳng | Đuổi thẳng | Đuổi thẳng | Đuổi thẳng |
+
+- **Đuổi thẳng** (`DirectChaseTactic`): áp sát, đánh khi hết hồi chiêu, đứng chờ ở khoảng dừng.
+- **Đánh rồi lùi** (`HitAndRunTactic`): đánh xong lùi lại (mặt vẫn hướng player, 0,7 tốc độ đuổi) tới khi cách 1,8 tầm đánh hoặc tối đa 1 s,
+  đứng chờ hồi chiêu, phản đòn nếu player lao vào tầm, rồi áp sát lại. Bị đánh trúng cũng lùi. Không lùi xuống vực, lên gai hay ra khỏi phòng.
+  Map Medium: 30 / 49 quái (vùng 3: 12, vùng 4: 18). Playtest tự động (`MediumMapPlaytestTest`, vùng 3–4 so với đuổi thẳng): số đòn quái vung
+  −27%, thời gian chạm thân −32%, thời gian quái đứng trong tầm dao của player −34%.
 
 - Quái mặt đất dừng ở mép vực và tường; từ Medium thì nhảy nếu có chỗ đáp an toàn (hố tới 4 tile, cao 2, sâu 2).
 - Quái bay không chịu trọng lực: tuần tra cao 40 đơn vị trên sàn, khi săn thì bay ngay trên đầu player và lao xuống

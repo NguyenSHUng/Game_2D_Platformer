@@ -18,6 +18,7 @@ import com.hung.component.ProjectileComponent;
 import com.hung.component.WeaponComponent;
 import com.hung.entity.Entity;
 import com.hung.physics.Hitboxes;
+import com.hung.world.Room;
 import com.hung.world.World;
 
 /**
@@ -25,7 +26,7 @@ import com.hung.world.World;
  *  - a trigger pull fires when the cooldown is over and the magazine isn't empty; an empty
  *    magazine starts a reload instead; R reloads early; a reload refills after reloadSeconds;
  *  - a shot spawns a projectile at the muzzle (world position of the weapon's muzzle anchor,
- *    along the weapon's angle ± spread), a muzzle flash and a casing from the ejection port,
+ *    along the weapon's angle ± spread, kept to the shooter's room), a muzzle flash and a casing from the ejection port,
  *    and keeps the SHOOT pose up for one SHOOT animation.
  * Reads: WeaponComponent (+ its Weapon), HealthComponent, MovementComponent. Writes: WeaponComponent,
  * new projectile / effect / casing entities.
@@ -123,6 +124,7 @@ public class ShootingSystem {
         projectile.owner = shooter;
         projectile.rangeLeft = fire.rangeTiles * tile;
         projectile.impact = gun.getEffect("impact");
+        projectile.room = roomOf(world, shooter, muzzle);
         bullet.setProjectile(projectile);
         WeaponEffect tracer = gun.getEffect("tracer");
         if (tracer != null) bullet.setSprite(Effects.sprite(tracer, local + (isFacingRight ? spread : -spread), isFacingRight, scale));
@@ -131,6 +133,16 @@ public class ShootingSystem {
         Entity flash = Effects.spawn(world, gun.getEffect("muzzleFlash"), muzzle.x, muzzle.y, local, isFacingRight, scale);
         Effects.light(flash, MUZZLE_LIGHT_RADIUS, 1f, 0.78f, 0.45f);
         ejectCasing(shooter, gun, fire, tile, scale, isFacingRight);
+    }
+
+    /**
+     * The room a shot stays in: the player's current room (the one on screen; neighbouring rooms' bounds
+     * overlap at shared walls), else the room holding the muzzle. Null on maps without rooms.
+     */
+    static Room roomOf(World world, Entity shooter, Vector2 muzzle) {
+        Room current = world.getRoomTransition().currentRoom;
+        if (shooter == world.getPlayer() && current != null) return current;
+        return world.getLevel().findRoomAt(muzzle.x, muzzle.y);
     }
 
     /** A brass casing flying up and back from the ejection port, falling under gravity. */

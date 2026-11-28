@@ -16,9 +16,12 @@ import com.hung.combat.WeaponFactory;
 import com.hung.combat.definition.AttachmentProfile;
 import com.hung.combat.definition.WeaponDefinition;
 import com.hung.component.WeaponComponent;
+import com.hung.ai.tactic.TacticPolicy;
+import com.hung.entity.enemy.Enemy;
 import com.hung.entity.enemy.EnemyDefinition;
 import com.hung.entity.enemy.EnemyFactory;
 import com.hung.entity.enemy.EnemySkill;
+import com.hung.entity.enemy.HunterEnemy;
 import com.hung.entity.player.CharacterDefinition;
 import com.hung.entity.player.PlayerFactory;
 import com.hung.entity.Entity;
@@ -29,6 +32,7 @@ import com.hung.world.EnemySpawn;
 import com.hung.world.Level;
 import com.hung.world.LightSource;
 import com.hung.world.PhysicsSettings;
+import com.hung.world.Room;
 import com.hung.world.TileGrid;
 import com.hung.world.TileType;
 import com.hung.world.World;
@@ -62,7 +66,7 @@ public final class WorldLoader {
     private WorldLoader() {
     }
 
-    public static World load(String mapPath, EnemySkill enemySkill, ResourceLoader resources) {
+    public static World load(String mapPath, EnemySkill enemySkill, TacticPolicy tacticPolicy, ResourceLoader resources) {
         resources.queueMap(mapPath);
         resources.finishLoading();
         TiledMap map = resources.getMap(mapPath);
@@ -99,8 +103,12 @@ public final class WorldLoader {
         World world = new World(level);
         RoomLoader.load(map, world);
         for (EnemySpawn enemySpawn : enemySpawns) {
-            world.addEntity(EnemyFactory.createEnemy(enemyDefinitions.get(enemySpawn.definitionPath),
-                enemySpawn.definitionPath, resources, enemySpawn, enemySkill));
+            Enemy enemy = EnemyFactory.createEnemy(enemyDefinitions.get(enemySpawn.definitionPath),
+                enemySpawn.definitionPath, resources, enemySpawn, enemySkill);
+            Room home = level.findRoom(enemySpawn.roomId, enemySpawn.x, enemySpawn.y);
+            enemy.setHomeRoom(home);
+            if (enemy instanceof HunterEnemy hunter) hunter.setTactic(tacticPolicy.create(home != null ? home.regionId : null));
+            world.addEntity(enemy);
         }
         if (player != null) {
             world.setPlayer(createPlayer(player, resources, spawn, physics));
@@ -196,6 +204,7 @@ public final class WorldLoader {
             spawn.patrolMinX = number(properties, "patrolMinX", rect.x);
             spawn.patrolMaxX = number(properties, "patrolMaxX", rect.x + rect.width);
             spawn.isFacingRight = !"LEFT".equals(properties.get("facing", String.class));
+            spawn.roomId = properties.get("room", String.class);
             spawns.add(spawn);
         }
         return spawns;

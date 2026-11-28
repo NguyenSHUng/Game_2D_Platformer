@@ -60,16 +60,14 @@ public final class EnemyFactory {
      */
     public static Enemy createEnemy(EnemyDefinition definition, String definitionPath, ResourceLoader resources,
                                     EnemySpawn spawn, EnemySkill skill) {
-        float scale = (definition.drawScale > 0f ? definition.drawScale : 1f) * SIZE_SCALE;
+        float scale = drawScale(definition);
         Enemy entity = newEnemy(definition, spawn);
         entity.setSkill(skill);
         entity.getTransform().position.set(spawn.x, spawn.y);
         entity.getTransform().isFacingRight = spawn.isFacingRight;
 
         MovementComponent movement = new MovementComponent();
-        EnemyDefinition.Animation move = definition.animations.get("move");
-        float speed = move != null && move.move != null ? Math.max(move.move.groundSpeed, move.move.airSpeed) : 0f;
-        movement.moveSpeed = speed * scale;
+        movement.moveSpeed = moveSpeed(definition);
         movement.isFlying = entity instanceof FlyingEnemy;
         entity.setMovement(movement);
 
@@ -167,7 +165,19 @@ public final class EnemyFactory {
         return shortest < Float.MAX_VALUE ? shortest * SIZE_SCALE * ATTACK_RANGE_RATIO + TARGET_HALF_WIDTH : DEFAULT_ATTACK_RANGE;
     }
 
-    private static HealthComponent createHealth(EnemyDefinition definition, Enemy enemy) {
+    /** Sprite pixels → world units: the file's drawScale times SIZE_SCALE. */
+    static float drawScale(EnemyDefinition definition) {
+        return (definition.drawScale > 0f ? definition.drawScale : 1f) * SIZE_SCALE;
+    }
+
+    /** Walk / patrol speed: the MOVE animation's ground or air speed, scaled like the sprite. Not scaled by EnemySkill. */
+    static float moveSpeed(EnemyDefinition definition) {
+        EnemyDefinition.Animation move = definition.animations.get("move");
+        float speed = move != null && move.move != null ? Math.max(move.move.groundSpeed, move.move.airSpeed) : 0f;
+        return speed * drawScale(definition);
+    }
+
+    static HealthComponent createHealth(EnemyDefinition definition, Enemy enemy) {
         String durability = definition.gameplay != null ? definition.gameplay.durabilityClass : null;
         HealthComponent health = new HealthComponent(enemy.getSkill().health("MEDIUM".equals(durability) ? HEALTH_MEDIUM
             : "LOW".equals(durability) ? HEALTH_LOW : DEFAULT_ENEMY_HEALTH));
@@ -175,7 +185,7 @@ public final class EnemyFactory {
         return health;
     }
 
-    private static AttackComponent createAttack(EnemyDefinition definition, EnemySkill skill) {
+    static AttackComponent createAttack(EnemyDefinition definition, EnemySkill skill) {
         AttackComponent attack = new AttackComponent();
         String damage = definition.gameplay != null ? definition.gameplay.damageClass : null;
         attack.damage = skill.damage("MEDIUM".equals(damage) ? DAMAGE_MEDIUM : DAMAGE_LOW);

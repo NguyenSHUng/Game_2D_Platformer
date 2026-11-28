@@ -104,7 +104,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `MyGame.java` | 104 | Lớp `Game` của LibGDX, đồng thời là `Navigator`. Tạo tài nguyên dùng chung (batch, ResourceLoader, SaveManager, Settings, UiTheme), mở MenuScreen, bắt đầu / kết thúc một ván (`startRun`, `endRun`). Kết thúc ván sẽ gỡ map để lần sau nạp lại bản gốc |
 | `GameScreen.java` | 360 | Màn hình chơi. Tạo và chạy mọi system theo thứ tự cố định, camera, các renderer, PauseMenu, Toast. Lắng nghe sự kiện checkpoint và lối ra để lưu game; việc chụp và khôi phục trạng thái giao cho `SaveSnapshot` |
 | `Navigator.java` | 20 | Interface chuyển màn hình: `startNewGame`, `continueGame`, `returnToMainMenu`, `quit` |
-| `GameMode.java` | 41 | Enum chế độ chơi, mỗi chế độ một file map và một `EnemySkill`: EASY, MEDIUM, HARD; cờ khoá (`isAvailable()`), HARD đang khoá |
+| `GameMode.java` | 48 | Enum chế độ chơi, mỗi chế độ một file map, một `EnemySkill` (con số) và một `TacticPolicy` (cách đánh theo vùng): EASY, MEDIUM, HARD; cờ khoá (`isAvailable()`), HARD đang khoá |
 | `event/EventBus.java` | 44 | Trung tâm observer: publisher phát đối tượng sự kiện, listener đăng ký theo class sự kiện. Danh sách listener kiểu copy-on-write, publish không cấp phát bộ nhớ |
 | `event/EventListener.java` | 13 | Interface 1 hàm `onEvent(T)` (dùng được lambda) |
 
@@ -113,8 +113,8 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | File | Dòng | Vai trò |
 |------|-----:|---------|
 | `World.java` | 48 | Chứa Level, danh sách entity, player, điểm hồi sinh (đổi qua `setRespawnPoint`), trạng thái chuyển phòng. Không có logic |
-| `Level.java` | 69 | Một level đã nạp: TiledMap để vẽ, lưới va chạm, thông số vật lý, điểm xuất phát, lối ra, checkpoint, đèn, phòng |
-| `loader/WorldLoader.java` | 301 | Dựng `World` từ file `.tmx`: lưới va chạm từ layer `terrain`, spawn và lối ra, enemy, đèn, phòng và cửa, enemy thử nghiệm, player kèm vũ khí. Xếp hàng nạp mọi texture trước rồi mới tạo entity |
+| `Level.java` | 75 | Một level đã nạp: TiledMap để vẽ, lưới va chạm, thông số vật lý, điểm xuất phát, lối ra, checkpoint, đèn, phòng; `findRoom(id, x, y)` (phòng theo id, không có thì phòng chứa điểm) |
+| `loader/WorldLoader.java` | 310 | Dựng `World` từ file `.tmx`: lưới va chạm từ layer `terrain`, spawn và lối ra, enemy (kèm phòng nhà và tactic theo vùng), đèn, phòng và cửa, player kèm vũ khí. Xếp hàng nạp mọi texture trước rồi mới tạo entity |
 | `loader/RoomLoader.java` | 116 | Đọc layer `rooms` và `doors` của map: phòng (vùng giới hạn camera) và entity cửa |
 | `Room.java` | 38 | Một phòng: id, index, loại, vùng, phòng kề, cửa ra vào |
 | `system/DoorSystem.java` | 126 | Chuyển phòng: chạm cửa → màn hình tối dần (thế giới dừng) → dời player → phát `RoomTransitionEvent` → sáng lại. Không biết gì về camera hay minimap |
@@ -125,7 +125,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `TileGrid.java` | 65 | Lưới tile va chạm (hàng 0 ở đáy). Ngoài map: hai bên là tường, trên dưới là khoảng trống. `hasFloorAhead` là phép dò mép vực dùng chung cho PatrolSystem và EnemyBrainSystem |
 | `TileType.java` | 33 | Loại tile: SOLID, PLATFORM, LADDER, SPIKE, TOXIC, BREAKABLE… |
 | `PhysicsSettings.java` | 44 | Thông số di chuyển dùng chung với tool tạo map (tốc độ, độ cao và khoảng cách nhảy), đổi từ tile sang đơn vị thế giới |
-| `EnemySpawn.java` | 16 | Một vị trí đặt enemy (toạ độ, hướng, đoạn tuần tra, file định nghĩa) |
+| `EnemySpawn.java` | 18 | Một vị trí đặt enemy (toạ độ, hướng, đoạn tuần tra, file định nghĩa, phòng) |
 | `system/PlayerRespawn.java` | 43 | Đưa player về điểm hồi sinh, đứng yên, bất tử một lúc |
 | `LightSource.java` | 61 | Một nguồn sáng của map (chỉ để vẽ) |
 
@@ -139,14 +139,14 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `player/Player.java` | 17 | Người chơi: phe PLAYER, phá được tường |
 | `player/PlayerFactory.java` | 228 | Dựng `Player` từ file JSON (animation nhiều tư thế, bàn tay, hitbox) |
 | `player/CharacterDefinition.java` | 29 | Phần của file JSON player mà game dùng (khung hình, drawScale, collider, `weaponLayer`, animations) |
-| `enemy/Enemy.java` | 73 | Lớp trừu tượng của mọi quái: phe ENEMY, sát thương khi chạm, kháng đẩy lùi; template method `updateBehaviour` (chết / bị thương / `think()` trừu tượng) |
+| `enemy/Enemy.java` | 84 | Lớp trừu tượng của mọi quái: phe ENEMY, sát thương khi chạm, kháng đẩy lùi, phòng nhà (`homeRoom`); template method `updateBehaviour` (chết / bị thương / `think()` trừu tượng) |
 | `enemy/MeleeEnemy.java` | 38 | small_melee_*: con số của melee; dừng cách một tầm vuốt (`holdRatio`) |
-| `enemy/HunterEnemy.java` | 265 | Lớp trừu tượng của quái biết săn: phát hiện, nhớ, gọi bầy, đuổi, nhảy, đón đầu, đánh; con số do lớp con cho, nhân với `EnemySkill` |
+| `enemy/HunterEnemy.java` | 378 | Lớp trừu tượng của quái biết săn: phát hiện, nhớ, gọi bầy (trong phòng nhà), nhảy, đón đầu; đánh / áp sát / lùi do `HuntTactic` quyết, quái thực hiện qua `TacticActions`; con số do lớp con cho, nhân với `EnemySkill` |
 | `enemy/EnemySkill.java` | 33 | Độ mạnh và độ khôn của quái theo chế độ (EASY, MEDIUM, HARD) |
 | `enemy/JumpPlanner.java` | 85 | Tìm cú nhảy an toàn trên lưới tile: qua hố, gai, bậc, lên bệ thấp |
 | `enemy/CrawlerEnemy.java` | 28 | crawler_01: con số của crawler |
-| `enemy/FlyingEnemy.java` | 126 | Quái bay: override đuổi (bỏ qua mép vực), đánh trên không, lái độ cao, xác rơi sau DEATH |
-| `enemy/EnemyFactory.java` | 189 | Chọn lớp quái theo `archetype` của file (`newEnemy`), rồi lắp component từ file: animation + hitbox theo khung, thân, đoạn tuần tra, hiệu ứng. Đổi các mức LOW / MEDIUM / HIGH thành con số máu và sát thương |
+| `enemy/FlyingEnemy.java` | 132 | Quái bay: override đuổi và lùi (bỏ qua mép vực), đánh trên không, lái độ cao, xác rơi sau DEATH |
+| `enemy/EnemyFactory.java` | 194 | Chọn lớp quái theo `archetype` của file (`newEnemy`), rồi lắp component từ file: animation + hitbox theo khung, thân, đoạn tuần tra, hiệu ứng. Đổi các mức LOW / MEDIUM / HIGH thành con số máu và sát thương |
 | `enemy/EnemyDefinition.java` | 107 | Phần của `character.json` enemy mà game dùng: anchor, sprite sheet, animation (frame, hitbox), khối gameplay. Chỉ đọc sau khi nạp, dùng chung cho mọi con cùng loại |
 
 ### 3.4 `component/` — dữ liệu thuần
@@ -183,6 +183,17 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 | `PatrolSystem.java` | 84 | Đi qua lại trong đoạn tuần tra, quay đầu ở mép, tường, vực | Đọc Patrol, Movement, Collider · Ghi Transform |
 | `EnemyBrainSystem.java` | 51 | Gọi `Enemy.updateBehaviour` của từng quái (đa hình): mỗi lớp quái tự săn, đánh, bay | Đọc Health của player · mỗi Enemy ghi Transform, Attack |
 
+`ai/tactic/` — cách đánh của quái (Strategy), Java thuần, không phụ thuộc package khác của game:
+
+| File | Dòng | Vai trò |
+|------|-----:|---------|
+| `HuntTactic.java` | 19 | Interface: `decide(context, actions)`; hook `onHurt()`, `onTargetLost()` |
+| `HuntContext.java` | 17 | Record: những gì tactic biết về một khung săn (dx, tầm đánh, khoảng dừng, trong tầm, đánh được, bước tới / lùi an toàn, delta) |
+| `TacticActions.java` | 22 | Interface hành động mà `HunterEnemy` cài: `face`, `strike`, `approach`, `retreat`, `hold` |
+| `DirectChaseTactic.java` | 18 | Áp sát, đánh khi sẵn sàng, đứng ở khoảng dừng (hành vi gốc) |
+| `HitAndRunTactic.java` | 93 | Đánh rồi lùi: APPROACH → ATTACK → RETREAT → RECOVER |
+| `TacticPolicy.java` | 30 | Tactic theo vùng của chế độ (`hitAndRunFromRegion`); mỗi lần một instance mới |
+
 ### 3.7 `physics/` — vật lý, va chạm, vùng nguy hiểm
 
 | File | Dòng | Vai trò | Đọc / Ghi |
@@ -198,8 +209,8 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 |------|-----:|---------|-----------|
 | `system/AttackSystem.java` | 109 | Đòn cận chiến theo animation ATTACK: khung có attack box gây sát thương phía bên kia, phá tile BREAKABLE (sửa trực tiếp TiledMap), mỗi cú vung trúng tối đa một lần | Đọc Animation, Attack · Ghi Health (qua Damage), TileGrid |
 | `system/ContactDamageSystem.java` | 45 | `Enemy` chạm player thì gây `getContactDamage()` sát thương | Ghi Health của player |
-| `system/ShootingSystem.java` | 157 | Súng: bóp cò, hồi chiêu, hết đạn → nạp, R nạp sớm, sinh đạn ở nòng, lửa nòng, vỏ đạn văng | Ghi Weapon, thêm entity đạn và hiệu ứng |
-| `system/ProjectileSystem.java` | 98 | Đạn bay theo bước ngắn (không xuyên tile), dừng ở tile cứng hoặc thân phe kia, hiệu ứng trúng | Ghi Health, xoá đạn |
+| `system/ShootingSystem.java` | 169 | Súng: bóp cò, hồi chiêu, hết đạn → nạp, R nạp sớm, sinh đạn ở nòng (gắn phòng của người bắn), lửa nòng, vỏ đạn văng | Ghi Weapon, thêm entity đạn và hiệu ứng |
+| `system/ProjectileSystem.java` | 100 | Đạn bay theo bước ngắn (không xuyên tile), dừng ở tile cứng hoặc thân phe kia, hiệu ứng trúng; biến mất khi ra khỏi phòng lúc bắn | Ghi Health, xoá đạn |
 | `system/HealthSystem.java` | 82 | Bộ đếm bị thương / bất tử, giảm đẩy lùi; enemy chết → animation DEATH → xoá; player chết → hồi sinh đủ máu | Ghi Health, Transform |
 | `system/WeaponSwitchSystem.java` | 59 | Đổi ô vũ khí và bộ animation theo tư thế; không đổi giữa cú vung, khi bị thương hay đã chết | Ghi Arsenal, Weapon, Animation |
 | `Damage.java` | 67 | Áp một đòn: trừ máu, bị thương / chết, đẩy lùi, bất tử. Dùng chung cho mọi system gây sát thương | — |
@@ -297,7 +308,7 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 
 **Tạo player:** `WorldLoader` → `PlayerFactory.createPlayer` (JSON player, animation nhiều tư thế, bàn tay) → `WeaponFactory` (kho 3 vũ khí, profile attachment) → `World.setPlayer`.
 
-**Đòn đánh của enemy:** `EnemyBrainSystem` gọi `updateBehaviour`, `HunterEnemy.think` yêu cầu đòn → `AnimationSystem` chạy → `AttackSystem` lấy attack box của khung hiện tại (qua `Hitboxes.fromSprite`) → `Damage.apply` lên player → `HealthSystem`.
+**Đòn đánh của enemy:** `EnemyBrainSystem` gọi `updateBehaviour`, `HunterEnemy.think` hỏi `HuntTactic`, tactic gọi `strike()` → `AnimationSystem` chạy → `AttackSystem` lấy attack box của khung hiện tại (qua `Hitboxes.fromSprite`) → `Damage.apply` lên player → `HealthSystem`.
 
 **Qua cửa:** `DoorSystem` thấy player chạm cửa → tối dần (thế giới dừng) → dời player → phát `RoomTransitionEvent` → `CameraController` giới hạn theo phòng mới, `MinimapState` đánh dấu phòng → sáng lại.
 
@@ -315,13 +326,13 @@ Tên file trong cột File tính từ package của mục; `event/`, `system/`�
 - Phòng, camera, minimap, lưu game nói chuyện qua sự kiện (`EventBus`), không gọi thẳng nhau.
 
 **Hạn chế đã biết** (chi tiết: [02-ARCHITECTURE.md → mục 11](02-ARCHITECTURE.md#11-nợ-kỹ-thuật-đã-biết))
-- Class lớn: `MenuView` (518 dòng), `StatsPanel` (340), `MenuScreen` (337), `WorldLoader` (301), `HunterEnemy` (265).
+- Class lớn: `MenuView` (518 dòng), `HunterEnemy` (378), `StatsPanel` (340), `MenuScreen` (337), `WorldLoader` (310).
 - Phụ thuộc vòng giữa package: 2 nhóm, 7 cặp phụ thuộc 2 chiều. Nhóm gameplay: `component` ↔ `combat`, `component` ↔ `entity`, `component` ↔ `animation`, `entity` ↔ `input`, `physics` ↔ `world.system`. Nhóm màn hình: `core` ↔ `save`, `core` ↔ `ui.menu`.
 - Hiệu ứng nằm ở 2 package (`animation`, `combat`).
 - `Entity` không có id; mỗi loại component là một field cố định (chủ ý, đơn giản và nhanh).
 - `AttackSystem` phá tường bằng cách sửa TiledMap đang cache, được bù bằng `ResourceLoader.unloadMap` khi kết thúc ván. Tường đã phá và quái đã giết chưa được lưu.
 - Enemy không có `Controller`; AI ghi thẳng vào component. Chuyển sang AI controller sẽ đổi thứ tự update nên chưa làm.
-- Số liệu gameplay của enemy (máu, sát thương, tầm phát hiện, hồi chiêu) vẫn là hằng số trong `EnemyFactory` và class quái; mức theo chế độ ở `EnemySkill`.
+- Số liệu gameplay của enemy (máu, sát thương, tầm phát hiện, hồi chiêu) vẫn là hằng số trong `EnemyFactory` và class quái; mức theo chế độ ở `EnemySkill`; cách đánh theo vùng ở `GameMode.tacticPolicy`.
 - Bảng màu UI có 2 bản (file HTML thiết kế và `UiTheme.java`), đổi phải chép tay.
 
 **Kiểm thử**

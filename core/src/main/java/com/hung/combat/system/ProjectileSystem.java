@@ -19,7 +19,8 @@ import com.hung.world.World;
  * Bullets: moved in short steps so they never tunnel through a tile or a body. A bullet stops at
  * the first SOLID / BREAKABLE tile (one-way platforms and ladders let it through) or the first
  * living body of the other side (player ↔ everyone else), which takes the damage; an impact
- * effect plays where it stops. It vanishes after its range.
+ * effect plays where it stops. It vanishes after its range, and on leaving the room it was fired in
+ * (through a doorway or a ladder shaft) before it could hit anything in the next room.
  * Reads/Writes: ProjectileComponent, TransformComponent; HealthComponent through Damage.
  */
 public class ProjectileSystem {
@@ -61,6 +62,7 @@ public class ProjectileSystem {
         for (int s = 0; s < steps; s++) {
             position.add(step);
             projectile.rangeLeft -= step.len();
+            if (projectile.room != null && !projectile.room.bounds.contains(position)) return true;
             if (grid.get(grid.toTile(position.x), grid.toTile(position.y)).isSolid()) {
                 impact(bullet, projectile);
                 return true;

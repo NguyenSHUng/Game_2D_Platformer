@@ -64,6 +64,12 @@ public class Level {
         return null;
     }
 
+    /** The room with this id, else the room holding the point (just above the feet); null on maps without rooms. */
+    public Room findRoom(String id, float x, float y) {
+        Room room = getRoom(id);
+        return room != null ? room : findRoomAt(x, y + 1f);
+    }
+
     public float getWidth() { return grid.getWidth() * grid.getTileSize(); }
     public float getHeight() { return grid.getHeight() * grid.getTileSize(); }
 }

@@ -192,7 +192,7 @@ Va chạm thân với thân: `ContactDamageSystem` (quái còn sống chạm pla
 | `WeaponSwitchSystem` | Đổi `Entity.weapon` sang ô được yêu cầu và gọi `AnimationComponent.useStance` theo tư thế của vũ khí; bỏ qua yêu cầu trùng ô đang cầm; không đổi khi đang vung / bị thương / chết; huỷ lượt nạp |
 | `WeaponComponent` (trạng thái súng) | `ammo`, `cooldown`, `reloadTime`, `shootTime`, `isFireRequested`, `isReloadRequested` |
 | `ShootingSystem` | Bóp cò → bắn khi hết hồi chiêu (1 / roundsPerSecond) và còn đạn (hết thì nạp); đạn sinh ở `Hitboxes.weaponPoint(muzzleAnchor)` theo `Hitboxes.weaponAngle` ± độ lệch; lửa nòng (`Effects.spawn`) và vỏ đạn (có trọng lực, va tile); `shootTime` giữ tư thế bắn trong một lượt animation SHOOT |
-| `ProjectileSystem` | Đạn di chuyển từng bước ≤ 2 đơn vị; dừng ở tile `SOLID` / `BREAKABLE` hoặc thân sống đầu tiên của phe kia (`Damage.apply`, hiệu ứng trúng); hết tầm thì xoá |
+| `ProjectileSystem` | Đạn di chuyển từng bước ≤ 2 đơn vị; dừng ở tile `SOLID` / `BREAKABLE` hoặc thân sống đầu tiên của phe kia (`Damage.apply`, hiệu ứng trúng); hết tầm thì xoá; ra khỏi phòng lúc bắn (`ProjectileComponent.room`: phòng đang hiện trên màn hình của player, shooter khác thì phòng chứa nòng súng) thì xoá ngay, không hiệu ứng, trước khi kịp trúng gì ở phòng bên |
 
 ## 5. Máu và sát thương
 
@@ -224,22 +224,41 @@ vi nằm trong class quái (`com.hung.entity.enemy`); thứ tự các bước c�
 |------|----------|----------|
 | Đã chết → `whileDead()` | Không làm gì | `FlyingEnemy`: treo trên không khi DEATH chạy, xong thì bật trọng lực, xác rơi xuống sàn |
 | `tick(delta)` | — | `HunterEnemy`: đếm lùi hồi chiêu và trí nhớ |
-| Bị thương → `whileHurt()` | Không làm gì | `HunterEnemy`: bị khiêu khích (săn dù chưa thấy player); `FlyingEnemy`: thêm dừng vận tốc dọc |
+| Bị thương → `whileHurt()` | Không làm gì | `HunterEnemy`: bị khiêu khích (săn dù chưa thấy player) và báo tactic (`onHurt`); `FlyingEnemy`: thêm dừng vận tốc dọc |
 | Còn lại → `think()` | (trừu tượng) | `HunterEnemy`: săn (dưới đây) |
 
-`HunterEnemy.think()` ghi đè vận tốc tuần tra khi đang săn:
+`HunterEnemy.think()` ghi đè vận tốc tuần tra khi đang săn. Phần nhìn, nhớ, gọi bầy và nhảy nằm trong `HunterEnemy`; còn
+**đánh, áp sát hay đứng chờ** là quyết định của `HuntTactic` của con quái đó (`com.hung.ai.tactic`, xem dưới):
+- Phòng nhà (`Enemy.getHomeRoom()`, từ property `room` của quái trên map; thiếu hoặc sai id thì lấy room chứa điểm spawn): quái chỉ thấy
+  player **trong phòng nhà**, chỉ gọi quái cùng phòng, không đuổi / lùi ra khỏi phòng (bị đẩy văng ra thì vẫn đi vào lại được), tuần tra
+  sau khi nhảy cũng bị kẹp trong phòng. Player rời phòng thì quái quên ngay (kể cả khi bị bắn từ phòng khác). Map không có room: không giới hạn.
 - Player trong `aggroRange()` × `aggroScale` (và `aggroHeight()` tính từ `floorY()`), hoặc còn trong trí nhớ (`memorySeconds`), hoặc vừa bị
-  bắn / được gọi (`provoke()`) → quay mặt, `chase()` với `moveSpeed × chaseSpeedScale() × chaseScale` (tối đa 84).
-- Lúc vừa thấy player, quái gọi mọi `HunterEnemy` trong `alertRange`; con được gọi không gọi tiếp.
+  bắn / được gọi (`provoke()`) → engaged; tactic quyết định, `chase()` chạy với `moveSpeed × chaseSpeedScale() × chaseScale` (tối đa 84).
+- Lúc vừa thấy player, quái gọi mọi `HunterEnemy` cùng phòng trong `alertRange`; con được gọi không gọi tiếp.
 - Gặp mép vực, gai, chất độc hay tường: nếu `canJump` và `JumpPlanner` tìm được chỗ đáp thì nhảy, không thì dừng. Player ở bệ thấp ngay trên đầu
   thì nhảy thẳng lên. Đáp xong, quái tuần tra chỗ mới. `FlyingEnemy` bay qua mọi thứ này.
 - Trong `attackRange` (80% tầm đánh do tool đo + khoảng nửa bề rộng player), hoặc sắp tới tầm (`aimLeadSeconds`), đúng độ cao
   (`canReachHeight()`), hết hồi chiêu và `canStrike()` (mặt đất: đang chạm đất; bay: luôn được) → đứng lại, yêu cầu đòn ATTACK. Sát thương do
   hitbox của animation qua `AttackSystem`.
-- Trong lúc chờ hồi chiêu, quái dừng áp sát ở `attackRange × holdRatio()` (mặc định 0,6; `MeleeEnemy` 0,75 để không húc vào player).
+- Khoảng dừng (hold distance) = `attackRange × holdRatio()` (mặc định 0,6; `MeleeEnemy` 0,75), nhưng không gần hơn lúc hai thân chạm nhau + 2
+  nếu khoảng đó vẫn còn trong tầm đánh. Thực tế chỉ đổi crawler (thân rộng 34): dừng ở ~22,6 thay vì 13,6, không đứng đè lên player.
 - Đòn giữ nguyên hướng lúc bắt đầu (nếu không, `PatrolSystem` xoay quái về hướng tuần tra và đòn đánh ngược).
 - `afterThink()`: quái mặt đất đứng yên khi đòn đang chạy; `FlyingEnemy` lái độ cao: tuần tra cao
   `FlyingEnemy.CRUISE_HEIGHT` (40) trên sàn, săn ở trên đầu player 18 đơn vị, hạ xuống giữa thân player khi lao.
+
+**Tactic (`com.hung.ai.tactic`)** — Strategy: mỗi `HunterEnemy` giữ một `HuntTactic` riêng (tactic có trạng thái). Mỗi khung engaged và không
+đang vung đòn, quái dựng `HuntContext` (dx, tầm đánh, khoảng dừng, trong tầm chưa, đánh được chưa, bước tới / lùi có an toàn không, delta) rồi
+gọi `tactic.decide(context, this)`; tactic ra lệnh qua `TacticActions` mà `HunterEnemy` cài: `face`, `strike` (yêu cầu đòn + hồi chiêu),
+`approach` (= `chase()` của lớp con), `retreat`, `hold`. Tactic không tự ghi vận tốc.
+
+| Tactic | Hành vi |
+|--------|---------|
+| `DirectChaseTactic` (mặc định) | Quay mặt → đánh nếu trong tầm và sẵn sàng → không thì áp sát tới khoảng dừng → không thì đứng |
+| `HitAndRunTactic` | APPROACH (như DirectChase) → ATTACK → **RETREAT** khi đòn xong: lùi, mặt vẫn hướng player, tới khi cách 1,8 × tầm đánh, phía sau không an toàn hoặc quá 1 s → **RECOVER**: đứng chờ; hết hồi chiêu thì phản đòn nếu player trong tầm, không thì APPROACH. Bị đánh → RETREAT; mất mục tiêu → APPROACH |
+
+`retreat()` chạy ở `chaseSpeed() × 0,7` (luôn dưới 84) và chỉ khi bước lùi an toàn (`canBackOff`: mặt đất phải đứng trên sàn, không có vực,
+gai, chất độc phía sau; quái bay luôn được) và còn trong phòng nhà; không thì đứng. Kiểm tra này nằm trong `HunterEnemy`, nên tactic nào cũng
+không lùi xuống vực được. Tactic theo chế độ và vùng: `GameMode.tacticPolicy` ([04 → mục 6](04-GAME-DESIGN.md#6-quái)).
 
 Con số theo loại quái: [04 → mục 6](04-GAME-DESIGN.md#6-quái); cây class: [02 → mục 4](02-ARCHITECTURE.md#4-entity-component-và-cây-nhân-vật). Quái không có `Controller`.
 
@@ -285,10 +304,11 @@ chơi bằng cách lặp khung trên nhịp 10 ms; `keyFrameSources` đổi khun
 **`World`** chứa `Level` (TiledMap + `TileGrid` + `PhysicsSettings` + điểm xuất phát / lối ra + checkpoint + đèn + phòng),
 danh sách entity, player, điểm hồi sinh, `RoomTransition`. Không có logic.
 
-**`WorldLoader.load(mapPath, enemySkill, resources)`:** nạp `.tmx` và tileset, dựng lưới va chạm từ layer `terrain`, đọc spawn / lối ra,
+**`WorldLoader.load(mapPath, enemySkill, tacticPolicy, resources)`:** nạp `.tmx` và tileset, dựng lưới va chạm từ layer `terrain`, đọc spawn / lối ra,
 layer `enemies`, checkpoint, đèn; xếp hàng nạp mọi định nghĩa và texture (player, vũ khí, quái) rồi
 `finishLoading()` một lần; tạo `Level`, quái, player kèm vũ khí, `World`.
-`RoomLoader` thêm phòng (layer `rooms`) và một entity cửa cho mỗi object `doors`.
+`RoomLoader` thêm phòng (layer `rooms`) và một entity cửa cho mỗi object `doors`. Sau khi `EnemyFactory` tạo một quái, loader gán
+phòng nhà (`Level.findRoom(spawn.roomId, x, y)`) và tactic theo vùng của phòng đó (`tacticPolicy.create(room.regionId)`).
 
 **Phòng và cửa (theo sự kiện):**
 
@@ -320,7 +340,7 @@ sau khung hình hiện tại. `MenuScreen` dựng các trang từ file lưu mỗ
 rồi phóng theo cửa sổ. `UiTheme` giữ bảng màu (chép từ file thiết kế `build_asset/build_ui/menu-preview.template.html`),
 font FreeType dựng theo tỉ lệ cửa sổ (`assets/ui/fonts/`: Silkscreen, Pixelify Sans) và texture sọc cảnh báo.
 
-**Chế độ:** `GameMode` = `EASY` (`Constants.EASY_MAP_PATH`), `MEDIUM` (`MEDIUM_MAP_PATH`), `HARD` (`HARD_MAP_PATH`); mỗi chế độ một map riêng. `GameMode.enemySkill` quyết định độ mạnh của quái.
+**Chế độ:** `GameMode` = `EASY` (`Constants.EASY_MAP_PATH`), `MEDIUM` (`MEDIUM_MAP_PATH`), `HARD` (`HARD_MAP_PATH`); mỗi chế độ một map riêng. `GameMode.enemySkill` quyết định con số của quái, `GameMode.tacticPolicy` quyết định cách quái đánh theo vùng.
 
 **File lưu** (`SaveData`, JSON, `~/.mygame/saves/<chế độ>.json`, schema phiên bản 1):
 

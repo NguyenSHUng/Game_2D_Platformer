@@ -13,4 +13,6 @@ public class EnemySpawn {
     public float patrolMinX;
     public float patrolMaxX;
     public boolean isFacingRight = true;
+    /** Id of the room it was placed in (the object's "room" property); null when the map has none. */
+    public String roomId;
 }

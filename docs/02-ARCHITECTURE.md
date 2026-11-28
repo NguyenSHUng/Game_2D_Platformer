@@ -112,16 +112,34 @@ Entity nào được lắp component nào (ngoài `TransformComponent`):
 Entity                         túi component (cửa, đạn, hiệu ứng là Entity thường)
  └─ GameCharacter «abstract»   getFaction() «abstract», isHostileTo(), canBreakWalls(), isAlive()
      ├─ Player                 phe PLAYER, phá được tường
-     └─ Enemy «abstract»       phe ENEMY, getContactDamage(), getKnockbackResistance()
+     └─ Enemy «abstract»       phe ENEMY, getContactDamage(), getKnockbackResistance(), homeRoom
          │                     updateBehaviour() = template: chết → whileDead · bị thương → whileHurt · còn lại → think()
-         └─ HunterEnemy «abstract»   think() = phát hiện → đuổi → đánh; aggroRange(), attackCooldown(), chaseSpeedScale() «abstract»
+         └─ HunterEnemy «abstract» implements TacticActions
+             │                 think() = nhìn / nhớ (trong phòng nhà) → nhảy → tactic.decide() → afterThink
+             │                 aggroRange(), attackCooldown(), chaseSpeedScale() «abstract»; chase(), canBackOff() override được
+             │                 ◇── HuntTactic (một instance mỗi quái, mặc định DirectChaseTactic)
              ├─ MeleeEnemy     small_melee_*: 120 / 1,2 s / ×2,2, dừng cách một tầm vuốt
              ├─ CrawlerEnemy   crawler_01: 160 / 0,9 s / ×1,6
-             └─ FlyingEnemy    flyer_wasp_01: bay, không xét mép vực, đánh trên không, xác rơi sau DEATH
+             └─ FlyingEnemy    flyer_wasp_01: bay, không xét mép vực (cả khi lùi), đánh trên không, xác rơi sau DEATH
 ```
 
 `EnemyFactory.newEnemy` chọn lớp theo `character.json`:
 `archetype` `SMALL_MELEE` → `MeleeEnemy`; `CRAWLER` → `CrawlerEnemy`; `FLYING` → `FlyingEnemy` (enum `EnemyDefinition.Archetype`; tên khác = lỗi khi nạp).
+
+**Cách đánh là Strategy** (`com.hung.ai.tactic`), tách khỏi cây kế thừa: lớp con quyết định quái *làm được gì* (bay, nhảy, dừng ở
+mép vực), tactic quyết định *làm gì* (đánh, áp sát, lùi, đứng). Hai trục độc lập nên không cần lớp `MediumMeleeEnemy`…
+
+```text
+«interface» HuntTactic      decide(HuntContext, TacticActions), onHurt(), onTargetLost()
+   ├─ DirectChaseTactic     không trạng thái; đúng hành vi cũ
+   └─ HitAndRunTactic       APPROACH → ATTACK → RETREAT → RECOVER
+HuntContext «record»        dx, attackRange, holdDistance, isInReach, canStrikeNow, canMoveTowardTarget, canBackOff, delta
+«interface» TacticActions   face, strike, approach (= chase của lớp con), retreat, hold   ← HunterEnemy cài đặt
+TacticPolicy «record»       hitAndRunFromRegion; create(regionId) → tactic mới      ← GameMode.tacticPolicy
+```
+
+`GameMode` giữ hai thứ riêng: `enemySkill` (con số, `EnemySkill`) và `tacticPolicy` (cách đánh). `WorldLoader` gán tactic sau
+`EnemyFactory`, nên chọn tactic không chạm vào đường tính chỉ số.
 
 **Component được đóng gói** (có quy tắc trải trên nhiều field):
 
@@ -130,7 +148,7 @@ Entity                         túi component (cửa, đạn, hiệu ứng là E
 | `HealthComponent` | 0 ≤ health ≤ maxHealth; isDead ⇔ health == 0; maxHealth ≥ 1 | `new HealthComponent(max)`, `applyDamage(n)`, `restoreFull()`, `setHealthClamped(n)`, các getter |
 | `AnimationComponent` | 5 map của tư thế đang dùng (animation, anchor tay, khung gốc, lớp tay trước, attack box) luôn thuộc cùng một tư thế | `useStance(tên)` đổi cả 5 cùng lúc; getter để đọc |
 | `World` | Điểm hồi sinh chỉ đổi ở một chỗ | `setRespawnPoint(x, y)`; `getRespawnPoint()` chỉ để đọc |
-| `HunterEnemy` (và lớp con) | Hồi chiêu, số đòn đã đánh, trạng thái đang săn chỉ do chính quái cập nhật | private; `isEngaged()` để đọc |
+| `HunterEnemy` (và lớp con) | Hồi chiêu, số đòn đã đánh, trạng thái đang săn chỉ do chính quái cập nhật; vận tốc khi săn chỉ đổi qua `TacticActions` (giới hạn 84, kiểm tra an toàn khi lùi) | private; `isEngaged()` để đọc; `setTactic()` |
 
 Các field còn lại (bộ đếm, vận tốc, cờ) để public: system cập nhật mỗi khung hình và không có quy tắc nào trải trên chúng.
 
@@ -226,6 +244,8 @@ component/           Transform, Movement, Collider, Animation, Health, Attack, W
                      Sprite, Effect, Projectile, Door
 input/               Controller, KeyboardController, InputSystem, CameraInput
 ai/                  PatrolSystem, EnemyBrainSystem
+  tactic/            HuntTactic, HuntContext, TacticActions, DirectChaseTactic, HitAndRunTactic, TacticPolicy
+                     (lá: không phụ thuộc package nào khác của game)
 physics/             PhysicsSystem, CollisionSystem, HazardSystem, Hitboxes
 combat/              Damage, Effects, Weapon, WeaponEffect, WeaponFactory (dùng chung)
   definition/        WeaponDefinition, FireDefinition, EffectDefinition, AttachmentProfile (JSON)
@@ -268,18 +288,32 @@ mỗi package.
 | Vòng phụ thuộc (nhóm màn hình) | `core` ↔ `save`, `core` ↔ `ui.menu` (qua `GameMode`, `Navigator`) |
 | Phụ thuộc đáng lưu ý | `save.SaveSnapshot` đọc `ui.minimap.MinimapState`; `input.CameraInput` điều khiển `rendering.CameraController` |
 | Phá tường | `AttackSystem` sửa TiledMap đang cache; `MyGame` gỡ map sau mỗi ván. Tường đã phá và quái đã giết không được lưu |
-| Số liệu quái | Tầm phát hiện, hồi chiêu, tốc độ đuổi là hằng số trong từng class quái; máu và sát thương là hằng số theo mức LOW / MEDIUM trong `EnemyFactory`, nhân với `EnemySkill` của chế độ |
+| Số liệu quái | Tầm phát hiện, hồi chiêu, tốc độ đuổi là hằng số trong từng class quái; máu và sát thương là hằng số theo mức LOW / MEDIUM trong `EnemyFactory`, nhân với `EnemySkill` của chế độ. Thông số HitAndRun (1,8 tầm đánh, 1 s, 0,7 tốc độ) và vùng bắt đầu là hằng số |
+| `HuntContext` mỗi khung | Một record mới mỗi khung cho mỗi quái đang săn (ngược quy tắc 6, chấp nhận vì nhỏ và sống ngắn) |
+| `HunterEnemy.approach()` / `retreat()` | Cần world của `think()` đang chạy (`thinkingWorld`); gọi ngoài `think()` là lỗi. Là method public vì thuộc interface |
 | `World.getPlayer()` | Trả về `Entity`, không phải `Player`, để các test dựng thế giới bằng entity thường |
 | Bảng màu UI | Có ở 2 nơi: file thiết kế `build_asset/build_ui/menu-preview.template.html` và `UiTheme.java`; đổi phải chép tay |
-| Class lớn | `MenuView` (518 dòng), `StatsPanel` (340), `MenuScreen` (337), `WorldLoader` (301), `HunterEnemy` (265) |
+| Class lớn | `MenuView` (518 dòng), `HunterEnemy` (378, gần mức 400), `StatsPanel` (340), `MenuScreen` (337), `WorldLoader` (310) |
 
 ## 12. Bốn tính chất OOP
 
 | Tính chất | Áp dụng ở đâu |
 |-----------|---------------|
 | **Kế thừa** | Cây nhân vật ở [mục 4](#4-entity-component-và-cây-nhân-vật): `Player` và `Enemy` kế thừa `GameCharacter`; `MeleeEnemy`, `CrawlerEnemy`, `FlyingEnemy` kế thừa `HunterEnemy`, tức là dùng lại toàn bộ logic săn đuổi và chỉ đổi phần khác. Kế thừa từ LibGDX: `MyGame extends Game`, `GameScreen` / `MenuScreen extends ScreenAdapter`, `CameraInput extends InputAdapter` |
-| **Đa hình** | `EnemyBrainSystem` gọi `enemy.updateBehaviour(...)` mà không biết loại quái: crawler dừng ở mép vực, flyer bay qua. `AttackSystem` / `ProjectileSystem` hỏi `GameCharacter.areHostile(a, b)` (dựa trên `getFaction()` override) và `canBreakWalls()`. `ContactDamageSystem` hỏi `getContactDamage()`, `EnemyFactory` hỏi `getKnockbackResistance()`. Qua interface: `Controller`, `EventListener<T>`, `Navigator`, `PauseMenu.Actions`, `Disposable` |
-| **Trừu tượng** | Lớp trừu tượng `GameCharacter` (`getFaction()`), `Enemy` (`think()`), `HunterEnemy` (`aggroRange()`, `attackCooldown()`, `chaseSpeedScale()`). Template method `Enemy.updateBehaviour` cố định thứ tự các bước, lớp con chỉ điền bước. Ngoài ra: interface `Controller`, `Navigator`; `Damage.apply`, `Hitboxes`, `WorldLoader.load`, `SaveSnapshot` giấu chi tiết sau một lời gọi |
-| **Đóng gói** | Trạng thái săn đuổi trong `HunterEnemy` (`cooldown`, `memory`, `isEngaged`, `isJumping`) và `FlyingEnemy` (`homeFloorY`, `hasCrashed`) là private; con số của từng loại là hằng số private trong chính class đó. `HealthComponent`, `AnimationComponent.useStance`, `World`, `Level`, `TileGrid`, `Weapon` (chỉ getter), `SaveManager` |
+| **Đa hình** | `EnemyBrainSystem` gọi `enemy.updateBehaviour(...)` mà không biết loại quái: crawler dừng ở mép vực, flyer bay qua. `HunterEnemy` gọi `tactic.decide(...)` mà không biết tactic nào (Strategy): cùng một con melee, map Medium vùng 3–4 đánh rồi lùi, chỗ khác đuổi thẳng; `approach()` / `retreat()` lại đa hình theo lớp quái (`chase()`, `canBackOff()`). `AttackSystem` / `ProjectileSystem` hỏi `GameCharacter.areHostile(a, b)` (dựa trên `getFaction()` override) và `canBreakWalls()`. `ContactDamageSystem` hỏi `getContactDamage()`, `EnemyFactory` hỏi `getKnockbackResistance()`. Qua interface: `Controller`, `EventListener<T>`, `Navigator`, `PauseMenu.Actions`, `Disposable` |
+| **Trừu tượng** | Lớp trừu tượng `GameCharacter` (`getFaction()`), `Enemy` (`think()`), `HunterEnemy` (`aggroRange()`, `attackCooldown()`, `chaseSpeedScale()`). Interface `HuntTactic` / `TacticActions`: tactic chỉ thấy `HuntContext` và 5 hành động, không thấy entity, component hay world. Template method `Enemy.updateBehaviour` cố định thứ tự các bước, lớp con chỉ điền bước. Ngoài ra: interface `Controller`, `Navigator`; `Damage.apply`, `Hitboxes`, `WorldLoader.load`, `SaveSnapshot` giấu chi tiết sau một lời gọi |
+| **Đóng gói** | Trạng thái săn đuổi trong `HunterEnemy` (`cooldown`, `memory`, `isEngaged`, `isJumping`), `HitAndRunTactic` (`state`, `retreatTime`) và `FlyingEnemy` (`homeFloorY`, `hasCrashed`) là private; con số của từng loại là hằng số private trong chính class đó. `HealthComponent`, `AnimationComponent.useStance`, `World`, `Level`, `TileGrid`, `Weapon` (chỉ getter), `SaveManager` |
 
 Test của cây nhân vật: `core/src/test/java/com/hung/entity/enemy/EnemyHierarchyTest.java` (phe, phá tường, flyer đánh trên không, săn rồi chờ hồi chiêu, melee đuổi, đánh, giữ khoảng cách và dừng ở mép vực, quái chết / bị thương không nghĩ) và `EnemySkillTest.java` (nhớ, bị bắn từ xa, gọi bầy, nhảy, đón đầu, không đánh với).
+
+Test của độ khó và AI quái (cùng package, trừ `ai/tactic`):
+
+| Test | Bảo vệ |
+|------|--------|
+| `EnemyStatScalingTest`, `HunterScalingTest` | Bảng golden của chỉ số: `EnemySkill` từng chế độ, máu / sát thương theo mức, chạm, kháng đẩy lùi, tốc độ đi / đuổi, trần 84, hồi chiêu, tầm phát hiện; cả 5 quái thật từ `character.json` |
+| `EnemyRoomTest` | Phòng nhà (thấy, gọi bầy, không bước ra, đi vào lại, tuần tra sau nhảy), khoảng dừng của crawler / ghoul / wasp, `Level.findRoom` |
+| `DirectChaseParityTest` | 45 kịch bản × mọi khung (vị trí, vận tốc, hướng, yêu cầu đòn, hồi chiêu, engaged) so với baseline ghi trước khi tách Strategy (`src/test/resources/parity/direct_chase_baseline.txt`; xoá file thì test ghi lại và cố ý fail một lần) |
+| `ai/tactic/DirectChaseTacticTest`, `HitAndRunTacticTest`, `TacticPolicyTest` | Tactic thuần Java (không quái, không LibGDX): thứ tự hành động, từng chuyển trạng thái, ma trận vùng, instance riêng |
+| `HitAndRunEnemyTest` | HitAndRun trên quái thật: lùi dưới trần, không lùi xuống vực / gai / ra khỏi phòng (kể cả tactic "ẩu"), quái bay, bị đánh, cả trận |
+| `core/GameModeTacticTest` | Chế độ → policy; số quái HitAndRun trên map thật (Easy 0, Medium 30, Hard 0), mọi quái có vùng |
+| `MediumMapPlaytestTest` | Playtest kịch bản trên map Medium thật (địa hình, phòng, quái): không quái nào rời phòng, đứng trên hazard, rơi khỏi map; số liệu so với đuổi thẳng ghi ra `core/build/playtest/medium.txt` |

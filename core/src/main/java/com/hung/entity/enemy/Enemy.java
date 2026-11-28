@@ -3,6 +3,7 @@ package com.hung.entity.enemy;
 import com.hung.component.HealthComponent;
 import com.hung.entity.Entity;
 import com.hung.entity.GameCharacter;
+import com.hung.world.Room;
 import com.hung.world.World;
 
 /**
@@ -16,6 +17,8 @@ public abstract class Enemy extends GameCharacter {
     public static final int CONTACT_DAMAGE = 10;
 
     private EnemySkill skill = EnemySkill.EASY;
+    /** The room it was placed in; it only hunts there. Null = no rooms, no limit. */
+    private Room homeRoom;
 
     @Override
     public final Faction getFaction() {
@@ -28,6 +31,14 @@ public abstract class Enemy extends GameCharacter {
 
     public void setSkill(EnemySkill skill) {
         this.skill = skill;
+    }
+
+    public Room getHomeRoom() {
+        return homeRoom;
+    }
+
+    public void setHomeRoom(Room homeRoom) {
+        this.homeRoom = homeRoom;
     }
 
     public int getContactDamage() {

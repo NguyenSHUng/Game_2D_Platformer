@@ -17,7 +17,7 @@
 | Nhóm | Có gì |
 |------|-------|
 | Màn hình | Màn hình chính (Continue, New Game, Settings, Quit), menu tạm dừng, màn "Mission complete" |
-| Chế độ chơi | Easy, Medium, Hard: ba map boong-ke riêng, dài dần, quái đông dần và mạnh dần (`EnemySkill`). Hard đang tạm khoá |
+| Chế độ chơi | Easy, Medium, Hard: ba map boong-ke riêng, dài dần, quái đông dần và mạnh dần (`EnemySkill`). Medium: nửa sau map quái đánh rồi lùi (`TacticPolicy`). Quái chỉ săn trong phòng của nó. Hard đang tạm khoá |
 | Lưu game | Mỗi chế độ một file lưu; tự lưu ở checkpoint và khi rời ván (về menu, thoát, đóng cửa sổ) |
 | Di chuyển | Đi, nhảy (coyote time, jump buffer), ngồi, leo thang, xuống bệ một chiều |
 | Chiến đấu | Dao (cận chiến theo khung animation), súng lục bán tự động, súng trường liên thanh, nạp đạn, đạn bay có va chạm |

@@ -87,6 +87,12 @@ public class FlyingEnemy extends HunterEnemy {
         getTransform().velocity.x = direction * chaseSpeed();
     }
 
+    /** Ledges and floor hazards don't matter in the air (its room still does). */
+    @Override
+    protected boolean canBackOff(World world, float direction) {
+        return true;
+    }
+
     /** Keeps flying (no standing still while attacking) and steers to the height of this moment. */
     @Override
     protected void afterThink(Entity target, boolean isAttacking) {

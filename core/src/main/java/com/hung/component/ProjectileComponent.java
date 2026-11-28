@@ -2,6 +2,7 @@ package com.hung.component;
 
 import com.hung.combat.WeaponEffect;
 import com.hung.entity.Entity;
+import com.hung.world.Room;
 
 /** A bullet in flight. ProjectileSystem moves it, hits tiles and bodies, and removes it. */
 public class ProjectileComponent {
@@ -16,4 +17,7 @@ public class ProjectileComponent {
 
     /** Impact effect to spawn where it stops (nullable). */
     public WeaponEffect impact;
+
+    /** The room it was fired in: it vanishes on leaving it (never reaches the next room). Null = no limit. */
+    public Room room;
 }
